@@ -1,0 +1,2779 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "ietf-network#",
+    "description": "JSON-schema generated for ietf-network object",
+    "type": "object",
+    "network-ref": {
+        "id": "#network-ref",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "network-ref": {
+                "type": "string"
+            }
+        }
+    },
+    "node-ref": {
+        "allOf": [
+            {
+                "$ref": "ietf-network#network-ref"
+            },
+            {
+                "properties": {
+                    "node-ref": {
+                        "type": "string"
+                    }
+                }
+            }
+        ]
+    },
+    "node-id": {
+        "$ref": "/inet#uri"
+    },
+    "network-id": {
+        "$ref": "/inet#uri"
+    },
+    "properties": {
+        "networks": {
+            "id": "#networks",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "network": {
+                    "id": "#network",
+                    "type": "array",
+                    "additionalProperties": false,
+                    "items": {
+                        "properties": {
+                            "network-id": {
+                                "type": "string"
+                            },
+                            "network-types": {
+                                "id": "#network-types",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "l3-unicast-topology": {
+                                        "id": "#l3-unicast-topology",
+                                        "type": "object",
+                                        "additionalProperties": false
+                                    },
+                                    "l2-network": {
+                                        "id": "#l2-network",
+                                        "type": "object",
+                                        "additionalProperties": false
+                                    }
+                                }
+                            },
+                            "supporting-network": {
+                                "id": "#supporting-network",
+                                "type": "array",
+                                "additionalProperties": false,
+                                "items": {
+                                    "properties": {
+                                        "network-ref": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "node": {
+                                "id": "#node",
+                                "type": "array",
+                                "additionalProperties": false,
+                                "items": {
+                                    "properties": {
+                                        "node-id": {
+                                            "type": "string"
+                                        },
+                                        "supporting-node": {
+                                            "id": "#supporting-node",
+                                            "type": "array",
+                                            "additionalProperties": false,
+                                            "items": {
+                                                "properties": {
+                                                    "network-ref": {
+                                                        "type": "string"
+                                                    },
+                                                    "node-ref": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "termination-point": {
+                                            "id": "#termination-point",
+                                            "type": "array",
+                                            "additionalProperties": false,
+                                            "items": {
+                                                "properties": {
+                                                    "tp-id": {
+                                                        "type": "string"
+                                                    },
+                                                    "supporting-termination-point": {
+                                                        "id": "#supporting-termination-point",
+                                                        "type": "array",
+                                                        "additionalProperties": false,
+                                                        "items": {
+                                                            "properties": {
+                                                                "network-ref": {
+                                                                    "type": "string"
+                                                                },
+                                                                "node-ref": {
+                                                                    "type": "string"
+                                                                },
+                                                                "tp-ref": {
+                                                                    "type": "string"
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "l3-termination-point-attributes": {
+                                                        "id": "#l3-termination-point-attributes",
+                                                        "type": "object",
+                                                        "additionalProperties": false,
+                                                        "properties": {
+                                                            "termination-point-type": {
+                                                                "id": "#termination-point-type",
+                                                                "type": "object",
+                                                                "additionalProperties": false,
+                                                                "properties": {
+                                                                    "ip": {
+                                                                        "id": "#ip",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "ip-address": {
+                                                                                "type": "array",
+                                                                                "items": {
+                                                                                    "$ref": "/inet#ip-address",
+                                                                                    "id": "#ip-address",
+                                                                                    "type": "object",
+                                                                                    "additionalProperties": false
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "unnumbered": {
+                                                                        "id": "#unnumbered",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "unnumbered-id": {
+                                                                                "type": "object",
+                                                                                "id": "#unnumbered-id",
+                                                                                "additionalProperties": false
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "interface-name": {
+                                                                        "id": "#interface-name",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "interface-name": {
+                                                                                "type": "object",
+                                                                                "id": "#interface-name",
+                                                                                "additionalProperties": false
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "l2-termination-point-attributes": {
+                                                        "id": "#l2-termination-point-attributes",
+                                                        "type": "object",
+                                                        "additionalProperties": false,
+                                                        "properties": {
+                                                            "description": {
+                                                                "type": "object",
+                                                                "id": "#description",
+                                                                "additionalProperties": false
+                                                            },
+                                                            "maximum-frame-size": {
+                                                                "type": "object",
+                                                                "id": "#maximum-frame-size",
+                                                                "additionalProperties": false
+                                                            },
+                                                            "l2-termination-point-type": {
+                                                                "id": "#l2-termination-point-type",
+                                                                "type": "object",
+                                                                "additionalProperties": false,
+                                                                "properties": {
+                                                                    "ethernet": {
+                                                                        "id": "#ethernet",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "mac-address": {
+                                                                                "$ref": "/yang#mac-address",
+                                                                                "id": "#mac-address",
+                                                                                "type": "object",
+                                                                                "additionalProperties": false
+                                                                            },
+                                                                            "eth-encapsulation": {
+                                                                                "type": "object",
+                                                                                "id": "#eth-encapsulation",
+                                                                                "additionalProperties": false
+                                                                            },
+                                                                            "port-vlan-id": {
+                                                                                "type": "object",
+                                                                                "id": "#port-vlan-id",
+                                                                                "additionalProperties": false
+                                                                            },
+                                                                            "vlan-id-name": {
+                                                                                "id": "#vlan-id-name",
+                                                                                "type": "array",
+                                                                                "additionalProperties": false,
+                                                                                "items": {
+                                                                                    "properties": {
+                                                                                        "vlan-id": {
+                                                                                            "type": "object",
+                                                                                            "id": "#vlan-id",
+                                                                                            "additionalProperties": false
+                                                                                        },
+                                                                                        "vlan-name": {
+                                                                                            "type": "object",
+                                                                                            "id": "#vlan-name",
+                                                                                            "additionalProperties": false
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "legacy": {
+                                                                        "id": "#legacy",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "layer-2-address": {
+                                                                                "$ref": "/yang#phys-address",
+                                                                                "id": "#layer-2-address",
+                                                                                "type": "object",
+                                                                                "additionalProperties": false
+                                                                            },
+                                                                            "encapsulation": {
+                                                                                "type": "object",
+                                                                                "id": "#encapsulation",
+                                                                                "additionalProperties": false
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "tp-state": {
+                                                                "type": "object",
+                                                                "enum": [
+                                                                    "in-use",
+                                                                    "blocking",
+                                                                    "down",
+                                                                    "others"
+                                                                ],
+                                                                "id": "#tp-state",
+                                                                "additionalProperties": false
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "l3-node-attributes": {
+                                            "id": "#l3-node-attributes",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "name": {
+                                                    "$ref": "/inet#domain-name",
+                                                    "id": "#name",
+                                                    "type": "object",
+                                                    "additionalProperties": false
+                                                },
+                                                "flag": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#flag",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "router-id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "/rt-types#router-id",
+                                                        "id": "#router-id",
+                                                        "type": "object",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "prefix": {
+                                                    "items": {
+                                                        "$ref": "ietf-network#l3-prefix-attributes"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "l2-node-attributes": {
+                                            "id": "#l2-node-attributes",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "name": {
+                                                    "type": "object",
+                                                    "id": "#name",
+                                                    "additionalProperties": false
+                                                },
+                                                "description": {
+                                                    "type": "object",
+                                                    "id": "#description",
+                                                    "additionalProperties": false
+                                                },
+                                                "management-address": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "/inet#ip-address",
+                                                        "id": "#management-address",
+                                                        "type": "object",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "sys-mac-address": {
+                                                    "$ref": "/yang#mac-address",
+                                                    "id": "#sys-mac-address",
+                                                    "type": "object",
+                                                    "additionalProperties": false
+                                                },
+                                                "management-vid": {
+                                                    "type": "object",
+                                                    "id": "#management-vid",
+                                                    "additionalProperties": false
+                                                },
+                                                "nick-name": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#nick-name",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "vn-id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#vn-id",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "flag": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#flag",
+                                                        "additionalProperties": false
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "link": {
+                                "id": "#link",
+                                "type": "array",
+                                "additionalProperties": false,
+                                "items": {
+                                    "properties": {
+                                        "link-id": {
+                                            "type": "string"
+                                        },
+                                        "source": {
+                                            "id": "#source",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "source-node": {
+                                                    "type": "string"
+                                                },
+                                                "source-tp": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "destination": {
+                                            "id": "#destination",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "dest-node": {
+                                                    "type": "string"
+                                                },
+                                                "dest-tp": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "supporting-link": {
+                                            "id": "#supporting-link",
+                                            "type": "array",
+                                            "additionalProperties": false,
+                                            "items": {
+                                                "properties": {
+                                                    "network-ref": {
+                                                        "type": "string"
+                                                    },
+                                                    "link-ref": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "l3-link-attributes": {
+                                            "id": "#l3-link-attributes",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "name": {
+                                                    "type": "object",
+                                                    "id": "#name",
+                                                    "additionalProperties": false
+                                                },
+                                                "flag": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#flag",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "metric1": {
+                                                    "type": "object",
+                                                    "id": "#metric1",
+                                                    "additionalProperties": false
+                                                },
+                                                "metric2": {
+                                                    "type": "object",
+                                                    "id": "#metric2",
+                                                    "additionalProperties": false
+                                                }
+                                            }
+                                        },
+                                        "l2-link-attributes": {
+                                            "id": "#l2-link-attributes",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "name": {
+                                                    "type": "object",
+                                                    "id": "#name",
+                                                    "additionalProperties": false
+                                                },
+                                                "flag": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#flag",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "rate": {
+                                                    "type": "object",
+                                                    "format": "double",
+                                                    "id": "#rate",
+                                                    "additionalProperties": false
+                                                },
+                                                "delay": {
+                                                    "type": "object",
+                                                    "id": "#delay",
+                                                    "additionalProperties": false
+                                                },
+                                                "srlg": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#srlg",
+                                                        "additionalProperties": false
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "l3-topology-attributes": {
+                                "id": "#l3-topology-attributes",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "name": {
+                                        "type": "object",
+                                        "id": "#name",
+                                        "additionalProperties": false
+                                    },
+                                    "flag": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "id": "#flag",
+                                            "additionalProperties": false
+                                        }
+                                    }
+                                }
+                            },
+                            "l2-network-attributes": {
+                                "id": "#l2-network-attributes",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "name": {
+                                        "type": "object",
+                                        "id": "#name",
+                                        "additionalProperties": false
+                                    },
+                                    "flag": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "id": "#flag",
+                                            "additionalProperties": false
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "ietf-network#",
+    "description": "JSON-schema generated for ietf-network object",
+    "type": "object",
+    "network-ref": {
+        "id": "#network-ref",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "network-ref": {
+                "type": "string"
+            }
+        }
+    },
+    "node-ref": {
+        "allOf": [
+            {
+                "$ref": "ietf-network#network-ref"
+            },
+            {
+                "properties": {
+                    "node-ref": {
+                        "type": "string"
+                    }
+                }
+            }
+        ]
+    },
+    "node-id": {
+        "type": "string"
+    },
+    "network-id": {
+        "type": "string"
+    },
+    "properties": {
+        "networks": {
+            "id": "#networks",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "network": {
+                    "id": "#network",
+                    "type": "array",
+                    "additionalProperties": false,
+                    "items": {
+                        "properties": {
+                            "network-id": {
+                                "type": "string"
+                            },
+                            "network-types": {
+                                "id": "#network-types",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "l3-unicast-topology": {
+                                        "id": "#l3-unicast-topology",
+                                        "type": "object",
+                                        "additionalProperties": false
+                                    },
+                                    "l2-network": {
+                                        "id": "#l2-network",
+                                        "type": "object",
+                                        "additionalProperties": false
+                                    }
+                                }
+                            },
+                            "supporting-network": {
+                                "id": "#supporting-network",
+                                "type": "array",
+                                "additionalProperties": false,
+                                "items": {
+                                    "properties": {
+                                        "network-ref": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "node": {
+                                "id": "#node",
+                                "type": "array",
+                                "additionalProperties": false,
+                                "items": {
+                                    "properties": {
+                                        "node-id": {
+                                            "type": "string"
+                                        },
+                                        "supporting-node": {
+                                            "id": "#supporting-node",
+                                            "type": "array",
+                                            "additionalProperties": false,
+                                            "items": {
+                                                "properties": {
+                                                    "network-ref": {
+                                                        "type": "string"
+                                                    },
+                                                    "node-ref": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "termination-point": {
+                                            "id": "#termination-point",
+                                            "type": "array",
+                                            "additionalProperties": false,
+                                            "items": {
+                                                "properties": {
+                                                    "tp-id": {
+                                                        "type": "string"
+                                                    },
+                                                    "supporting-termination-point": {
+                                                        "id": "#supporting-termination-point",
+                                                        "type": "array",
+                                                        "additionalProperties": false,
+                                                        "items": {
+                                                            "properties": {
+                                                                "network-ref": {
+                                                                    "type": "string"
+                                                                },
+                                                                "node-ref": {
+                                                                    "type": "string"
+                                                                },
+                                                                "tp-ref": {
+                                                                    "type": "string"
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "l3-termination-point-attributes": {
+                                                        "id": "#l3-termination-point-attributes",
+                                                        "type": "object",
+                                                        "additionalProperties": false,
+                                                        "properties": {
+                                                            "termination-point-type": {
+                                                                "id": "#termination-point-type",
+                                                                "type": "object",
+                                                                "additionalProperties": false,
+                                                                "properties": {
+                                                                    "ip": {
+                                                                        "id": "#ip",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "ip-address": {
+                                                                                "type": "array",
+                                                                                "items": {
+                                                                                    "type": "object",
+                                                                                    "id": "#ip-address",
+                                                                                    "additionalProperties": false
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "unnumbered": {
+                                                                        "id": "#unnumbered",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "unnumbered-id": {
+                                                                                "type": "object",
+                                                                                "id": "#unnumbered-id",
+                                                                                "additionalProperties": false
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "interface-name": {
+                                                                        "id": "#interface-name",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "interface-name": {
+                                                                                "type": "object",
+                                                                                "id": "#interface-name",
+                                                                                "additionalProperties": false
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "l2-termination-point-attributes": {
+                                                        "id": "#l2-termination-point-attributes",
+                                                        "type": "object",
+                                                        "additionalProperties": false,
+                                                        "properties": {
+                                                            "description": {
+                                                                "type": "object",
+                                                                "id": "#description",
+                                                                "additionalProperties": false
+                                                            },
+                                                            "maximum-frame-size": {
+                                                                "type": "object",
+                                                                "id": "#maximum-frame-size",
+                                                                "additionalProperties": false
+                                                            },
+                                                            "l2-termination-point-type": {
+                                                                "id": "#l2-termination-point-type",
+                                                                "type": "object",
+                                                                "additionalProperties": false,
+                                                                "properties": {
+                                                                    "ethernet": {
+                                                                        "id": "#ethernet",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "mac-address": {
+                                                                                "type": "object",
+                                                                                "id": "#mac-address",
+                                                                                "additionalProperties": false
+                                                                            },
+                                                                            "eth-encapsulation": {
+                                                                                "type": "object",
+                                                                                "id": "#eth-encapsulation",
+                                                                                "additionalProperties": false
+                                                                            },
+                                                                            "port-vlan-id": {
+                                                                                "type": "object",
+                                                                                "id": "#port-vlan-id",
+                                                                                "additionalProperties": false
+                                                                            },
+                                                                            "vlan-id-name": {
+                                                                                "id": "#vlan-id-name",
+                                                                                "type": "array",
+                                                                                "additionalProperties": false,
+                                                                                "items": {
+                                                                                    "properties": {
+                                                                                        "vlan-id": {
+                                                                                            "type": "object",
+                                                                                            "id": "#vlan-id",
+                                                                                            "additionalProperties": false
+                                                                                        },
+                                                                                        "vlan-name": {
+                                                                                            "type": "object",
+                                                                                            "id": "#vlan-name",
+                                                                                            "additionalProperties": false
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "legacy": {
+                                                                        "id": "#legacy",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "layer-2-address": {
+                                                                                "type": "object",
+                                                                                "id": "#layer-2-address",
+                                                                                "additionalProperties": false
+                                                                            },
+                                                                            "encapsulation": {
+                                                                                "type": "object",
+                                                                                "id": "#encapsulation",
+                                                                                "additionalProperties": false
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "tp-state": {
+                                                                "type": "object",
+                                                                "enum": [
+                                                                    "in-use",
+                                                                    "blocking",
+                                                                    "down",
+                                                                    "others"
+                                                                ],
+                                                                "id": "#tp-state",
+                                                                "additionalProperties": false
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "l3-node-attributes": {
+                                            "id": "#l3-node-attributes",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "name": {
+                                                    "type": "object",
+                                                    "id": "#name",
+                                                    "additionalProperties": false
+                                                },
+                                                "flag": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#flag",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "router-id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#router-id",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "prefix": {
+                                                    "items": {
+                                                        "$ref": "ietf-network#l3-prefix-attributes"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "l2-node-attributes": {
+                                            "id": "#l2-node-attributes",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "name": {
+                                                    "type": "object",
+                                                    "id": "#name",
+                                                    "additionalProperties": false
+                                                },
+                                                "description": {
+                                                    "type": "object",
+                                                    "id": "#description",
+                                                    "additionalProperties": false
+                                                },
+                                                "management-address": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#management-address",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "sys-mac-address": {
+                                                    "type": "object",
+                                                    "id": "#sys-mac-address",
+                                                    "additionalProperties": false
+                                                },
+                                                "management-vid": {
+                                                    "type": "object",
+                                                    "id": "#management-vid",
+                                                    "additionalProperties": false
+                                                },
+                                                "nick-name": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#nick-name",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "vn-id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#vn-id",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "flag": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#flag",
+                                                        "additionalProperties": false
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "link": {
+                                "id": "#link",
+                                "type": "array",
+                                "additionalProperties": false,
+                                "items": {
+                                    "properties": {
+                                        "link-id": {
+                                            "type": "string"
+                                        },
+                                        "source": {
+                                            "id": "#source",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "source-node": {
+                                                    "type": "string"
+                                                },
+                                                "source-tp": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "destination": {
+                                            "id": "#destination",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "dest-node": {
+                                                    "type": "string"
+                                                },
+                                                "dest-tp": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "supporting-link": {
+                                            "id": "#supporting-link",
+                                            "type": "array",
+                                            "additionalProperties": false,
+                                            "items": {
+                                                "properties": {
+                                                    "network-ref": {
+                                                        "type": "string"
+                                                    },
+                                                    "link-ref": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "l3-link-attributes": {
+                                            "id": "#l3-link-attributes",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "name": {
+                                                    "type": "object",
+                                                    "id": "#name",
+                                                    "additionalProperties": false
+                                                },
+                                                "flag": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#flag",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "metric1": {
+                                                    "type": "object",
+                                                    "id": "#metric1",
+                                                    "additionalProperties": false
+                                                },
+                                                "metric2": {
+                                                    "type": "object",
+                                                    "id": "#metric2",
+                                                    "additionalProperties": false
+                                                }
+                                            }
+                                        },
+                                        "l2-link-attributes": {
+                                            "id": "#l2-link-attributes",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "name": {
+                                                    "type": "object",
+                                                    "id": "#name",
+                                                    "additionalProperties": false
+                                                },
+                                                "flag": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#flag",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "rate": {
+                                                    "type": "object",
+                                                    "format": "double",
+                                                    "id": "#rate",
+                                                    "additionalProperties": false
+                                                },
+                                                "delay": {
+                                                    "type": "object",
+                                                    "id": "#delay",
+                                                    "additionalProperties": false
+                                                },
+                                                "srlg": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#srlg",
+                                                        "additionalProperties": false
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "l3-topology-attributes": {
+                                "id": "#l3-topology-attributes",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "name": {
+                                        "type": "object",
+                                        "id": "#name",
+                                        "additionalProperties": false
+                                    },
+                                    "flag": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "id": "#flag",
+                                            "additionalProperties": false
+                                        }
+                                    }
+                                }
+                            },
+                            "l2-network-attributes": {
+                                "id": "#l2-network-attributes",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "name": {
+                                        "type": "object",
+                                        "id": "#name",
+                                        "additionalProperties": false
+                                    },
+                                    "flag": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "id": "#flag",
+                                            "additionalProperties": false
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "ietf-l3-unicast-topology#",
+    "description": "JSON-schema generated for ietf-l3-unicast-topology object",
+    "type": "object",
+    "network-ref": {
+        "id": "#network-ref",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "network-ref": {
+                "type": "string"
+            }
+        }
+    },
+    "node-ref": {
+        "allOf": [
+            {
+                "$ref": "ietf-network#network-ref"
+            },
+            {
+                "properties": {
+                    "node-ref": {
+                        "type": "string"
+                    }
+                }
+            }
+        ]
+    },
+    "node-id": {
+        "type": "string"
+    },
+    "network-id": {
+        "type": "string"
+    },
+    "properties": {
+        "networks": {
+            "id": "#networks",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "network": {
+                    "id": "#network",
+                    "type": "array",
+                    "additionalProperties": false,
+                    "items": {
+                        "properties": {
+                            "network-id": {
+                                "type": "string"
+                            },
+                            "network-types": {
+                                "id": "#network-types",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "l3-unicast-topology": {
+                                        "id": "#l3-unicast-topology",
+                                        "type": "object",
+                                        "additionalProperties": false
+                                    },
+                                    "l2-network": {
+                                        "id": "#l2-network",
+                                        "type": "object",
+                                        "additionalProperties": false
+                                    }
+                                }
+                            },
+                            "supporting-network": {
+                                "id": "#supporting-network",
+                                "type": "array",
+                                "additionalProperties": false,
+                                "items": {
+                                    "properties": {
+                                        "network-ref": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "node": {
+                                "id": "#node",
+                                "type": "array",
+                                "additionalProperties": false,
+                                "items": {
+                                    "properties": {
+                                        "node-id": {
+                                            "type": "string"
+                                        },
+                                        "supporting-node": {
+                                            "id": "#supporting-node",
+                                            "type": "array",
+                                            "additionalProperties": false,
+                                            "items": {
+                                                "properties": {
+                                                    "network-ref": {
+                                                        "type": "string"
+                                                    },
+                                                    "node-ref": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "termination-point": {
+                                            "id": "#termination-point",
+                                            "type": "array",
+                                            "additionalProperties": false,
+                                            "items": {
+                                                "properties": {
+                                                    "tp-id": {
+                                                        "type": "string"
+                                                    },
+                                                    "supporting-termination-point": {
+                                                        "id": "#supporting-termination-point",
+                                                        "type": "array",
+                                                        "additionalProperties": false,
+                                                        "items": {
+                                                            "properties": {
+                                                                "network-ref": {
+                                                                    "type": "string"
+                                                                },
+                                                                "node-ref": {
+                                                                    "type": "string"
+                                                                },
+                                                                "tp-ref": {
+                                                                    "type": "string"
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "l3-termination-point-attributes": {
+                                                        "id": "#l3-termination-point-attributes",
+                                                        "type": "object",
+                                                        "additionalProperties": false,
+                                                        "properties": {
+                                                            "termination-point-type": {
+                                                                "id": "#termination-point-type",
+                                                                "type": "object",
+                                                                "additionalProperties": false,
+                                                                "properties": {
+                                                                    "ip": {
+                                                                        "id": "#ip",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "ip-address": {
+                                                                                "type": "array",
+                                                                                "items": {
+                                                                                    "type": "object",
+                                                                                    "id": "#ip-address",
+                                                                                    "additionalProperties": false
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "unnumbered": {
+                                                                        "id": "#unnumbered",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "unnumbered-id": {
+                                                                                "type": "object",
+                                                                                "id": "#unnumbered-id",
+                                                                                "additionalProperties": false
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "interface-name": {
+                                                                        "id": "#interface-name",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "interface-name": {
+                                                                                "type": "object",
+                                                                                "id": "#interface-name",
+                                                                                "additionalProperties": false
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "l2-termination-point-attributes": {
+                                                        "id": "#l2-termination-point-attributes",
+                                                        "type": "object",
+                                                        "additionalProperties": false,
+                                                        "properties": {
+                                                            "description": {
+                                                                "type": "object",
+                                                                "id": "#description",
+                                                                "additionalProperties": false
+                                                            },
+                                                            "maximum-frame-size": {
+                                                                "type": "object",
+                                                                "id": "#maximum-frame-size",
+                                                                "additionalProperties": false
+                                                            },
+                                                            "l2-termination-point-type": {
+                                                                "id": "#l2-termination-point-type",
+                                                                "type": "object",
+                                                                "additionalProperties": false,
+                                                                "properties": {
+                                                                    "ethernet": {
+                                                                        "id": "#ethernet",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "mac-address": {
+                                                                                "type": "object",
+                                                                                "id": "#mac-address",
+                                                                                "additionalProperties": false
+                                                                            },
+                                                                            "eth-encapsulation": {
+                                                                                "type": "object",
+                                                                                "id": "#eth-encapsulation",
+                                                                                "additionalProperties": false
+                                                                            },
+                                                                            "port-vlan-id": {
+                                                                                "type": "object",
+                                                                                "id": "#port-vlan-id",
+                                                                                "additionalProperties": false
+                                                                            },
+                                                                            "vlan-id-name": {
+                                                                                "id": "#vlan-id-name",
+                                                                                "type": "array",
+                                                                                "additionalProperties": false,
+                                                                                "items": {
+                                                                                    "properties": {
+                                                                                        "vlan-id": {
+                                                                                            "type": "object",
+                                                                                            "id": "#vlan-id",
+                                                                                            "additionalProperties": false
+                                                                                        },
+                                                                                        "vlan-name": {
+                                                                                            "type": "object",
+                                                                                            "id": "#vlan-name",
+                                                                                            "additionalProperties": false
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "legacy": {
+                                                                        "id": "#legacy",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "layer-2-address": {
+                                                                                "type": "object",
+                                                                                "id": "#layer-2-address",
+                                                                                "additionalProperties": false
+                                                                            },
+                                                                            "encapsulation": {
+                                                                                "type": "object",
+                                                                                "id": "#encapsulation",
+                                                                                "additionalProperties": false
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "tp-state": {
+                                                                "type": "object",
+                                                                "enum": [
+                                                                    "in-use",
+                                                                    "blocking",
+                                                                    "down",
+                                                                    "others"
+                                                                ],
+                                                                "id": "#tp-state",
+                                                                "additionalProperties": false
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "l3-node-attributes": {
+                                            "id": "#l3-node-attributes",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "name": {
+                                                    "type": "object",
+                                                    "id": "#name",
+                                                    "additionalProperties": false
+                                                },
+                                                "flag": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#flag",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "router-id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#router-id",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "prefix": {
+                                                    "items": {
+                                                        "$ref": "ietf-network#l3-prefix-attributes"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "l2-node-attributes": {
+                                            "id": "#l2-node-attributes",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "name": {
+                                                    "type": "object",
+                                                    "id": "#name",
+                                                    "additionalProperties": false
+                                                },
+                                                "description": {
+                                                    "type": "object",
+                                                    "id": "#description",
+                                                    "additionalProperties": false
+                                                },
+                                                "management-address": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#management-address",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "sys-mac-address": {
+                                                    "type": "object",
+                                                    "id": "#sys-mac-address",
+                                                    "additionalProperties": false
+                                                },
+                                                "management-vid": {
+                                                    "type": "object",
+                                                    "id": "#management-vid",
+                                                    "additionalProperties": false
+                                                },
+                                                "nick-name": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#nick-name",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "vn-id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#vn-id",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "flag": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#flag",
+                                                        "additionalProperties": false
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "link": {
+                                "id": "#link",
+                                "type": "array",
+                                "additionalProperties": false,
+                                "items": {
+                                    "properties": {
+                                        "link-id": {
+                                            "type": "string"
+                                        },
+                                        "source": {
+                                            "id": "#source",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "source-node": {
+                                                    "type": "string"
+                                                },
+                                                "source-tp": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "destination": {
+                                            "id": "#destination",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "dest-node": {
+                                                    "type": "string"
+                                                },
+                                                "dest-tp": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "supporting-link": {
+                                            "id": "#supporting-link",
+                                            "type": "array",
+                                            "additionalProperties": false,
+                                            "items": {
+                                                "properties": {
+                                                    "network-ref": {
+                                                        "type": "string"
+                                                    },
+                                                    "link-ref": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "l3-link-attributes": {
+                                            "id": "#l3-link-attributes",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "name": {
+                                                    "type": "object",
+                                                    "id": "#name",
+                                                    "additionalProperties": false
+                                                },
+                                                "flag": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#flag",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "metric1": {
+                                                    "type": "object",
+                                                    "id": "#metric1",
+                                                    "additionalProperties": false
+                                                },
+                                                "metric2": {
+                                                    "type": "object",
+                                                    "id": "#metric2",
+                                                    "additionalProperties": false
+                                                }
+                                            }
+                                        },
+                                        "l2-link-attributes": {
+                                            "id": "#l2-link-attributes",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "name": {
+                                                    "type": "object",
+                                                    "id": "#name",
+                                                    "additionalProperties": false
+                                                },
+                                                "flag": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#flag",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "rate": {
+                                                    "type": "object",
+                                                    "format": "double",
+                                                    "id": "#rate",
+                                                    "additionalProperties": false
+                                                },
+                                                "delay": {
+                                                    "type": "object",
+                                                    "id": "#delay",
+                                                    "additionalProperties": false
+                                                },
+                                                "srlg": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#srlg",
+                                                        "additionalProperties": false
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "l3-topology-attributes": {
+                                "id": "#l3-topology-attributes",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "name": {
+                                        "type": "object",
+                                        "id": "#name",
+                                        "additionalProperties": false
+                                    },
+                                    "flag": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "id": "#flag",
+                                            "additionalProperties": false
+                                        }
+                                    }
+                                }
+                            },
+                            "l2-network-attributes": {
+                                "id": "#l2-network-attributes",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "name": {
+                                        "type": "object",
+                                        "id": "#name",
+                                        "additionalProperties": false
+                                    },
+                                    "flag": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "id": "#flag",
+                                            "additionalProperties": false
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "l3-prefix-attributes": {
+        "id": "#l3-prefix-attributes",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "prefix": {
+                "$ref": "/inet#ip-prefix"
+            },
+            "metric": {
+                "type": "string"
+            },
+            "flag": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "l3-unicast-topology-type": {
+        "id": "#l3-unicast-topology-type",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "l3-unicast-topology": {
+                "id": "#l3-unicast-topology",
+                "type": "object",
+                "additionalProperties": false
+            }
+        }
+    },
+    "l3-topology-attributes": {
+        "id": "#l3-topology-attributes",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "l3-topology-attributes": {
+                "id": "#l3-topology-attributes",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "flag": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "l3-node-attributes": {
+        "id": "#l3-node-attributes",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "l3-node-attributes": {
+                "id": "#l3-node-attributes",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "flag": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "router-id": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "prefix": {
+                        "items": {
+                            "$ref": "ietf-l3-unicast-topology#l3-prefix-attributes"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "l3-link-attributes": {
+        "id": "#l3-link-attributes",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "l3-link-attributes": {
+                "id": "#l3-link-attributes",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "flag": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "metric1": {
+                        "type": "string"
+                    },
+                    "metric2": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "l3-termination-point-attributes": {
+        "id": "#l3-termination-point-attributes",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "l3-termination-point-attributes": {
+                "id": "#l3-termination-point-attributes",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "termination-point-type": {
+                        "id": "#termination-point-type",
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "ip": {
+                                "id": "#ip",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "ip-address": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "unnumbered": {
+                                "id": "#unnumbered",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "unnumbered-id": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "interface-name": {
+                                "id": "#interface-name",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "interface-name": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "l3-event-type": {
+        "type": "string",
+        "enum": [
+            "add",
+            "remove",
+            "update"
+        ]
+    },
+    "prefix-flag-type": {
+        "type": "string"
+    },
+    "node-flag-type": {
+        "type": "string"
+    },
+    "link-flag-type": {
+        "type": "string"
+    },
+    "l3-flag-type": {
+        "type": "string"
+    }
+}{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "ietf-l2-topology#",
+    "description": "JSON-schema generated for ietf-l2-topology object",
+    "type": "object",
+    "network-ref": {
+        "id": "#network-ref",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "network-ref": {
+                "type": "string"
+            }
+        }
+    },
+    "node-ref": {
+        "allOf": [
+            {
+                "$ref": "ietf-network#network-ref"
+            },
+            {
+                "properties": {
+                    "node-ref": {
+                        "type": "string"
+                    }
+                }
+            }
+        ]
+    },
+    "node-id": {
+        "type": "string"
+    },
+    "network-id": {
+        "type": "string"
+    },
+    "properties": {
+        "networks": {
+            "id": "#networks",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "network": {
+                    "id": "#network",
+                    "type": "array",
+                    "additionalProperties": false,
+                    "items": {
+                        "properties": {
+                            "network-id": {
+                                "type": "string"
+                            },
+                            "network-types": {
+                                "id": "#network-types",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "l3-unicast-topology": {
+                                        "id": "#l3-unicast-topology",
+                                        "type": "object",
+                                        "additionalProperties": false
+                                    },
+                                    "l2-network": {
+                                        "id": "#l2-network",
+                                        "type": "object",
+                                        "additionalProperties": false
+                                    }
+                                }
+                            },
+                            "supporting-network": {
+                                "id": "#supporting-network",
+                                "type": "array",
+                                "additionalProperties": false,
+                                "items": {
+                                    "properties": {
+                                        "network-ref": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "node": {
+                                "id": "#node",
+                                "type": "array",
+                                "additionalProperties": false,
+                                "items": {
+                                    "properties": {
+                                        "node-id": {
+                                            "type": "string"
+                                        },
+                                        "supporting-node": {
+                                            "id": "#supporting-node",
+                                            "type": "array",
+                                            "additionalProperties": false,
+                                            "items": {
+                                                "properties": {
+                                                    "network-ref": {
+                                                        "type": "string"
+                                                    },
+                                                    "node-ref": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "termination-point": {
+                                            "id": "#termination-point",
+                                            "type": "array",
+                                            "additionalProperties": false,
+                                            "items": {
+                                                "properties": {
+                                                    "tp-id": {
+                                                        "type": "string"
+                                                    },
+                                                    "supporting-termination-point": {
+                                                        "id": "#supporting-termination-point",
+                                                        "type": "array",
+                                                        "additionalProperties": false,
+                                                        "items": {
+                                                            "properties": {
+                                                                "network-ref": {
+                                                                    "type": "string"
+                                                                },
+                                                                "node-ref": {
+                                                                    "type": "string"
+                                                                },
+                                                                "tp-ref": {
+                                                                    "type": "string"
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "l3-termination-point-attributes": {
+                                                        "id": "#l3-termination-point-attributes",
+                                                        "type": "object",
+                                                        "additionalProperties": false,
+                                                        "properties": {
+                                                            "termination-point-type": {
+                                                                "id": "#termination-point-type",
+                                                                "type": "object",
+                                                                "additionalProperties": false,
+                                                                "properties": {
+                                                                    "ip": {
+                                                                        "id": "#ip",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "ip-address": {
+                                                                                "type": "array",
+                                                                                "items": {
+                                                                                    "type": "object",
+                                                                                    "id": "#ip-address",
+                                                                                    "additionalProperties": false
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "unnumbered": {
+                                                                        "id": "#unnumbered",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "unnumbered-id": {
+                                                                                "type": "object",
+                                                                                "id": "#unnumbered-id",
+                                                                                "additionalProperties": false
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "interface-name": {
+                                                                        "id": "#interface-name",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "interface-name": {
+                                                                                "type": "object",
+                                                                                "id": "#interface-name",
+                                                                                "additionalProperties": false
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "l2-termination-point-attributes": {
+                                                        "id": "#l2-termination-point-attributes",
+                                                        "type": "object",
+                                                        "additionalProperties": false,
+                                                        "properties": {
+                                                            "description": {
+                                                                "type": "object",
+                                                                "id": "#description",
+                                                                "additionalProperties": false
+                                                            },
+                                                            "maximum-frame-size": {
+                                                                "type": "object",
+                                                                "id": "#maximum-frame-size",
+                                                                "additionalProperties": false
+                                                            },
+                                                            "l2-termination-point-type": {
+                                                                "id": "#l2-termination-point-type",
+                                                                "type": "object",
+                                                                "additionalProperties": false,
+                                                                "properties": {
+                                                                    "ethernet": {
+                                                                        "id": "#ethernet",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "mac-address": {
+                                                                                "type": "object",
+                                                                                "id": "#mac-address",
+                                                                                "additionalProperties": false
+                                                                            },
+                                                                            "eth-encapsulation": {
+                                                                                "type": "object",
+                                                                                "id": "#eth-encapsulation",
+                                                                                "additionalProperties": false
+                                                                            },
+                                                                            "port-vlan-id": {
+                                                                                "type": "object",
+                                                                                "id": "#port-vlan-id",
+                                                                                "additionalProperties": false
+                                                                            },
+                                                                            "vlan-id-name": {
+                                                                                "id": "#vlan-id-name",
+                                                                                "type": "array",
+                                                                                "additionalProperties": false,
+                                                                                "items": {
+                                                                                    "properties": {
+                                                                                        "vlan-id": {
+                                                                                            "type": "object",
+                                                                                            "id": "#vlan-id",
+                                                                                            "additionalProperties": false
+                                                                                        },
+                                                                                        "vlan-name": {
+                                                                                            "type": "object",
+                                                                                            "id": "#vlan-name",
+                                                                                            "additionalProperties": false
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "legacy": {
+                                                                        "id": "#legacy",
+                                                                        "type": "object",
+                                                                        "additionalProperties": false,
+                                                                        "properties": {
+                                                                            "layer-2-address": {
+                                                                                "type": "object",
+                                                                                "id": "#layer-2-address",
+                                                                                "additionalProperties": false
+                                                                            },
+                                                                            "encapsulation": {
+                                                                                "type": "object",
+                                                                                "id": "#encapsulation",
+                                                                                "additionalProperties": false
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            "tp-state": {
+                                                                "type": "object",
+                                                                "enum": [
+                                                                    "in-use",
+                                                                    "blocking",
+                                                                    "down",
+                                                                    "others"
+                                                                ],
+                                                                "id": "#tp-state",
+                                                                "additionalProperties": false
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "l3-node-attributes": {
+                                            "id": "#l3-node-attributes",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "name": {
+                                                    "type": "object",
+                                                    "id": "#name",
+                                                    "additionalProperties": false
+                                                },
+                                                "flag": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#flag",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "router-id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#router-id",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "prefix": {
+                                                    "items": {
+                                                        "$ref": "ietf-network#l3-prefix-attributes"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "l2-node-attributes": {
+                                            "id": "#l2-node-attributes",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "name": {
+                                                    "type": "object",
+                                                    "id": "#name",
+                                                    "additionalProperties": false
+                                                },
+                                                "description": {
+                                                    "type": "object",
+                                                    "id": "#description",
+                                                    "additionalProperties": false
+                                                },
+                                                "management-address": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#management-address",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "sys-mac-address": {
+                                                    "type": "object",
+                                                    "id": "#sys-mac-address",
+                                                    "additionalProperties": false
+                                                },
+                                                "management-vid": {
+                                                    "type": "object",
+                                                    "id": "#management-vid",
+                                                    "additionalProperties": false
+                                                },
+                                                "nick-name": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#nick-name",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "vn-id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#vn-id",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "flag": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#flag",
+                                                        "additionalProperties": false
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "link": {
+                                "id": "#link",
+                                "type": "array",
+                                "additionalProperties": false,
+                                "items": {
+                                    "properties": {
+                                        "link-id": {
+                                            "type": "string"
+                                        },
+                                        "source": {
+                                            "id": "#source",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "source-node": {
+                                                    "type": "string"
+                                                },
+                                                "source-tp": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "destination": {
+                                            "id": "#destination",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "dest-node": {
+                                                    "type": "string"
+                                                },
+                                                "dest-tp": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "supporting-link": {
+                                            "id": "#supporting-link",
+                                            "type": "array",
+                                            "additionalProperties": false,
+                                            "items": {
+                                                "properties": {
+                                                    "network-ref": {
+                                                        "type": "string"
+                                                    },
+                                                    "link-ref": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "l3-link-attributes": {
+                                            "id": "#l3-link-attributes",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "name": {
+                                                    "type": "object",
+                                                    "id": "#name",
+                                                    "additionalProperties": false
+                                                },
+                                                "flag": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#flag",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "metric1": {
+                                                    "type": "object",
+                                                    "id": "#metric1",
+                                                    "additionalProperties": false
+                                                },
+                                                "metric2": {
+                                                    "type": "object",
+                                                    "id": "#metric2",
+                                                    "additionalProperties": false
+                                                }
+                                            }
+                                        },
+                                        "l2-link-attributes": {
+                                            "id": "#l2-link-attributes",
+                                            "type": "object",
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "name": {
+                                                    "type": "object",
+                                                    "id": "#name",
+                                                    "additionalProperties": false
+                                                },
+                                                "flag": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#flag",
+                                                        "additionalProperties": false
+                                                    }
+                                                },
+                                                "rate": {
+                                                    "type": "object",
+                                                    "format": "double",
+                                                    "id": "#rate",
+                                                    "additionalProperties": false
+                                                },
+                                                "delay": {
+                                                    "type": "object",
+                                                    "id": "#delay",
+                                                    "additionalProperties": false
+                                                },
+                                                "srlg": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "id": "#srlg",
+                                                        "additionalProperties": false
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "l3-topology-attributes": {
+                                "id": "#l3-topology-attributes",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "name": {
+                                        "type": "object",
+                                        "id": "#name",
+                                        "additionalProperties": false
+                                    },
+                                    "flag": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "id": "#flag",
+                                            "additionalProperties": false
+                                        }
+                                    }
+                                }
+                            },
+                            "l2-network-attributes": {
+                                "id": "#l2-network-attributes",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "name": {
+                                        "type": "object",
+                                        "id": "#name",
+                                        "additionalProperties": false
+                                    },
+                                    "flag": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "id": "#flag",
+                                            "additionalProperties": false
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "l3-prefix-attributes": {
+        "id": "#l3-prefix-attributes",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "prefix": {
+                "$ref": "/inet#ip-prefix"
+            },
+            "metric": {
+                "type": "string"
+            },
+            "flag": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "l3-unicast-topology-type": {
+        "id": "#l3-unicast-topology-type",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "l3-unicast-topology": {
+                "id": "#l3-unicast-topology",
+                "type": "object",
+                "additionalProperties": false
+            }
+        }
+    },
+    "l3-topology-attributes": {
+        "id": "#l3-topology-attributes",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "l3-topology-attributes": {
+                "id": "#l3-topology-attributes",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "flag": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "l3-node-attributes": {
+        "id": "#l3-node-attributes",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "l3-node-attributes": {
+                "id": "#l3-node-attributes",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "flag": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "router-id": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "prefix": {
+                        "items": {
+                            "$ref": "ietf-l3-unicast-topology#l3-prefix-attributes"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "l3-link-attributes": {
+        "id": "#l3-link-attributes",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "l3-link-attributes": {
+                "id": "#l3-link-attributes",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "flag": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "metric1": {
+                        "type": "string"
+                    },
+                    "metric2": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "l3-termination-point-attributes": {
+        "id": "#l3-termination-point-attributes",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "l3-termination-point-attributes": {
+                "id": "#l3-termination-point-attributes",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "termination-point-type": {
+                        "id": "#termination-point-type",
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "ip": {
+                                "id": "#ip",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "ip-address": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "unnumbered": {
+                                "id": "#unnumbered",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "unnumbered-id": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "interface-name": {
+                                "id": "#interface-name",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "interface-name": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "l3-event-type": {
+        "type": "string",
+        "enum": [
+            "add",
+            "remove",
+            "update"
+        ]
+    },
+    "prefix-flag-type": {
+        "type": "string"
+    },
+    "node-flag-type": {
+        "type": "string"
+    },
+    "link-flag-type": {
+        "type": "string"
+    },
+    "l3-flag-type": {
+        "type": "string"
+    },
+    "l2-network-type": {
+        "id": "#l2-network-type",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "l2-network": {
+                "id": "#l2-network",
+                "type": "object",
+                "additionalProperties": false
+            }
+        }
+    },
+    "l2-network-attributes": {
+        "id": "#l2-network-attributes",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "l2-network-attributes": {
+                "id": "#l2-network-attributes",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "flag": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "l2-node-attributes": {
+        "id": "#l2-node-attributes",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "l2-node-attributes": {
+                "id": "#l2-node-attributes",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "management-address": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "sys-mac-address": {
+                        "type": "string"
+                    },
+                    "management-vid": {
+                        "type": "string"
+                    },
+                    "nick-name": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "vn-id": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "flag": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "l2-link-attributes": {
+        "id": "#l2-link-attributes",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "l2-link-attributes": {
+                "id": "#l2-link-attributes",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "flag": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "rate": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "delay": {
+                        "type": "string"
+                    },
+                    "srlg": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "l2-termination-point-attributes": {
+        "id": "#l2-termination-point-attributes",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+            "l2-termination-point-attributes": {
+                "id": "#l2-termination-point-attributes",
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "description": {
+                        "type": "string"
+                    },
+                    "maximum-frame-size": {
+                        "type": "string"
+                    },
+                    "l2-termination-point-type": {
+                        "id": "#l2-termination-point-type",
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "ethernet": {
+                                "id": "#ethernet",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "mac-address": {
+                                        "type": "string"
+                                    },
+                                    "eth-encapsulation": {
+                                        "type": "string"
+                                    },
+                                    "port-vlan-id": {
+                                        "type": "string"
+                                    },
+                                    "vlan-id-name": {
+                                        "id": "#vlan-id-name",
+                                        "type": "array",
+                                        "additionalProperties": false,
+                                        "items": {
+                                            "properties": {
+                                                "vlan-id": {
+                                                    "type": "string"
+                                                },
+                                                "vlan-name": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "legacy": {
+                                "id": "#legacy",
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "layer-2-address": {
+                                        "type": "string"
+                                    },
+                                    "encapsulation": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "tp-state": {
+                        "type": "string",
+                        "enum": [
+                            "in-use",
+                            "blocking",
+                            "down",
+                            "others"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "vlan": {
+        "type": "string"
+    },
+    "trill-nickname": {
+        "type": "string"
+    },
+    "vni": {
+        "type": "string"
+    },
+    "l2-flag-type": {
+        "type": "string"
+    },
+    "l2-network-event-type": {
+        "type": "string",
+        "enum": [
+            "add",
+            "remove",
+            "update"
+        ]
+    }
+}
