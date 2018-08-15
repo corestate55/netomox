@@ -6,9 +6,10 @@ module TopoChecker
   class GraphNetworks < Networks
     attr_reader :objects
 
-    def initialize(data)
+    def initialize(data, db_info)
       super(data)
       @objects = []
+      @db_info = db_info
       make_neo4j_objects
       config_neo4j
     end

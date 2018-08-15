@@ -11,6 +11,11 @@ You can find latest yang files defined in [RFC8345](https://www.rfc-editor.org/i
 
 ## Installation
 
+### Setup environment
+
+* Install tools for development tools (in Ubuntu, `apt install build-essentials`)
+* Install `ruby`, `ruby-dev`, `ruby-bundler`
+
 ### Setup tools
 
 * Install [pyang](https://github.com/mbj4668/pyang)
@@ -30,6 +35,7 @@ make
 to check (and convert to xml) all json data in `model` directory.
 
 ### Store topology data with Neo4j
+Ready `db_info.json` file to store information to connect your Neo4j database.
 
 Install [neography](https://github.com/maxdemarzi/neography) to post the data into neo4j graph database.
 ```

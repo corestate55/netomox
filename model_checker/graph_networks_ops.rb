@@ -17,11 +17,7 @@ module TopoChecker
     private
 
     def config_neo4j
-      @n4j = Neography::Rest.new(
-        server: '192.168.1.82',
-        username: 'neo4j',
-        password: 'NetworkM0deling'
-      )
+      @n4j = Neography::Rest.new(@db_info)
     end
 
     def add_label(object, labels)

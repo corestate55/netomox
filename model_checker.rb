@@ -22,9 +22,7 @@ opt.parse!(ARGV)
 ## read file
 data = []
 if option[:file]
-  File.open(option[:file]) do |file|
-    data = JSON.parse(file.read)
-  end
+  data = JSON.parse(File.read(option[:file]))
 else
   warn opt.help
   exit 1
@@ -33,30 +31,32 @@ puts JSON.pretty_generate(data) if option[:debug]
 
 if option[:check]
   networks = TopoChecker::Networks.new(data)
-  p '## check all supporting networks'
+  puts '# check all supporting networks'
   networks.check_all_supporting_networks
-  p '## check all supporting nodes'
+  puts '# check all supporting nodes'
   networks.check_all_supporting_nodes
-  p '## check all supporting termination points'
+  puts '# check all supporting termination points'
   networks.check_all_supporting_tps
-  p '## check all supporting links'
+  puts '# check all supporting links'
   networks.check_all_supporting_links
-  p '## check all link pair'
+  puts '# check all link pair'
   networks.check_all_link_pair
-  p '## check uniqueness'
+  puts '# check uniqueness'
   networks.check_object_uniqueness
-  p '## check terminal point reference count'
+  puts '# check terminal point reference count'
   networks.check_tp_ref_count
 end
 
 if option[:neo4j]
-  networks = TopoChecker::GraphNetworks.new(data)
+  db_info = JSON.parse(File.read('./db_info.json'), symbolize_names: true)
+  networks = TopoChecker::GraphNetworks.new(data, db_info)
   if option[:debug]
     puts JSON.pretty_generate(networks.node_objects)
     puts JSON.pretty_generate(networks.relationship_objects)
+    puts db_info
   end
-  p 'clear all nodes'
+  puts '# clear all nodes'
   networks.exec_clear_all_objects
-  p 'create nodes/relationships'
+  puts '# create nodes/relationships'
   networks.exec_create_objects
 end
