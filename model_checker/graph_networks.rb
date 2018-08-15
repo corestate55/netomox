@@ -62,20 +62,27 @@ module TopoChecker
       all_termination_points do |tp, node, _nw|
         @objects.concat(tp.n4j_create)
         # p "create relationship, Label:has, id:#{node.path},#{tp.path}"
-        @objects.push(node_tp_relation(tp, node))
+        @objects.push(*node_tp_relation(tp, node)) # expand array
       end
     end
 
-    def node_tp_relation(term_point, node)
+    def construct_node_tp_relation(source, destination)
       {
         object_type: :relationship,
-        rel_type: :has,
+        rel_type: :connected,
         labels: [],
         property: {
-          source: node.path,
-          destination: term_point.path
+          source: source,
+          destination: destination
         }
       }
+    end
+
+    def node_tp_relation(term_point, node)
+      [
+        construct_node_tp_relation(node.path, term_point.path),
+        construct_node_tp_relation(term_point.path, node.path)
+      ]
     end
 
     def n4j_create_for_all_links

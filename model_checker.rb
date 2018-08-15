@@ -51,9 +51,13 @@ if option[:neo4j]
   db_info = JSON.parse(File.read('./db_info.json'), symbolize_names: true)
   networks = TopoChecker::GraphNetworks.new(data, db_info)
   if option[:debug]
+    puts '# node objects'
     puts JSON.pretty_generate(networks.node_objects)
+    puts '# relationship objects'
     puts JSON.pretty_generate(networks.relationship_objects)
+    puts '# DB info'
     puts db_info
+    exit(0)
   end
   puts '# clear all nodes'
   networks.exec_clear_all_objects
