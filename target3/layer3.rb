@@ -153,18 +153,18 @@ def make_target_layer3
       support 'target-L2', 'SV2'
     end
 
-    bdlink 'GRT-vRT', 'p1', 'Seg.A', 'p0'
-    bdlink 'GRT-vRT', 'p2', 'Seg.B', 'p0'
-    bdlink 'R1-GRT', 'p1', 'Seg.A', 'p1'
-    bdlink 'R1-GRT', 'p2', 'Seg.B', 'p1'
-    bdlink 'R2-GRT', 'p1', 'Seg.A', 'p2'
-    bdlink 'R2-GRT', 'p2', 'Seg.B', 'p2'
-    bdlink 'Seg.A', 'p3', 'VM1', 'eth0'
-    bdlink 'Seg.B', 'p3', 'VM2', 'eth0.20'
-    bdlink 'Seg.A', 'p4', 'SV1', 'eth0'
-    bdlink 'Seg.B', 'p4', 'SV2', 'eth0.20'
-    bdlink 'VM2', 'eth0.30', 'Seg.C', 'p1'
-    bdlink 'SV2', 'eth0.30', 'Seg.C', 'p2'
+    bdlink %w[GRT-vRT p1 Seg.A p0]
+    bdlink %w[GRT-vRT p2 Seg.B p0]
+    bdlink %w[R1-GRT p1 Seg.A p1]
+    bdlink %w[R1-GRT p2 Seg.B p1]
+    bdlink %w[R2-GRT p1 Seg.A p2]
+    bdlink %w[R2-GRT p2 Seg.B p2]
+    bdlink %w[Seg.A p3 VM1 eth0]
+    bdlink %w[Seg.B p3 VM2 eth0.20]
+    bdlink %w[Seg.A p4 SV1 eth0]
+    bdlink %w[Seg.B p4 SV2 eth0.20]
+    bdlink %w[VM2 eth0.30 Seg.C p1]
+    bdlink %w[SV2 eth0.30 Seg.C p2]
   end
 end
 # rubocop:enable Metrics/MethodLength, Metrics/BlockLength, Metrics/AbcSize

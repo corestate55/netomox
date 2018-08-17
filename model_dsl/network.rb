@@ -90,11 +90,19 @@ module NWTopoDSL
       @nodes.push(Node.new(name, @type, &block))
     end
 
-    def bdlink(src_node, src_tp, dst_node, dst_tp, &block)
+    def bdlink(src_node, src_tp = false,
+               dst_node = false, dst_tp = false, &block)
       # make bidirectional link
+      args = if src_tp && dst_node && dst_tp
+               # with 4 args
+               [src_node, src_tp, dst_node, dst_tp]
+             else
+               # with  1 arg (with array)
+               src_node
+             end
       @links.push(
-        Link.new(src_node, src_tp, dst_node, dst_tp, &block),
-        Link.new(dst_node, dst_tp, src_node, src_tp, &block)
+        Link.new(args[0], args[1], args[2], args[3], &block),
+        Link.new(args[2], args[3], args[0], args[1], &block)
       )
     end
 

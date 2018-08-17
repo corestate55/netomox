@@ -43,16 +43,16 @@ def make_target_layer1
       term_point 'eth0'
     end
 
-    bdlink 'R1', 'Fa0', 'R2', 'Fa0'
-    bdlink 'R1', 'Fa1', 'R2', 'Fa1'
-    bdlink 'R1', 'Po1', 'R2', 'Po1'
-    bdlink 'R1', 'Fa2', 'SW1', 'Fa1'
-    bdlink 'R2', 'Fa2', 'SW2', 'Fa1'
-    bdlink 'SW1', 'Fa0', 'SW2', 'Fa0'
-    bdlink 'SW1', 'Fa2', 'HYP1', 'eth0'
-    bdlink 'SW2', 'Fa2', 'HYP1', 'eth1'
-    bdlink 'SW2', 'Fa3', 'SV1', 'eth0'
-    bdlink 'SW2', 'Fa4', 'SV2', 'eth0'
+    bdlink %w[R1 Fa0 R2 Fa0]
+    bdlink %w[R1 Fa1 R2 Fa1]
+    bdlink %w[R1 Po1 R2 Po1]
+    bdlink %w[R1 Fa2 SW1 Fa1]
+    bdlink %w[R2 Fa2 SW2 Fa1]
+    bdlink %w[SW1 Fa0 SW2 Fa0]
+    bdlink %w[SW1 Fa2 HYP1 eth0]
+    bdlink %w[SW2 Fa2 HYP1 eth1]
+    bdlink %w[SW2 Fa3 SV1 eth0]
+    bdlink %w[SW2 Fa4 SV2 eth0]
   end
 end
 # rubocop:enable Metrics/MethodLength, Metrics/BlockLength, Metrics/AbcSize

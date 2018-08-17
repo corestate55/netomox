@@ -155,20 +155,20 @@ def make_target_layer2
       support 'target-L1', 'SV2'
     end
 
-    bdlink 'R1-GRT', 'p1', 'R1-BR', 'p1'
-    bdlink 'R2-GRT', 'p1', 'R2-BR', 'p1'
-    bdlink 'R1-BR', 'p2', 'R2-BR', 'p2'
-    bdlink 'R1-BR', 'p3', 'SW1-BR', 'p1'
-    bdlink 'R2-BR', 'p3', 'SW2-BR', 'p1'
-    bdlink 'SW1-BR', 'p2', 'SW2-BR', 'p2'
-    bdlink 'SW1-BR', 'p3', 'HYP1-vSW1-BR', 'p1'
-    bdlink 'SW2-BR', 'p3', 'HYP1-vSW1-BR', 'p2'
-    bdlink 'SW2-BR', 'p4', 'SV1', 'eth0'
-    bdlink 'HYP1-vSW1-BR', 'p3', 'VM1', 'eth0'
-    bdlink 'HYP1-vSW1-BR', 'p4', 'VM2', 'eth0.20'
-    bdlink 'SW2-BR', 'p5', 'SV2', 'eth0.20'
-    bdlink 'HYP1-vSW1-BR', 'p5', 'VM2', 'eth0.30'
-    bdlink 'SW2-BR', 'p6', 'SV2', 'eth0.30'
+    bdlink %w[R1-GRT p1 R1-BR p1]
+    bdlink %w[R2-GRT p1 R2-BR p1]
+    bdlink %w[R1-BR p2 R2-BR p2]
+    bdlink %w[R1-BR p3 SW1-BR p1]
+    bdlink %w[R2-BR p3 SW2-BR p1]
+    bdlink %w[SW1-BR p2 SW2-BR p2]
+    bdlink %w[SW1-BR p3 HYP1-vSW1-BR p1]
+    bdlink %w[SW2-BR p3 HYP1-vSW1-BR p2]
+    bdlink %w[SW2-BR p4 SV1 eth0]
+    bdlink %w[HYP1-vSW1-BR p3 VM1 eth0]
+    bdlink %w[HYP1-vSW1-BR p4 VM2 eth0.20]
+    bdlink %w[SW2-BR p5 SV2 eth0.20]
+    bdlink %w[HYP1-vSW1-BR p5 VM2 eth0.30]
+    bdlink %w[SW2-BR p6 SV2 eth0.30]
   end
 end
 # rubocop:enable Metrics/MethodLength, Metrics/BlockLength, Metrics/AbcSize

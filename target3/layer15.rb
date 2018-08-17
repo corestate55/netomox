@@ -26,8 +26,8 @@ def make_target_layer15
       support 'target-L1', 'HYP1'
     end
 
-    bdlink 'HYP1-vSW1', 'p1', 'VM1', 'eth0'
-    bdlink 'HYP1-vSW1', 'p2', 'VM2', 'eth0'
+    bdlink %w[HYP1-vSW1 p1 VM1 eth0]
+    bdlink %w[HYP1-vSW1 p2 VM2 eth0]
   end
 end
 # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
