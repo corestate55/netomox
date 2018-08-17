@@ -7,6 +7,10 @@ def make_target_layer3
     support 'target-L1'
     support 'target-L1.5'
     support 'target-L2'
+    attribute(
+      name: 'L3 of target network',
+      flags: %w[layer3 unicast]
+    )
 
     node 'GRT-vRT' do
       term_point 'p1' do

@@ -6,6 +6,10 @@ def make_target_layer2
     type NWTopoDSL::NWTYPE_L2
     support 'target-L1'
     support 'target-L1.5'
+    attribute(
+      name: 'L2 of target network',
+      flags: ['layer2']
+    )
 
     node 'R1-GRT' do
       term_point 'p1'

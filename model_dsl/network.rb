@@ -3,6 +3,44 @@ require_relative 'node'
 require_relative 'link'
 
 module NWTopoDSL
+  # network attribute base
+  class NetworkAttributeBase
+    attr_accessor :name, :flags
+    attr_reader :type
+    def initialize(name: '', flags: [])
+      @name = name
+      @flags = flags
+      @type = ''
+    end
+
+    def topo_data
+      {
+        'name': @name,
+        'flags': @flags
+      }
+    end
+
+    def empty?
+      @name.empty? && @flags.empty?
+    end
+  end
+
+  # attributes for L3 network
+  class L3NWAttribute < NetworkAttributeBase
+    def initialize(name: '', flags: [])
+      super(name: name, flags: flags)
+      @type = "#{NS_L3NW}:l3-topology-attributes"
+    end
+  end
+
+  # attributes for L2 network
+  class L2NWAttribute < NetworkAttributeBase
+    def initialize(name: '', flags: [])
+      super(name: name, flags: flags)
+      @type = "#{NS_L2NW}:l2-network-attributes"
+    end
+  end
+
   # supporting network container
   class SupportNetwork
     def initialize(nw_ref)
@@ -34,6 +72,16 @@ module NWTopoDSL
       @supports.push(SupportNetwork.new(nw_ref))
     end
 
+    def attribute(attr)
+      @attribute = if @type.key?(NWTYPE_L2)
+                     L2NWAttribute.new(attr)
+                   elsif @type.key?(NWTYPE_L3)
+                     L3NWAttribute.new(attr)
+                   else
+                     {}
+                   end
+    end
+
     def register(&block)
       instance_eval(&block)
     end
@@ -50,6 +98,7 @@ module NWTopoDSL
       )
     end
 
+    # rubocop:disable Metrics/MethodLength
     def topo_data
       data = {
         'network-id': @name,
@@ -60,7 +109,9 @@ module NWTopoDSL
       unless @supports.empty?
         data['supporting-network'] = @supports.map(&:topo_data)
       end
+      data[@attribute.type] = @attribute.topo_data unless @attribute.empty?
       data
     end
+    # rubocop:enable Metrics/MethodLength
   end
 end
