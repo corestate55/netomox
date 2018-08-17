@@ -1,4 +1,4 @@
-module ModelDSL
+module NWTopoDSL
   NS_NW = 'ietf-network'.freeze
   NS_TOPO = 'ietf-network-topology'.freeze
   NS_L2NW = 'ietf-l2-topology'.freeze

@@ -1,4 +1,4 @@
-module ModelDSL
+module NWTopoDSL
   # termination point reference
   class TermPointRef
     attr_reader :node_ref, :tp_ref
@@ -16,19 +16,21 @@ module ModelDSL
     end
   end
 
+  # termination point reference for link source
   class SrcTPRef < TermPointRef
     def initialize(node_ref, tp_ref)
       super(node_ref, tp_ref, 'source')
     end
   end
 
+  # termination point reference for link destination
   class DstTPRef < TermPointRef
     def initialize(node_ref, tp_ref)
       super(node_ref, tp_ref, 'dest')
     end
   end
 
-# link (unidirectional)
+  # link (unidirectional)
   class Link
     def initialize(src_node, src_tp, dst_node, dst_tp, &block)
       @name = [src_node, src_tp, dst_node, dst_tp].join(',')

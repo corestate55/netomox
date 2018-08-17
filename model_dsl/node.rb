@@ -1,7 +1,7 @@
-require_relative 'dsl_const'
-require_relative 'dsl_tp'
+require_relative 'const'
+require_relative 'tp'
 
-module ModelDSL
+module NWTopoDSL
   # supporting node container
   class SupportNode
     def initialize(nw_ref, node_ref)
@@ -44,7 +44,9 @@ module ModelDSL
         'node-id': @name,
         "#{NS_TOPO}:termination-point": @term_points.map(&:topo_data)
       }
-      data['supporting-node'] = @supports.map(&:topo_data) unless @supports.empty?
+      unless @supports.empty?
+        data['supporting-node'] = @supports.map(&:topo_data)
+      end
       data
     end
   end

@@ -1,4 +1,4 @@
-module ModelDSL
+module NWTopoDSL
   # supporting termination point container
   class SupportTermPoint
     def initialize(nw_ref, node_ref, tp_ref)
@@ -35,7 +35,9 @@ module ModelDSL
 
     def topo_data
       data = { 'tp-id': @name }
-      data['supporting-termination-point'] = @supports.map(&:topo_data) unless @supports.empty?
+      unless @supports.empty?
+        data['supporting-termination-point'] = @supports.map(&:topo_data)
+      end
       data
     end
   end

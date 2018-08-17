@@ -1,3 +1,5 @@
-require_relative 'dsl_const'
-require_relative 'dsl_networks'
-module ModelDSL; end
+require_relative 'const'
+require_relative 'networks'
+
+# DSL to Make Network Topology Data
+module NWTopoDSL; end

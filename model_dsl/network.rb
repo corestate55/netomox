@@ -1,8 +1,8 @@
-require_relative 'dsl_const'
-require_relative 'dsl_node'
-require_relative 'dsl_link'
+require_relative 'const'
+require_relative 'node'
+require_relative 'link'
 
-module ModelDSL
+module NWTopoDSL
   # supporting network container
   class SupportNetwork
     def initialize(nw_ref)
@@ -57,7 +57,9 @@ module ModelDSL
         'node': @nodes.map(&:topo_data),
         "#{NS_TOPO}:link": @links.map(&:topo_data)
       }
-      data['supporting-network'] = @supports.map(&:topo_data) unless @supports.empty?
+      unless @supports.empty?
+        data['supporting-network'] = @supports.map(&:topo_data)
+      end
       data
     end
   end

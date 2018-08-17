@@ -1,8 +1,10 @@
-require_relative 'dsl_network'
+require_relative 'network'
 
-module ModelDSL
+module NWTopoDSL
   # multiple network container (top)
   class Networks
+    attr_accessor :networks
+
     def initialize(&block)
       @networks = []
       register(&block) if block_given?
