@@ -114,8 +114,14 @@ module NWTopoDSL
       @term_points.push(TermPoint.new(name, &block))
     end
 
-    def support(nw_ref, node_ref)
-      @supports.push(SupportNode.new(nw_ref, node_ref))
+    def support(nw_ref, node_ref = false)
+      if node_ref
+        # with 2 args
+        @supports.push(SupportNode.new(nw_ref, node_ref))
+      else
+        # with 1 arg (with array)
+        @supports.push(SupportNode.new(*nw_ref))
+      end
     end
 
     def attribute(attr)

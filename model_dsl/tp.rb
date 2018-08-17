@@ -29,8 +29,14 @@ module NWTopoDSL
       instance_eval(&block)
     end
 
-    def support(nw_ref, node_ref, tp_ref)
-      @supports.push(SupportTermPoint.new(nw_ref, node_ref, tp_ref))
+    def support(nw_ref, node_ref = false, tp_ref = false)
+      if node_ref && tp_ref
+        # with 3 args
+        @supports.push(SupportTermPoint.new(nw_ref, node_ref, tp_ref))
+      else
+        # with 1 arg (with array)
+        @supports.push(SupportTermPoint.new(*nw_ref))
+      end
     end
 
     def topo_data

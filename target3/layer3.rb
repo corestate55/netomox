@@ -22,15 +22,15 @@ def make_target_layer3
         flags: %w[fhrp-virtual-router default-gateway pseudo-node]
       )
       term_point 'p1' do
-        support 'target-L3', 'R1-GRT', 'p1'
-        support 'target-L3', 'R2-GRT', 'p1'
+        support %w[target-L3 R1-GRT p1]
+        support %w[target-L3 R2-GRT p1]
       end
       term_point 'p2' do
-        support 'target-L3', 'R1-GRT', 'p2'
-        support 'target-L3', 'R2-GRT', 'p2'
+        support %w[target-L3 R1-GRT p2]
+        support %w[target-L3 R2-GRT p2]
       end
-      support 'target-L3', 'R1-GRT'
-      support 'target-L3', 'R2-GRT'
+      support %w[target-L3 R1-GRT]
+      support %w[target-L3 R2-GRT]
     end
 
     node 'R1-GRT' do
@@ -39,12 +39,12 @@ def make_target_layer3
         router_id: '192.168.0.1'
       )
       term_point 'p1' do
-        support 'target-L2', 'R1-GRT', 'p1'
+        support %w[target-L2 R1-GRT p1]
       end
       term_point 'p2' do
-        support 'target-L2', 'R1-GRT', 'p1'
+        support %w[target-L2 R1-GRT p1]
       end
-      support 'target-L2', 'R1-GRT'
+      support %w[target-L2 R1-GRT]
     end
 
     node 'R2-GRT' do
@@ -53,12 +53,12 @@ def make_target_layer3
         router_id: '192.168.0.2'
       )
       term_point 'p1' do
-        support 'target-L2', 'R2-GRT', 'p1'
+        support %w[target-L2 R2-GRT p1]
       end
       term_point 'p2' do
-        support 'target-L2', 'R2-GRT', 'p1'
+        support %w[target-L2 R2-GRT p1]
       end
-      support 'target-L2', 'R2-GRT'
+      support %w[target-L2 R2-GRT]
     end
 
     node 'Seg.A' do
@@ -68,16 +68,16 @@ def make_target_layer3
       )
       (0..2).each { |n| term_point "p#{n}" }
       term_point 'p3' do
-        support 'target-L2', 'HYP1-vSW1-BR', 'p3'
+        support %w[target-L2 HYP1-vSW1-BR p3]
       end
       term_point 'p4' do
-        support 'target-L2', 'SW2-BR', 'p4'
+        support %w[target-L2 SW2-BR p4]
       end
-      support 'target-L2', 'R1-BR'
-      support 'target-L2', 'R2-BR'
-      support 'target-L2', 'SW1-BR'
-      support 'target-L2', 'SW2-BR'
-      support 'target-L2', 'HYP1-vSW1-BR'
+      support %w[target-L2 R1-BR]
+      support %w[target-L2 R2-BR]
+      support %w[target-L2 SW1-BR]
+      support %w[target-L2 SW2-BR]
+      support %w[target-L2 HYP1-vSW1-BR]
     end
 
     node 'Seg.B' do
@@ -87,16 +87,16 @@ def make_target_layer3
       )
       (0..2).each { |n| term_point "p#{n}" }
       term_point 'p3' do
-        support 'target-L2', 'HYP1-vSW1-BR', 'p3'
+        support %w[target-L2 HYP1-vSW1-BR p3]
       end
       term_point 'p4' do
-        support 'target-L2', 'SW2-BR', 'p5'
+        support %w[target-L2 SW2-BR p5]
       end
-      support 'target-L2', 'R1-BR'
-      support 'target-L2', 'R2-BR'
-      support 'target-L2', 'SW1-BR'
-      support 'target-L2', 'SW2-BR'
-      support 'target-L2', 'HYP1-vSW1-BR'
+      support %w[target-L2 R1-BR]
+      support %w[target-L2 R2-BR]
+      support %w[target-L2 SW1-BR]
+      support %w[target-L2 SW2-BR]
+      support %w[target-L2 HYP1-vSW1-BR]
     end
 
     node 'Seg.C' do
@@ -105,52 +105,52 @@ def make_target_layer3
         flags: %w[l3-segment pseudo-node]
       )
       term_point 'p1' do
-        support 'target-L2', 'HYP1-vSW1-BR', 'p4'
+        support %w[target-L2 HYP1-vSW1-BR p4]
       end
       term_point 'p2' do
-        support 'target-L2', 'SW2-BR', 'p6'
+        support %w[target-L2 SW2-BR p6]
       end
-      support 'target-L2', 'SW1-BR'
-      support 'target-L2', 'SW2-BR'
-      support 'target-L2', 'HYP1-vSW1-BR'
+      support %w[target-L2 SW1-BR]
+      support %w[target-L2 SW2-BR]
+      support %w[target-L2 HYP1-vSW1-BR]
     end
 
     node 'VM1' do
       attribute(prefixes: [seg_a_prefix])
       term_point 'eth0' do
-        support 'target-L2', 'VM1', 'eth0'
+        support %w[target-L2 VM1 eth0]
       end
-      support 'target-L2', 'VM1'
+      support %w[target-L2 VM1]
     end
 
     node 'VM2' do
       attribute(prefixes: [seg_b_prefix, seg_c_prefix])
       term_point 'eth0.20' do
-        support 'target-L2', 'VM2', 'eth0.20'
+        support %w[target-L2 VM2 eth0.20]
       end
       term_point 'eth0.30' do
-        support 'target-L2', 'VM2', 'eth0.30'
+        support %w[target-L2 VM2 eth0.30]
       end
-      support 'target-L2', 'VM2'
+      support %w[target-L2 VM2]
     end
 
     node 'SV1' do
       attribute(prefixes: [seg_a_prefix])
       term_point 'eth0' do
-        support 'target-L2', 'SV1', 'eth0'
+        support %w[target-L2 SV1 eth0]
       end
-      support 'target-L2', 'SV1'
+      support %w[target-L2 SV1]
     end
 
     node 'SV2' do
       attribute(prefixes: [seg_b_prefix, seg_c_prefix])
       term_point 'eth0.20' do
-        support 'target-L2', 'SV2', 'eth0.20'
+        support %w[target-L2 SV2 eth0.20]
       end
       term_point 'eth0.30' do
-        support 'target-L2', 'SV2', 'eth0.30'
+        support %w[target-L2 SV2 eth0.30]
       end
-      support 'target-L2', 'SV2'
+      support %w[target-L2 SV2]
     end
 
     bdlink %w[GRT-vRT p1 Seg.A p0]

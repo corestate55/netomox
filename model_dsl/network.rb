@@ -97,7 +97,7 @@ module NWTopoDSL
                # with 4 args
                [src_node, src_tp, dst_node, dst_tp]
              else
-               # with  1 arg (with array)
+               # with 1 arg (with array)
                src_node
              end
       @links.push(

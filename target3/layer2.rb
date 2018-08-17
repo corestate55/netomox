@@ -19,18 +19,18 @@ def make_target_layer2
         mgmt_vid: 10
       )
       term_point 'p1'
-      support 'target-L1', 'R1'
+      support %w[target-L1 R1]
     end
 
     node 'R1-BR' do
       term_point 'p1'
       term_point 'p2' do
-        support 'target-L1', 'R1', 'Po1'
+        support %w[target-L1 R1 Po1]
       end
       term_point 'p3' do
-        support 'target-L1', 'R1', 'Fa2'
+        support %w[target-L1 R1 Fa2]
       end
-      support 'target-L1', 'R1'
+      support %w[target-L1 R1]
     end
 
     node 'R2-GRT' do
@@ -41,18 +41,18 @@ def make_target_layer2
         mgmt_vid: 10
       )
       term_point 'p1'
-      support 'target-L1', 'R2'
+      support %w[target-L1 R2]
     end
 
     node 'R2-BR' do
       term_point 'p1'
       term_point 'p2' do
-        support 'target-L1', 'R2', 'Po1'
+        support %w[target-L1 R2 Po1]
       end
       term_point 'p3' do
-        support 'target-L1', 'R2', 'Fa2'
+        support %w[target-L1 R2 Fa2]
       end
-      support 'target-L1', 'R2'
+      support %w[target-L1 R2]
     end
 
     node 'SW1-BR' do
@@ -63,15 +63,15 @@ def make_target_layer2
         mgmt_vid: 10
       )
       term_point 'p1' do
-        support 'target-L1', 'SW1', 'Fa1'
+        support %w[target-L1 SW1 Fa1]
       end
       term_point 'p2' do
-        support 'target-L1', 'SW1', 'Fa0'
+        support %w[target-L1 SW1 Fa0]
       end
       term_point 'p3' do
-        support 'target-L1', 'SW1', 'Fa2'
+        support %w[target-L1 SW1 Fa2]
       end
-      support 'target-L1', 'SW1'
+      support %w[target-L1 SW1]
     end
 
     node 'SW2-BR' do
@@ -82,77 +82,77 @@ def make_target_layer2
         mgmt_vid: 10
       )
       term_point 'p1' do
-        support 'target-L1', 'SW2', 'Fa1'
+        support %w[target-L1 SW2 Fa1]
       end
       term_point 'p2' do
-        support 'target-L1', 'SW2', 'Fa0'
+        support %w[target-L1 SW2 Fa0]
       end
       term_point 'p3' do
-        support 'target-L1', 'SW2', 'Fa2'
+        support %w[target-L1 SW2 Fa2]
       end
       term_point 'p4' do
-        support 'target-L1', 'SW2', 'Fa3'
+        support %w[target-L1 SW2 Fa3]
       end
       term_point 'p5' do
-        support 'target-L1', 'SW2', 'Fa4'
+        support %w[target-L1 SW2 Fa4]
       end
       term_point 'p6' do
-        support 'target-L1', 'SW2', 'Fa4'
+        support %w[target-L1 SW2 Fa4]
       end
-      support 'target-L1', 'SW2'
+      support %w[target-L1 SW2]
     end
 
     node 'HYP1-vSW1-BR' do
       term_point 'p1' do
-        support 'target-L1.5', 'HYP1-vSW1', 'eth0'
+        support %w[target-L1.5 HYP1-vSW1 eth0]
       end
       term_point 'p2' do
-        support 'target-L1.5', 'HYP1-vSW1', 'eth1'
+        support %w[target-L1.5 HYP1-vSW1 eth1]
       end
       term_point 'p3' do
-        support 'target-L1.5', 'HYP1-vSW1', 'p1'
+        support %w[target-L1.5 HYP1-vSW1 p1]
       end
       term_point 'p4' do
-        support 'target-L1.5', 'HYP1-vSW1', 'p2'
+        support %w[target-L1.5 HYP1-vSW1 p2]
       end
       term_point 'p5' do
-        support 'target-L1.5', 'HYP1-vSW1', 'p2'
+        support %w[target-L1.5 HYP1-vSW1 p2]
       end
-      support 'target-L1.5', 'HYP1-vSW1'
+      support %w[target-L1.5 HYP1-vSW1]
     end
 
     node 'VM1' do
       term_point 'eth0' do
-        support 'target-L1.5', 'VM1', 'eth0'
+        support %w[target-L1.5 VM1 eth0]
       end
-      support 'target-L1.5', 'VM1'
+      support %w[target-L1.5 VM1]
     end
 
     node 'VM2' do
       term_point 'eth0.20' do
-        support 'target-L1.5', 'VM2', 'eth0'
+        support %w[target-L1.5 VM2 eth0]
       end
       term_point 'eth0.30' do
-        support 'target-L1.5', 'VM2', 'eth0'
+        support %w[target-L1.5 VM2 eth0]
       end
-      support 'target-L1.5', 'VM2'
+      support %w[target-L1.5 VM2]
     end
 
     node 'SV1' do
       term_point 'eth0' do
-        support 'target-L1', 'SV1', 'eth0'
+        support %w[target-L1 SV1 eth0]
       end
-      support 'target-L1', 'SV1'
+      support %w[target-L1 SV1]
     end
 
     node 'SV2' do
       term_point 'eth0.20' do
-        support 'target-L1', 'SV2', 'eth0'
+        support %w[target-L1 SV2 eth0]
       end
       term_point 'eth0.30' do
-        support 'target-L1', 'SV2', 'eth0'
+        support %w[target-L1 SV2 eth0]
       end
-      support 'target-L1', 'SV2'
+      support %w[target-L1 SV2]
     end
 
     bdlink %w[R1-GRT p1 R1-BR p1]

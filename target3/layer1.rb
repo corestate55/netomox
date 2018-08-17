@@ -8,8 +8,8 @@ def make_target_layer1
       term_point 'Fa1'
       term_point 'Fa2'
       term_point 'Po1' do
-        support 'target-L1', 'R1', 'Fa0'
-        support 'target-L1', 'R1', 'Fa1'
+        support %w[target-L1 R1 Fa0]
+        support %w[target-L1 R1 Fa1]
       end
     end
 
@@ -18,8 +18,8 @@ def make_target_layer1
       term_point 'Fa1'
       term_point 'Fa2'
       term_point 'Po1' do
-        support 'target-L1', 'R2', 'Fa0'
-        support 'target-L1', 'R2', 'Fa1'
+        support %w[target-L1 R2 Fa0]
+        support %w[target-L1 R2 Fa1]
       end
     end
 
