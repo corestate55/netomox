@@ -26,7 +26,6 @@ module ModelDSL
     end
 
     def register(&block)
-      p '# TermPoint#register'
       instance_eval(&block)
     end
 

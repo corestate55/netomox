@@ -24,7 +24,7 @@ module ModelDSL
 
   class DstTPRef < TermPointRef
     def initialize(node_ref, tp_ref)
-      super(node_ref, tp_ref, 'destination')
+      super(node_ref, tp_ref, 'dest')
     end
   end
 
@@ -40,7 +40,6 @@ module ModelDSL
     end
 
     def register(&block)
-      p '# Link#register'
       instance_eval(&block)
     end
 

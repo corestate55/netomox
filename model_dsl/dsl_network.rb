@@ -1,3 +1,4 @@
+require_relative 'dsl_const'
 require_relative 'dsl_node'
 require_relative 'dsl_link'
 
@@ -34,7 +35,6 @@ module ModelDSL
     end
 
     def register(&block)
-      p '# Network#register'
       instance_eval(&block)
     end
 
@@ -43,6 +43,7 @@ module ModelDSL
     end
 
     def bdlink(src_node, src_tp, dst_node, dst_tp, &block)
+      # make bidirectional link
       @links.push(
         Link.new(src_node, src_tp, dst_node, dst_tp, &block),
         Link.new(dst_node, dst_tp, src_node, src_tp, &block)
@@ -54,7 +55,7 @@ module ModelDSL
         'network-id': @name,
         'network-types': @type,
         'node': @nodes.map(&:topo_data),
-        'link': @links.map(&:topo_data)
+        "#{NS_TOPO}:link": @links.map(&:topo_data)
       }
       data['supporting-network'] = @supports.map(&:topo_data) unless @supports.empty?
       data

@@ -9,7 +9,6 @@ module ModelDSL
     end
 
     def register(&block)
-      p '# Networks#register'
       instance_eval(&block)
     end
 
