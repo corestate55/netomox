@@ -87,7 +87,7 @@ module NWTopoDSL
     end
 
     def node(name, &block)
-      @nodes.push(Node.new(name, &block))
+      @nodes.push(Node.new(name, @type, &block))
     end
 
     def bdlink(src_node, src_tp, dst_node, dst_tp, &block)

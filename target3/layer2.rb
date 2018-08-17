@@ -12,6 +12,12 @@ def make_target_layer2
     )
 
     node 'R1-GRT' do
+      attribute(
+        name: 'R1-GRT',
+        descr: 'L2 of R1-GRT',
+        mgmt_addrs: %w[192.168.10.253 192.168.20.253],
+        mgmt_vid: 10
+      )
       term_point 'p1'
       support 'target-L1', 'R1'
     end
@@ -28,6 +34,12 @@ def make_target_layer2
     end
 
     node 'R2-GRT' do
+      attribute(
+        name: 'R2-GRT',
+        descr: 'L2 of R2-GRT',
+        mgmt_addrs: %w[192.168.10.252 192.168.20.252],
+        mgmt_vid: 10
+      )
       term_point 'p1'
       support 'target-L1', 'R2'
     end
@@ -44,6 +56,12 @@ def make_target_layer2
     end
 
     node 'SW1-BR' do
+      attribute(
+        name: 'SW1-BR',
+        descr: 'L2 bridge of SW1',
+        mgmt_addrs: %w[192.168.10.1],
+        mgmt_vid: 10
+      )
       term_point 'p1' do
         support 'target-L1', 'SW1', 'Fa1'
       end
@@ -57,6 +75,12 @@ def make_target_layer2
     end
 
     node 'SW2-BR' do
+      attribute(
+        name: 'SW2-BR',
+        descr: 'L2 bridge of SW2',
+        mgmt_addrs: %w[192.168.10.2],
+        mgmt_vid: 10
+      )
       term_point 'p1' do
         support 'target-L1', 'SW2', 'Fa1'
       end

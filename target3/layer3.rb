@@ -12,7 +12,15 @@ def make_target_layer3
       flags: %w[layer3 unicast]
     )
 
+    seg_a_prefix = { prefix: '192.168,10.0/24', metric: 100 }
+    seg_b_prefix = { prefix: '192.168.20.0/24', metric: 100 }
+    seg_c_prefix = { prefix: '192.168.30.0/24', metric: 100 }
+
     node 'GRT-vRT' do
+      attribute(
+        prefixes: [seg_a_prefix, seg_b_prefix],
+        flags: %w[fhrp-virtual-router default-gateway pseudo-node]
+      )
       term_point 'p1' do
         support 'target-L3', 'R1-GRT', 'p1'
         support 'target-L3', 'R2-GRT', 'p1'
@@ -26,6 +34,10 @@ def make_target_layer3
     end
 
     node 'R1-GRT' do
+      attribute(
+        prefixes: [seg_a_prefix, seg_b_prefix],
+        router_id: '192.168.0.1'
+      )
       term_point 'p1' do
         support 'target-L2', 'R1-GRT', 'p1'
       end
@@ -36,6 +48,10 @@ def make_target_layer3
     end
 
     node 'R2-GRT' do
+      attribute(
+        prefixes: [seg_a_prefix, seg_b_prefix],
+        router_id: '192.168.0.2'
+      )
       term_point 'p1' do
         support 'target-L2', 'R2-GRT', 'p1'
       end
@@ -46,6 +62,10 @@ def make_target_layer3
     end
 
     node 'Seg.A' do
+      attribute(
+        prefixes: [seg_a_prefix],
+        flags: %w[l3-segment pseudo-node]
+      )
       (0..2).each { |n| term_point "p#{n}" }
       term_point 'p3' do
         support 'target-L2', 'HYP1-vSW1-BR', 'p3'
@@ -61,6 +81,10 @@ def make_target_layer3
     end
 
     node 'Seg.B' do
+      attribute(
+        prefixes: [seg_b_prefix],
+        flags: %w[l3-segment pseudo-node]
+      )
       (0..2).each { |n| term_point "p#{n}" }
       term_point 'p3' do
         support 'target-L2', 'HYP1-vSW1-BR', 'p3'
@@ -76,6 +100,10 @@ def make_target_layer3
     end
 
     node 'Seg.C' do
+      attribute(
+        prefixes: [seg_c_prefix],
+        flags: %w[l3-segment pseudo-node]
+      )
       term_point 'p1' do
         support 'target-L2', 'HYP1-vSW1-BR', 'p4'
       end
@@ -88,6 +116,7 @@ def make_target_layer3
     end
 
     node 'VM1' do
+      attribute(prefixes: [seg_a_prefix])
       term_point 'eth0' do
         support 'target-L2', 'VM1', 'eth0'
       end
@@ -95,6 +124,7 @@ def make_target_layer3
     end
 
     node 'VM2' do
+      attribute(prefixes: [seg_b_prefix, seg_c_prefix])
       term_point 'eth0.20' do
         support 'target-L2', 'VM2', 'eth0.20'
       end
@@ -105,6 +135,7 @@ def make_target_layer3
     end
 
     node 'SV1' do
+      attribute(prefixes: [seg_a_prefix])
       term_point 'eth0' do
         support 'target-L2', 'SV1', 'eth0'
       end
@@ -112,6 +143,7 @@ def make_target_layer3
     end
 
     node 'SV2' do
+      attribute(prefixes: [seg_b_prefix, seg_c_prefix])
       term_point 'eth0.20' do
         support 'target-L2', 'SV2', 'eth0.20'
       end
