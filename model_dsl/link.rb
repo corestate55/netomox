@@ -1,3 +1,5 @@
+require_relative 'base'
+
 module NWTopoDSL
   # termination point reference
   class TermPointRef
@@ -31,7 +33,7 @@ module NWTopoDSL
   end
 
   # link (unidirectional)
-  class Link
+  class Link < DSLObjectBase
     def initialize(src_node, src_tp, dst_node, dst_tp, &block)
       @name = [src_node, src_tp, dst_node, dst_tp].join(',')
       @source = SrcTPRef.new(src_node, src_tp)
@@ -39,10 +41,6 @@ module NWTopoDSL
       @supports = [] # supporting link
       @attribute = {} # for augments
       register(&block) if block_given?
-    end
-
-    def register(&block)
-      instance_eval(&block)
     end
 
     def topo_data

@@ -1,17 +1,14 @@
+require_relative 'base'
 require_relative 'network'
 
 module NWTopoDSL
   # multiple network container (top)
-  class Networks
+  class Networks < DSLObjectBase
     attr_accessor :networks
 
     def initialize(&block)
       @networks = []
       register(&block) if block_given?
-    end
-
-    def register(&block)
-      instance_eval(&block)
     end
 
     def network(name, &block)

@@ -1,3 +1,5 @@
+require_relative 'base'
+
 module NWTopoDSL
   # supporting termination point container
   class SupportTermPoint
@@ -17,16 +19,12 @@ module NWTopoDSL
   end
 
   # termination point
-  class TermPoint
+  class TermPoint < DSLObjectBase
     def initialize(name, &block)
       @name = name
       @supports = [] # supporting termination point
       @attribute = {} # for augments
       register(&block) if block_given?
-    end
-
-    def register(&block)
-      instance_eval(&block)
     end
 
     def support(nw_ref, node_ref = false, tp_ref = false)

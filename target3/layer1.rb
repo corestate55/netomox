@@ -4,9 +4,7 @@ require_relative '../model_dsl/dsl'
 def make_target_layer1
   NWTopoDSL::Network.new 'target-L1' do
     node 'R1' do
-      term_point 'Fa0'
-      term_point 'Fa1'
-      term_point 'Fa2'
+      (0..2).each { |n| term_point "Fa#{n}" }
       term_point 'Po1' do
         support %w[target-L1 R1 Fa0]
         support %w[target-L1 R1 Fa1]
@@ -14,9 +12,7 @@ def make_target_layer1
     end
 
     node 'R2' do
-      term_point 'Fa0'
-      term_point 'Fa1'
-      term_point 'Fa2'
+      (0..2).each { |n| term_point "Fa#{n}" }
       term_point 'Po1' do
         support %w[target-L1 R2 Fa0]
         support %w[target-L1 R2 Fa1]
