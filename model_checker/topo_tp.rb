@@ -1,26 +1,10 @@
+require_relative 'topo_support_tp'
+
 module TopoChecker
   # Termination point for topology data
   class TerminationPoint
     attr_reader :name, :path, :supporting_termination_points, :ref_count
-
-    # Supporting termination point for topology termination point
-    class SupportingTerminationPoint
-      attr_reader :network_ref, :node_ref, :tp_ref
-
-      def initialize(data)
-        @network_ref = data['network-ref']
-        @node_ref = data['node-ref']
-        @tp_ref = data['tp-ref']
-      end
-
-      def to_s
-        "tp_ref:#{@network_ref}/#{@node_ref}/#{@tp_ref}"
-      end
-
-      def ref_path
-        [@network_ref, @node_ref, @tp_ref].join('/')
-      end
-    end
+    alias_method :supports, :supporting_termination_points
 
     def initialize(data, parent_path)
       @name = data['tp-id']
@@ -33,6 +17,24 @@ module TopoChecker
       @supporting_termination_points = data[stp_key].map do |stp|
         SupportingTerminationPoint.new(stp)
       end
+    end
+
+    def eql?(other)
+      @name == other.name
+    end
+
+    def to_s
+      "term_point:#{@name}"
+    end
+
+    def -(other)
+      deleted_stps = @supporting_termination_points - other.supports
+      added_stps = other.supports - @supporting_termination_points
+      kept_stps = @supporting_termination_points & other.supports
+      puts '    - supporting term points'
+      puts "      - deleted sup-tps: #{deleted_stps.map(&:to_s)}"
+      puts "      - added   sup-tps: #{added_stps.map(&:to_s)}"
+      puts "      - kept    sup-tps: #{kept_stps.map(&:to_s)}"
     end
 
     def ref_count_up

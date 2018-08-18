@@ -5,29 +5,38 @@ require_relative 'model_checker/graph_networks_ops'
 
 opt = OptionParser.new
 option = {}
-opt.on('-f', '--file=FILE', 'Target topology data (json)') do |v|
-  option[:file] = v
-end
 opt.on('-c', '--check', 'Run model check') do |v|
   option[:check] = v
 end
 opt.on('-n', '--neo4j', 'Add data to neo4j') do |v|
   option[:neo4j] = v
 end
-opt.on('-d', '--debug', 'Debug (dump data)') do |v|
-  option[:debug] = v
+opt.on('-v', '--verbose', 'Verbose output (dump data)') do |v|
+  option[:verbose] = v
 end
+opt.on('-d', '--diff', 'Diff between models') do |v|
+  option[:diff] = v
+end
+opt.banner += ' FILE [FILE]'
 opt.parse!(ARGV)
 
-## read file
-data = []
-if option[:file]
-  data = JSON.parse(File.read(option[:file]))
-else
+def help_and_exit(opt)
   warn opt.help
   exit 1
 end
-puts JSON.pretty_generate(data) if option[:debug]
+
+## read file
+data = nil
+if ARGV.empty?
+  help_and_exit opt
+else
+  data = JSON.parse(File.read(ARGV[0]))
+end
+
+if option[:verbose]
+  puts "# Target File: #{ARGV[0]}"
+  puts JSON.pretty_generate(data)
+end
 
 if option[:check]
   networks = TopoChecker::Networks.new(data)
@@ -50,7 +59,7 @@ end
 if option[:neo4j]
   db_info = JSON.parse(File.read('./db_info.json'), symbolize_names: true)
   networks = TopoChecker::GraphNetworks.new(data, db_info)
-  if option[:debug]
+  if option[:verbose]
     puts '# node objects'
     puts JSON.pretty_generate(networks.node_objects)
     puts '# relationship objects'
@@ -63,4 +72,21 @@ if option[:neo4j]
   networks.exec_clear_all_objects
   puts '# create nodes/relationships'
   networks.exec_create_objects
+end
+
+if option[:diff]
+  data2 = nil
+  if ARGV.length != 2
+    help_and_exit opt
+  else
+    data2 = JSON.parse(File.read(ARGV[1]))
+  end
+  if option[:verbose]
+    puts "# Target File: #{ARGV[1]}"
+    puts JSON.pretty_generate(data2)
+  end
+
+  nws1 = TopoChecker::Networks.new(data)
+  nws2 = TopoChecker::Networks.new(data2)
+  nws1 - nws2
 end

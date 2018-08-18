@@ -1,27 +1,11 @@
 require_relative 'topo_tp'
+require_relative 'topo_support_node'
 
 module TopoChecker
   # Node for topology data
   class Node
     attr_reader :name, :path, :termination_points, :supporting_nodes
-
-    # Supporting node for topology node
-    class SupportingNode
-      attr_reader :network_ref, :node_ref
-
-      def initialize(data)
-        @network_ref = data['network-ref']
-        @node_ref = data['node-ref']
-      end
-
-      def to_s
-        "node_ref:#{@network_ref}/#{@node_ref}"
-      end
-
-      def ref_path
-        [@network_ref, @node_ref].join('/')
-      end
-    end
+    alias_method :supports, :supporting_nodes
 
     def initialize(data, parent_path)
       @name = data['node-id']
@@ -33,6 +17,38 @@ module TopoChecker
       @supporting_nodes = data['supporting-node'].map do |snode|
         SupportingNode.new(snode)
       end
+    end
+
+    def eql?(other)
+      # for Nodes#-()
+      @name == other.name
+    end
+
+    def -(other)
+      deleted_tps = @termination_points - other.termination_points
+      added_tps = other.termination_points - @termination_points
+      kept_tps = @termination_points & other.termination_points
+      puts '  - term points'
+      puts "    - deleted tps: #{deleted_tps.map(&:to_s)}"
+      puts "    - added   tps: #{added_tps.map(&:to_s)}"
+      puts "    - kept    tps: #{kept_tps.map(&:to_s)}"
+      kept_tps.each do |tp|
+        lhs_tp = @termination_points.find { |t| t.eql?(tp) }
+        rhs_tp = other.termination_points.find { |t| t.eql?(tp) }
+        puts "    ## check #{lhs_tp}--#{rhs_tp} : changed or not"
+        lhs_tp - rhs_tp
+      end
+      deleted_snodes = @supporting_nodes - other.supports
+      added_snodes = other.supports - @supporting_nodes
+      kept_snodes = @supporting_nodes & other.supports
+      puts '  - supporting nodes'
+      puts "    - deleted sup-tps: #{deleted_snodes.map(&:to_s)}"
+      puts "    - added   sup-tps: #{added_snodes.map(&:to_s)}"
+      puts "    - kept    sup-tps: #{kept_snodes.map(&:to_s)}"
+    end
+
+    def to_s
+      "node:#{@name}"
     end
 
     private

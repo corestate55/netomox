@@ -18,7 +18,7 @@ $(TARGETXML): $(TARGETJSON) $(JTOX) $(JSONSCHEMA) $(CHECKERSRC)
 %.xml: %.json
 	echo "# convert json 2 xml" $<
 	jsonlint-cli -s $(JSONSCHEMA) $<
-	bundle exec ruby $(CHECKER) --check --file $<
+	bundle exec ruby $(CHECKER) --check $<
 	json2xml $(JTOX) $< | xmllint --output $@ --format -
 
 $(JTOX): $(YANGFILES)
