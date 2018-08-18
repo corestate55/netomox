@@ -1,3 +1,5 @@
+require_relative 'const'
+
 module NWTopoDSL
   # network attribute base
   class NetworkAttributeBase
@@ -26,7 +28,7 @@ module NWTopoDSL
   class L3NWAttribute < NetworkAttributeBase
     def initialize(name: '', flags: [])
       super(name: name, flags: flags)
-      @type = "#{NS_L3NW}:l3-topology-attributes"
+      @type = "#{NS_L3NW}:l3-topology-attributes".freeze
     end
   end
 
@@ -34,7 +36,7 @@ module NWTopoDSL
   class L2NWAttribute < NetworkAttributeBase
     def initialize(name: '', flags: [])
       super(name: name, flags: flags)
-      @type = "#{NS_L2NW}:l2-network-attributes"
+      @type = "#{NS_L2NW}:l2-network-attributes".freeze
     end
   end
 end

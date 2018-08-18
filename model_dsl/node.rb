@@ -31,7 +31,7 @@ module NWTopoDSL
     end
 
     def term_point(name, &block)
-      @term_points.push(TermPoint.new(name, &block))
+      @term_points.push(TermPoint.new(name, @type, &block))
     end
 
     def support(nw_ref, node_ref = false)

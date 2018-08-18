@@ -22,10 +22,12 @@ def make_target_layer3
         flags: %w[fhrp-virtual-router default-gateway pseudo-node]
       )
       term_point 'p1' do
+        attribute(ip_addrs: ['192.168.10.254'])
         support %w[target-L3 R1-GRT p1]
         support %w[target-L3 R2-GRT p1]
       end
       term_point 'p2' do
+        attribute(ip_addrs: ['192.168.20.254'])
         support %w[target-L3 R1-GRT p2]
         support %w[target-L3 R2-GRT p2]
       end
@@ -39,9 +41,11 @@ def make_target_layer3
         router_id: '192.168.0.1'
       )
       term_point 'p1' do
+        attribute(ip_addrs: ['192.168.10.253'])
         support %w[target-L2 R1-GRT p1]
       end
       term_point 'p2' do
+        attribute(ip_addrs: ['192.168.20.253'])
         support %w[target-L2 R1-GRT p1]
       end
       support %w[target-L2 R1-GRT]
@@ -53,9 +57,11 @@ def make_target_layer3
         router_id: '192.168.0.2'
       )
       term_point 'p1' do
+        attribute(ip_addrs: ['192.168.10.252'])
         support %w[target-L2 R2-GRT p1]
       end
       term_point 'p2' do
+        attribute(ip_addrs: ['192.168.20.252'])
         support %w[target-L2 R2-GRT p1]
       end
       support %w[target-L2 R2-GRT]
@@ -118,6 +124,7 @@ def make_target_layer3
     node 'VM1' do
       attribute(prefixes: [seg_a_prefix])
       term_point 'eth0' do
+        attribute(ip_addrs: ['192.168.10.11'])
         support %w[target-L2 VM1 eth0]
       end
       support %w[target-L2 VM1]
@@ -126,9 +133,11 @@ def make_target_layer3
     node 'VM2' do
       attribute(prefixes: [seg_b_prefix, seg_c_prefix])
       term_point 'eth0.20' do
+        attribute(ip_addrs: ['192.168.20.2'])
         support %w[target-L2 VM2 eth0.20]
       end
       term_point 'eth0.30' do
+        attribute(ip_addrs: ['192.168.30.2'])
         support %w[target-L2 VM2 eth0.30]
       end
       support %w[target-L2 VM2]
@@ -137,6 +146,7 @@ def make_target_layer3
     node 'SV1' do
       attribute(prefixes: [seg_a_prefix])
       term_point 'eth0' do
+        attribute(ip_addrs: ['192.168.10.31'])
         support %w[target-L2 SV1 eth0]
       end
       support %w[target-L2 SV1]
@@ -145,9 +155,11 @@ def make_target_layer3
     node 'SV2' do
       attribute(prefixes: [seg_b_prefix, seg_c_prefix])
       term_point 'eth0.20' do
+        attribute(ip_addrs: ['192.168.20.4'])
         support %w[target-L2 SV2 eth0.20]
       end
       term_point 'eth0.30' do
+        attribute(ip_addrs: ['192.168.30.4'])
         support %w[target-L2 SV2 eth0.30]
       end
       support %w[target-L2 SV2]

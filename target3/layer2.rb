@@ -11,6 +11,30 @@ def make_target_layer2
       flags: ['layer2']
     )
 
+    vlan_a = { id: 10, name: 'Seg.A' }
+    vlan_b = { id: 20, name: 'Seg.B' }
+    vlan_c = { id: 30, name: 'Seg.C' }
+    trunk_vlan_ab = {
+      eth_encap: '802.1q',
+      vlan_id_names: [vlan_a, vlan_b]
+    }
+    trunk_vlan_abc = {
+      eth_encap: '802.1q',
+      vlan_id_names: [vlan_a, vlan_b, vlan_c]
+    }
+    access_vlan_a = {
+      port_vlan_id: 10,
+      vlan_id_names: [vlan_a]
+    }
+    trunk_vlan_b = {
+      eth_encap: '802.1q',
+      vlan_id_names: [vlan_b]
+    }
+    trunk_vlan_c = {
+      eth_encap: '802.1q',
+      vlan_id_names: [vlan_c]
+    }
+
     node 'R1-GRT' do
       attribute(
         name: 'R1-GRT',
@@ -18,16 +42,22 @@ def make_target_layer2
         mgmt_addrs: %w[192.168.10.253 192.168.20.253],
         mgmt_vid: 10
       )
-      term_point 'p1'
+      term_point 'p1' do
+        attribute(trunk_vlan_ab)
+      end
       support %w[target-L1 R1]
     end
 
     node 'R1-BR' do
-      term_point 'p1'
+      term_point 'p1' do
+        attribute(trunk_vlan_ab)
+      end
       term_point 'p2' do
+        attribute(trunk_vlan_ab)
         support %w[target-L1 R1 Po1]
       end
       term_point 'p3' do
+        attribute(trunk_vlan_ab)
         support %w[target-L1 R1 Fa2]
       end
       support %w[target-L1 R1]
@@ -45,11 +75,15 @@ def make_target_layer2
     end
 
     node 'R2-BR' do
-      term_point 'p1'
+      term_point 'p1' do
+        attribute(trunk_vlan_ab)
+      end
       term_point 'p2' do
+        attribute(trunk_vlan_ab)
         support %w[target-L1 R2 Po1]
       end
       term_point 'p3' do
+        attribute(trunk_vlan_ab)
         support %w[target-L1 R2 Fa2]
       end
       support %w[target-L1 R2]
@@ -63,12 +97,15 @@ def make_target_layer2
         mgmt_vid: 10
       )
       term_point 'p1' do
+        attribute(trunk_vlan_ab)
         support %w[target-L1 SW1 Fa1]
       end
       term_point 'p2' do
+        attribute(trunk_vlan_abc)
         support %w[target-L1 SW1 Fa0]
       end
       term_point 'p3' do
+        attribute(trunk_vlan_abc)
         support %w[target-L1 SW1 Fa2]
       end
       support %w[target-L1 SW1]
@@ -82,21 +119,27 @@ def make_target_layer2
         mgmt_vid: 10
       )
       term_point 'p1' do
+        attribute(trunk_vlan_ab)
         support %w[target-L1 SW2 Fa1]
       end
       term_point 'p2' do
+        attribute(trunk_vlan_abc)
         support %w[target-L1 SW2 Fa0]
       end
       term_point 'p3' do
+        attribute(trunk_vlan_abc)
         support %w[target-L1 SW2 Fa2]
       end
       term_point 'p4' do
+        attribute(access_vlan_a)
         support %w[target-L1 SW2 Fa3]
       end
       term_point 'p5' do
+        attribute(trunk_vlan_b)
         support %w[target-L1 SW2 Fa4]
       end
       term_point 'p6' do
+        attribute(trunk_vlan_c)
         support %w[target-L1 SW2 Fa4]
       end
       support %w[target-L1 SW2]
@@ -104,18 +147,23 @@ def make_target_layer2
 
     node 'HYP1-vSW1-BR' do
       term_point 'p1' do
+        attribute(trunk_vlan_abc)
         support %w[target-L1.5 HYP1-vSW1 eth0]
       end
       term_point 'p2' do
+        attribute(trunk_vlan_abc)
         support %w[target-L1.5 HYP1-vSW1 eth1]
       end
       term_point 'p3' do
+        attribute(access_vlan_a)
         support %w[target-L1.5 HYP1-vSW1 p1]
       end
       term_point 'p4' do
+        attribute(trunk_vlan_b)
         support %w[target-L1.5 HYP1-vSW1 p2]
       end
       term_point 'p5' do
+        attribute(trunk_vlan_c)
         support %w[target-L1.5 HYP1-vSW1 p2]
       end
       support %w[target-L1.5 HYP1-vSW1]
@@ -123,6 +171,7 @@ def make_target_layer2
 
     node 'VM1' do
       term_point 'eth0' do
+        attribute(access_vlan_a)
         support %w[target-L1.5 VM1 eth0]
       end
       support %w[target-L1.5 VM1]
@@ -130,9 +179,11 @@ def make_target_layer2
 
     node 'VM2' do
       term_point 'eth0.20' do
+        attribute(trunk_vlan_b)
         support %w[target-L1.5 VM2 eth0]
       end
       term_point 'eth0.30' do
+        attribute(trunk_vlan_c)
         support %w[target-L1.5 VM2 eth0]
       end
       support %w[target-L1.5 VM2]
@@ -140,6 +191,7 @@ def make_target_layer2
 
     node 'SV1' do
       term_point 'eth0' do
+        attribute(access_vlan_a)
         support %w[target-L1 SV1 eth0]
       end
       support %w[target-L1 SV1]
@@ -147,9 +199,11 @@ def make_target_layer2
 
     node 'SV2' do
       term_point 'eth0.20' do
+        attribute(trunk_vlan_b)
         support %w[target-L1 SV2 eth0]
       end
       term_point 'eth0.30' do
+        attribute(trunk_vlan_c)
         support %w[target-L1 SV2 eth0]
       end
       support %w[target-L1 SV2]

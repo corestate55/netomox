@@ -1,4 +1,6 @@
 require_relative 'base'
+require_relative 'const'
+require_relative 'tp_attr'
 
 module NWTopoDSL
   # supporting termination point container
@@ -20,9 +22,10 @@ module NWTopoDSL
 
   # termination point
   class TermPoint < DSLObjectBase
-    def initialize(name, &block)
+    def initialize(name, nw_type, &block)
       @name = name
       @supports = [] # supporting termination point
+      @type = nw_type
       @attribute = {} # for augments
       register(&block) if block_given?
     end
@@ -37,11 +40,22 @@ module NWTopoDSL
       end
     end
 
+    def attribute(attr)
+      @attribute = if @type.key?(NWTYPE_L2)
+                     L2TPAttribute.new(attr)
+                   elsif @type.key?(NWTYPE_L3)
+                     L3TPAttribute.new(attr)
+                   else
+                     {}
+                   end
+    end
+
     def topo_data
       data = { 'tp-id': @name }
       unless @supports.empty?
         data['supporting-termination-point'] = @supports.map(&:topo_data)
       end
+      data[@attribute.type] = @attribute.topo_data unless @attribute.empty?
       data
     end
   end

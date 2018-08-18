@@ -1,3 +1,5 @@
+require_relative 'const'
+
 module NWTopoDSL
   # prefix info for L3 node attribute
   class L3Prefix
@@ -25,8 +27,8 @@ module NWTopoDSL
       @name = name
       @flags = flags
       @router_id = router_id
-      @prefixes = prefixes.map { |p| L3Prefix.new(p) } unless prefixes.empty?
-      @type = "#{NS_L3NW}:l3-node-attributes"
+      @prefixes = prefixes.empty? ? [] : prefixes.map { |p| L3Prefix.new(p) }
+      @type = "#{NS_L3NW}:l3-node-attributes".freeze
     end
 
     def topo_data
@@ -57,7 +59,7 @@ module NWTopoDSL
       @mgmt_addrs = mgmt_addrs
       @sys_mac_addr = sys_mac_addr
       @mgmt_vid = mgmt_vid
-      @type = "#{NS_L2NW}:l2-node-attributes"
+      @type = "#{NS_L2NW}:l2-node-attributes".freeze
     end
     # rubocop:enable Metrics/ParameterLists
 
@@ -73,7 +75,7 @@ module NWTopoDSL
     end
 
     def empty?
-      @name.empty? && flags.empty? && descr.empty? \
+      @name.empty? && @flags.empty? && @descr.empty? \
       && @mgmt_addrs.empty? && @sys_mac_addr.empty? && @mgmt_vid.empty?
     end
   end
