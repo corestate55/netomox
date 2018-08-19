@@ -14,8 +14,8 @@ module TopoChecker
     def -(other)
       changed_attrs = []
       [:network_ref].each do |attr|
-        if self.send(attr) != other.send(attr)
-          changed_attrs.push({ attr: attr, value: other.send(attr) })
+        if send(attr) != other.send(attr)
+          changed_attrs.push(attr: attr, value: other.send(attr))
         end
       end
       changed_attrs
@@ -30,4 +30,3 @@ module TopoChecker
     end
   end
 end
-

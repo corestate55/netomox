@@ -1,4 +1,5 @@
-require_relative 'topo_network'
+require_relative 'topo_const'
+require_relative 'topo_network_diff'
 
 module TopoChecker
   # Networks for Topology data
@@ -7,7 +8,7 @@ module TopoChecker
 
     def initialize(data)
       @networks = []
-      data['ietf-network:networks']['network'].each do |each|
+      data["#{NS_NW}:networks"]['network'].each do |each|
         @networks.push create_network(each)
       end
     end
@@ -61,21 +62,6 @@ module TopoChecker
         node.termination_points.each do |tp|
           yield tp, node, nw
         end
-      end
-    end
-
-    def -(other)
-      deleted_networks = @networks - other.networks
-      added_networks = other.networks - @networks
-      kept_networks = @networks & other.networks
-      puts "deleted nws: #{deleted_networks.map(&:to_s)}"
-      puts "added   nws: #{added_networks.map(&:to_s)}"
-      puts "kept    nws: #{kept_networks.map(&:to_s)}"
-      kept_networks.each do |nw|
-        lhs_nw = @networks.find { |n| n.eql?(nw) }
-        rhs_nw = other.networks.find { |n| n.eql?(nw) }
-        puts "## check #{lhs_nw}--#{rhs_nw} : changed or not"
-        lhs_nw - rhs_nw
       end
     end
 

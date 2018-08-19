@@ -1,6 +1,6 @@
 require 'json'
 require 'optparse'
-require_relative 'model_checker/topo_networks_ops'
+require_relative 'model_checker/topo_networks_diff'
 require_relative 'model_checker/graph_networks_ops'
 
 opt = OptionParser.new

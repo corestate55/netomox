@@ -1,13 +1,15 @@
+require_relative 'topo_const'
 require_relative 'topo_node'
 require_relative 'topo_link'
 require_relative 'topo_support_network'
+require_relative 'topo_network_attr'
 
 module TopoChecker
-  # Netwrok for topology data
+  # Network for topology data
   class Network
     attr_reader :network_types, :name, :path,
-                :nodes, :links, :supporting_networks
-    alias_method :supports, :supporting_networks
+                :nodes, :links, :supporting_networks, :attribute
+    alias supports supporting_networks
 
     def initialize(data)
       @network_types = data['network-types']
@@ -16,6 +18,7 @@ module TopoChecker
       setup_nodes(data)
       setup_links(data)
       setup_supporting_networks(data)
+      setup_attribute(data)
     end
 
     def find_link(source, destination)
@@ -40,64 +43,19 @@ module TopoChecker
       "network:#{@name}"
     end
 
-    def -(other)
-      nodes_diff(other)
-      links_diff(other)
-      deleted_snws = @supporting_networks - other.supports
-      added_snws = other.supports - @supporting_networks
-      kept_snws = @supporting_networks & other.supports
-      puts '- supporting networks'
-      puts "  - deleted sup-tps: #{deleted_snws.map(&:to_s)}"
-      puts "  - added   sup-tps: #{added_snws.map(&:to_s)}"
-      puts "  - kept    sup-tps: #{kept_snws.map(&:to_s)}"
-    end
-
     private
 
-    def nodes_diff(other)
-      deleted_nodes = @nodes - other.nodes
-      added_nodes = other.nodes - @nodes
-      kept_nodes = @nodes & other.nodes
-      puts '- nodes'
-      puts "  - deleted nodes: #{deleted_nodes.map(&:to_s)}"
-      puts "  - added   nodes: #{added_nodes.map(&:to_s)}"
-      puts "  - kept    nodes: #{kept_nodes.map(&:to_s)}"
-      kept_nodes.each do |node|
-        lhs_node = @nodes.find { |n| n.eql?(node) }
-        rhs_node = other.nodes.find { |n| n.eql?(node) }
-        puts "  ## check #{lhs_node}--#{rhs_node} : change or not"
-        lhs_node - rhs_node
-      end
-    end
-
-    def links_diff(other)
-      ## TODO it does not works ????
-      # deleted_links = @links - other.links
-      # added_links = other.links - @links
-      # kept_links = @links & other.links
-
-      ## workaround
-      lmap = @links.map(&:name)
-      rmap = other.links.map(&:name)
-      deleted_links = (lmap - rmap).map do |dl|
-        @links.find { |l| l.name == dl }
-      end
-      added_links = (rmap - lmap).map do |al|
-        other.links.find { |l| l.name == al }
-      end
-      kept_links = (lmap & rmap).map do |kl|
-        @links.find { |l| l.name == kl }
-      end
-      puts '- links'
-      puts "  - deleted links: #{deleted_links.map(&:to_s)}"
-      puts "  - added   links: #{added_links.map(&:to_s)}"
-      puts "  - kept    links: #{kept_links.map(&:to_s)}"
-      kept_links.each do |link|
-        lhs_link = @links.find { |n| n.eql?(link) }
-        rhs_link = other.links.find { |n| n.eql?(link) }
-        puts "  ## check #{lhs_link}--#{rhs_link} : change or not"
-        lhs_link - rhs_link
-      end
+    def setup_attribute(data)
+      l2nw_attr_key = "#{NS_L2NW}:l2-network-attributes"
+      l3nw_attr_key = "#{NS_L3NW}:l3-topology-attributes"
+      # NOTICE: WITHOUT network type checking
+      @attribute = if data.key?(l2nw_attr_key)
+                     L2NetworkAttribute.new(data[l2nw_attr_key])
+                   elsif data.key?(l3nw_attr_key)
+                     L3NetworkAttribute.new(data[l3nw_attr_key])
+                   else
+                     {}
+                   end
     end
 
     def setup_nodes(data)
@@ -109,7 +67,7 @@ module TopoChecker
 
     def setup_links(data)
       @links = []
-      @links = data['ietf-network-topology:link'].map do |link|
+      @links = data["#{NS_TOPO}:link"].map do |link|
         create_link(link)
       end
     end

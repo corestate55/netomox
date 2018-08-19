@@ -14,9 +14,9 @@ module TopoChecker
 
     def -(other)
       changed_attrs = []
-      [:network_ref, :node_ref].each do |attr|
-        if self.send(attr) != other.send(attr)
-          changed_attrs.push({ attr: attr, value: other.send(attr) })
+      %i[network_ref node_ref].each do |attr|
+        if send(attr) != other.send(attr)
+          changed_attrs.push(attr: attr, value: other.send(attr))
         end
       end
       changed_attrs
