@@ -5,7 +5,7 @@ module TopoChecker
   class Networks
     def check_all_supporting_networks
       all_networks do |nw|
-        nw.supporting_networks.each do |snw|
+        nw.supports.each do |snw|
           next if find_network(snw.network_ref)
           warn "Not found: #{snw} of nw:#{nw.name}"
         end
@@ -14,7 +14,7 @@ module TopoChecker
 
     def check_all_supporting_nodes
       all_nodes do |node, nw|
-        node.supporting_nodes.each do |snode|
+        node.supports.each do |snode|
           # p "#{nw.network_id}/#{node.node_id} refs #{snode}"
           next if find_node(snode.network_ref, snode.node_ref)
           warn "Not Found: #{snode} of node:#{nw.name}/#{node.name}"
@@ -24,7 +24,7 @@ module TopoChecker
 
     def check_all_supporting_tps
       all_termination_points do |tp, node, nw|
-        tp.supporting_termination_points.each do |stp|
+        tp.supports.each do |stp|
           # p "#{nw.network_id}/#{node.node_id}/#{tp.tp_id} refs #{stp}"
           next if find_tp(stp.network_ref, stp.node_ref, stp.tp_ref)
           warn "Not Found: #{stp} of tp:#{nw.name}/#{node.name}/#{tp.name}"
@@ -34,7 +34,7 @@ module TopoChecker
 
     def check_all_supporting_links
       all_links do |link, nw|
-        link.supporting_links.each do |slink|
+        link.supports.each do |slink|
           # p "#{nw.network_id}/#{link.link_id} refs #{slink}"
           next if find_link(slink.network_ref, slink.link_ref)
           warn "Not Found: #{slink} of link:#{nw.name}/#{link.name}"

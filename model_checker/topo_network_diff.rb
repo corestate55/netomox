@@ -1,8 +1,11 @@
 require_relative 'topo_network'
+require_relative 'topo_diff'
 
 module TopoChecker
   # Network for topology data (diff functions)
   class Network
+    include TopoDiff
+
     def -(other)
       diff_nodes(other)
       diff_links(other)
@@ -12,88 +15,45 @@ module TopoChecker
 
     private
 
-    def diff_attribute(other)
-      puts '- network attribute'
-      result = if @attribute == other.attribute
-                 :kept
-               elsif @attribute.empty?
-                 :added
-               elsif other.attribute.empty?
-                 :deleted
-               else
-                 :changed
-               end
-      puts "  - #{result}: #{@attribute} => #{other.attribute}"
-    end
-
-    def diff_supports(other)
-      deleted_snws = @supporting_networks - other.supports
-      added_snws = other.supports - @supporting_networks
-      kept_snws = @supporting_networks & other.supports
-      puts '- supporting networks'
-      puts "  - deleted sup-tps: #{deleted_snws.map(&:to_s)}"
-      puts "  - added   sup-tps: #{added_snws.map(&:to_s)}"
-      puts "  - kept    sup-tps: #{kept_snws.map(&:to_s)}"
-    end
-
     def diff_nodes(other)
-      deleted_nodes = @nodes - other.nodes
-      added_nodes = other.nodes - @nodes
-      kept_nodes = @nodes & other.nodes
-      puts '- nodes'
-      puts "  - deleted nodes: #{deleted_nodes.map(&:to_s)}"
-      puts "  - added   nodes: #{added_nodes.map(&:to_s)}"
-      puts "  - kept    nodes: #{kept_nodes.map(&:to_s)}"
-      diff_kept_nodes(kept_nodes, other)
+      diff_table = diff_list(:nodes, other)
+      print_diff_list(:nodes, diff_table)
+      diff_kept(:nodes, diff_table, other)
     end
 
-    # rubocop:disable Lint/Void
-    def diff_kept_nodes(kept_nodes, other)
-      kept_nodes.each do |node|
-        lhs_node = @nodes.find { |n| n.eql?(node) }
-        rhs_node = other.nodes.find { |n| n.eql?(node) }
-        puts "  ## check #{lhs_node}--#{rhs_node} : change or not"
-        lhs_node - rhs_node # TODO: Lint/Void
-      end
+    # diff workaround
+    def dw_deleted(lmap, rmap)
+      (lmap - rmap).map { |m| @links.find { |l| l.name == m } }
     end
-    # rubocop:enable Lint/Void
 
-    # rubocop:disable Metrics/AbcSize
+    # diff workaround
+    def dw_added(lmap, rmap, other)
+      (rmap - lmap).map { |m| other.links.find { |l| l.name == m } }
+    end
+
+    # diff workaround
+    def dw_kept(lmap, rmap)
+      (lmap & rmap).map { |m| @links.find { |l| l.name == m } }
+    end
+
     def diff_workaround(other)
       lmap = @links.map(&:name)
       rmap = other.links.map(&:name)
-      [
-        (lmap - rmap).map { |m| @links.find { |l| l.name == m } },
-        (rmap - lmap).map { |m| other.links.find { |l| l.name == m } },
-        (lmap & rmap).map { |m| @links.find { |l| l.name == m } }
-      ]
+      {
+        deleted: dw_deleted(lmap, rmap),
+        added: dw_added(lmap, rmap, other),
+        kept: dw_kept(lmap, rmap)
+      }
     end
-    # rubocop:enable Metrics/AbcSize
 
     def diff_links(other)
       ## TODO: it does not works ????
-      # deleted_links = @links - other.links
-      # added_links = other.links - @links
-      # kept_links = @links & other.links
+      # diff_table = diff_list(:links, other)
 
       ## workaround
-      (deleted_links, added_links, kept_links) = diff_workaround(other)
-      puts '- links'
-      puts "  - deleted links: #{deleted_links.map(&:to_s)}"
-      puts "  - added   links: #{added_links.map(&:to_s)}"
-      puts "  - kept    links: #{kept_links.map(&:to_s)}"
-      diff_kept_links(kept_links, other)
+      diff_table = diff_workaround(other)
+      print_diff_list(:links, diff_table)
+      diff_kept(:links, diff_table, other)
     end
-
-    # rubocop:disable Lint/Void
-    def diff_kept_links(kept_links, other)
-      kept_links.each do |link|
-        lhs_link = @links.find { |n| n.eql?(link) }
-        rhs_link = other.links.find { |n| n.eql?(link) }
-        puts "  ## check #{lhs_link}--#{rhs_link} : change or not"
-        lhs_link - rhs_link # TODO: Lint/Void
-      end
-    end
-    # rubocop:enable Lint/Void
   end
 end

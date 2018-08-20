@@ -1,33 +1,15 @@
+require_relative 'topo_support_base'
+
 module TopoChecker
   # Supporting node for topology node
-  class SupportingNode
-    attr_reader :network_ref, :node_ref
+  class SupportingNode < SupportingRefBase
+    ATTRS = %i[network_ref node_ref].freeze
+    attr_reader(*ATTRS)
 
     def initialize(data)
+      super(:node_ref, ATTRS)
       @network_ref = data['network-ref']
       @node_ref = data['node-ref']
-    end
-
-    def eql?(other)
-      @network_ref == other.network_ref && @node_ref == other.node_ref
-    end
-
-    def -(other)
-      changed_attrs = []
-      %i[network_ref node_ref].each do |attr|
-        if send(attr) != other.send(attr)
-          changed_attrs.push(attr: attr, value: other.send(attr))
-        end
-      end
-      changed_attrs
-    end
-
-    def to_s
-      "node_ref:#{@network_ref}/#{@node_ref}"
-    end
-
-    def ref_path
-      [@network_ref, @node_ref].join('/')
     end
   end
 end

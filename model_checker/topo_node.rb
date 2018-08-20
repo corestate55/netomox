@@ -2,24 +2,23 @@ require_relative 'topo_const'
 require_relative 'topo_tp'
 require_relative 'topo_support_node'
 require_relative 'topo_node_attr'
+require_relative 'topo_diff'
+require_relative 'topo_object_base'
 
 module TopoChecker
   # Node for topology data
-  class Node
-    attr_reader :name, :path, :termination_points, :supporting_nodes, :attribute
-    alias supports supporting_nodes
+  class Node < TopoObjectBase
+    attr_reader :termination_points
+    include TopoDiff
 
     def initialize(data, parent_path)
-      @name = data['node-id']
-      @path = [parent_path, @name].join('/')
+      super(data['node-id'], parent_path)
       setup_termination_points(data)
-      setup_supporting_nodes(data)
-      setup_attribute(data)
-    end
-
-    def eql?(other)
-      # for Nodes#-()
-      @name == other.name
+      setup_supports(data, 'supporting-node', SupportingNode)
+      setup_attribute(data,[
+        {key: "#{NS_L2NW}:l2-node-attributes", klass: L2NodeAttribute },
+        {key: "#{NS_L3NW}:l3-node-attributes", klass: L3NodeAttribute }
+      ])
     end
 
     def -(other)
@@ -34,71 +33,10 @@ module TopoChecker
 
     private
 
-    def diff_attribute(other)
-      puts '  - node attribute'
-      result = if @attribute == other.attribute
-                 :kept
-               elsif @attribute.empty?
-                 :added
-               elsif other.attribute.empty?
-                 :deleted
-               else
-                 :changed
-               end
-      puts "    - #{result}: #{@attribute} => #{other.attribute}"
-    end
-
     def diff_tp(other)
-      deleted_tps = @termination_points - other.termination_points
-      added_tps = other.termination_points - @termination_points
-      kept_tps = @termination_points & other.termination_points
-      puts '  - term points'
-      puts "    - deleted tps: #{deleted_tps.map(&:to_s)}"
-      puts "    - added   tps: #{added_tps.map(&:to_s)}"
-      puts "    - kept    tps: #{kept_tps.map(&:to_s)}"
-      diff_kept_tps(kept_tps, other)
-    end
-
-    # rubocop:disable Lint/Void
-    def diff_kept_tps(kept_tps, other)
-      kept_tps.each do |tp|
-        lhs_tp = @termination_points.find { |t| t.eql?(tp) }
-        rhs_tp = other.termination_points.find { |t| t.eql?(tp) }
-        puts "    ## check #{lhs_tp}--#{rhs_tp} : changed or not"
-        lhs_tp - rhs_tp # TODO: Lint/Void
-      end
-    end
-    # rubocop:enable Lint/Void
-
-    def diff_supports(other)
-      deleted_snodes = @supporting_nodes - other.supports
-      added_snodes = other.supports - @supporting_nodes
-      kept_snodes = @supporting_nodes & other.supports
-      puts '  - supporting nodes'
-      puts "    - deleted sup-tps: #{deleted_snodes.map(&:to_s)}"
-      puts "    - added   sup-tps: #{added_snodes.map(&:to_s)}"
-      puts "    - kept    sup-tps: #{kept_snodes.map(&:to_s)}"
-    end
-
-    def setup_attribute(data)
-      l2node_attr_key = "#{NS_L2NW}:l2-node-attributes"
-      l3node_attr_key = "#{NS_L3NW}:l3-node-attributes"
-      # NOTICE: WITHOUT network type check
-      @attribute = if data.key?(l2node_attr_key)
-                     L2NodeAttribute.new(data[l2node_attr_key])
-                   elsif data.key?(l3node_attr_key)
-                     L3NodeAttribute.new(data[l3node_attr_key])
-                   else
-                     {}
-                   end
-    end
-
-    def setup_supporting_nodes(data)
-      @supporting_nodes = []
-      return unless data.key?('supporting-node')
-      @supporting_nodes = data['supporting-node'].map do |snode|
-        SupportingNode.new(snode)
-      end
+      diff_table = diff_list(:termination_points, other)
+      print_diff_list(:termination_points, diff_table)
+      diff_kept(:termination_points, diff_table, other)
     end
 
     def setup_termination_points(data)

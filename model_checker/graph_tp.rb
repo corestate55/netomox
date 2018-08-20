@@ -10,7 +10,7 @@ module TopoChecker
     def n4j_create
       # p "create node, Label:TerminationPoint, id:#{@path}"
       node = termination_point_object
-      stps = @supporting_termination_points.map do |stp|
+      stps = @supports.map do |stp|
         # p "create relationship, Label:support, id:#{@path},#{stp.ref_path}"
         supporting_tp_object(stp)
       end

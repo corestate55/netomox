@@ -12,7 +12,7 @@ module TopoChecker
     def n4j_create
       # p "create node, Label:network, id:#{@path}"
       node = network_object
-      snws = @supporting_networks.map do |snw|
+      snws = @supports.map do |snw|
         # p "create relationship, Label:support, id:#{@path},#{snw.ref_path}"
         supporting_network_object(snw)
       end
