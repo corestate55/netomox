@@ -22,6 +22,15 @@ module TopoChecker
       "term_point:#{@name}"
     end
 
+    def to_data
+      {
+        'tp-id' => @name,
+        '_diff_state_' => @diff_state.to_data,
+        'supporting-termination-point' => @supports.map(&:to_data),
+        'tp-attribute' => @attribute.to_data # TODO: attribute key
+      }
+    end
+
     def diff(other)
       d_tp = TerminationPoint.new({'tp-id' => @name}, @parent_path)
       d_tp.supports = diff_supports(other)

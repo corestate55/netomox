@@ -65,6 +65,14 @@ module TopoChecker
       end
     end
 
+    def to_data
+      {
+        "#{NS_NW}:networks" => {
+          'networks' => @networks.map(&:to_data)
+        }
+      }
+    end
+
     private
 
     def setup_networks(data)

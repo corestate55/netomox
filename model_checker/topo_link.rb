@@ -38,6 +38,17 @@ module TopoChecker
       "link:#{name}" # "#{@source}->#{@destination}"
     end
 
+    def to_data
+      {
+        'link-id' => @name,
+        '_diff_state_' => @diff_state.to_data,
+        'source' => @source.to_data('source'),
+        'destination' => @destination.to_data('destination'),
+        'supporting-link' => @supports.map(&:to_data),
+        'link-attributes' => @attribute.to_data # TODO: attribute key
+      }
+    end
+
     private
 
     def setup_source(data)

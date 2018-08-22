@@ -23,7 +23,7 @@ module TopoChecker
       end
       d_network.supports = diff_supports(other)
       d_network.attribute = diff_attribute(other)
-      p "### check [#{@diff_state}], [#{other.diff_state}]"
+      # p "### check [#{@diff_state}], [#{other.diff_state}]"
       d_network.diff_state = @diff_state
       d_network
     end

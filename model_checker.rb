@@ -91,20 +91,5 @@ if option[:diff]
   d_nws = nws1.diff(nws2)
 
   # test
-  p '- networks'
-  d_nws.networks.each do |nw|
-    p "  - #{nw.name}, #{nw.diff_state}"
-    nw.nodes.each do |node|
-      p "    - #{node}, #{node.diff_state}"
-      node.termination_points.each do |tp|
-        p "      - #{tp}, #{tp.diff_state}"
-      end
-    end
-    nw.links.each do |link|
-      p "    - #{link}, #{link.diff_state}"
-      %i[source destination].each do |d|
-        p "      - #{d}, #{link.send(d).diff_state}"
-      end
-    end
-  end
+  puts JSON.pretty_generate(d_nws.to_data)
 end

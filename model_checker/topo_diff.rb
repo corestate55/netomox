@@ -12,6 +12,18 @@ module TopoChecker
       name = @pair && !@pair.empty? ? @pair.name : ''
       "diff_state: fwd:#{@forward}, bwd:#{@backward}, pair:#{name}"
     end
+
+    def to_data
+      {
+        forward: @forward,
+        backward: @backward,
+        pair: @pair.nil? ? '' : @pair.path # TODO
+      }
+    end
+
+    def empty?
+      !(@forward || @backward || @pair)
+    end
   end
 
   module TopoDiff
@@ -56,8 +68,8 @@ module TopoChecker
 
     def diff_attribute(other)
       result = diff_single_value(@attribute, other.attribute)
-      other.diff_state = DiffState.new(forward: result, pair: @attribute)
-      other
+      other.attribute.diff_state = DiffState.new(forward: result, pair: @attribute)
+      other.attribute
     end
   end
 end
