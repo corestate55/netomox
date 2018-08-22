@@ -1,9 +1,12 @@
 module TopoChecker
   # Base class for attribute
   class AttributeBase
+    attr_accessor :diff_state
+
     def initialize(keys, keys_with_default = [])
       @keys = keys
       @keys_with_default = keys_with_default # keys to except empty check
+      @diff_state = nil
     end
 
     def empty?

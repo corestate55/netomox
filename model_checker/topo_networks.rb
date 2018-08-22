@@ -1,16 +1,16 @@
 require_relative 'topo_const'
 require_relative 'topo_network_diff'
+require_relative 'topo_base'
 
 module TopoChecker
   # Networks for Topology data
-  class Networks
-    attr_reader :networks
+  class Networks < TopoObjectBase
+    attr_accessor :networks
+    include TopoDiff
 
     def initialize(data)
-      @networks = []
-      data["#{NS_NW}:networks"]['network'].each do |each|
-        @networks.push create_network(each)
-      end
+      super('networks')
+      setup_networks(data)
     end
 
     def find_network(network_ref)
@@ -66,6 +66,15 @@ module TopoChecker
     end
 
     private
+
+    def setup_networks(data)
+      @networks = []
+      nws_key = "#{NS_NW}:networks"
+      return unless data.key?(nws_key)
+      data[nws_key]['network'].each do |each|
+        @networks.push create_network(each)
+      end
+    end
 
     def create_network(data)
       Network.new(data)

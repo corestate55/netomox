@@ -5,6 +5,7 @@ module TopoChecker
   class TpRef < SupportingRefBase
     ATTRS = %i[node_ref tp_ref].freeze
     attr_reader(*ATTRS)
+    attr_reader :parent_path
 
     def initialize(data, parent_path)
       super(:tp_ref, ATTRS)
@@ -15,6 +16,13 @@ module TopoChecker
 
     def ref_path
       [@parent_path, @node_ref, @tp_ref].join('/')
+    end
+
+    def to_data(direction)
+      {
+        "#{direction}-node" => @node_ref,
+        "#{direction}-tp" => @tp_ref
+      }
     end
   end
 

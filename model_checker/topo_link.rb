@@ -1,19 +1,17 @@
 require_relative 'topo_const'
 require_relative 'topo_support_link'
 require_relative 'topo_link_attr'
-require_relative 'topo_diff'
-require_relative 'topo_object_base'
+require_relative 'topo_base'
 
 module TopoChecker
   # Link for topology data
   class Link < TopoObjectBase
-    attr_reader :source, :destination
-    include TopoDiff
+    attr_accessor :source, :destination
 
     def initialize(data, parent_path)
       super(data['link-id'], parent_path)
-      @source = TpRef.new(data['source'], parent_path)
-      @destination = TpRef.new(data['destination'], parent_path)
+      setup_source(data)
+      setup_destination(data)
       setup_supports(data, 'supporting-link', SupportingLink)
       setup_attribute(data,[
         { key: "#{NS_L2NW}:l2-link-attributes", klass: L2LinkAttribute },
@@ -21,10 +19,13 @@ module TopoChecker
       ])
     end
 
-    def -(other)
-      diff_link_tp(other)
-      diff_supports(other)
-      diff_attribute(other)
+    def diff(other)
+      d_link = Link.new({'link-id' => @name}, @parent_path)
+      d_link.source = diff_link_tp(:source, other)
+      d_link.destination = diff_link_tp(:destination, other)
+      d_link.supports = diff_supports(other)
+      d_link.attribute = diff_attribute(other)
+      d_link
     end
 
     def eql?(other)
@@ -39,12 +40,23 @@ module TopoChecker
 
     private
 
-    def diff_link_tp(other)
-      %i[source destination].each do |d|
-        puts "    - #{d}"
-        result = send(d) == other.send(d) ? 'kept' : 'changed'
-        puts "      - #{result}: #{other.send(d)}"
-      end
+    def setup_source(data)
+      @source = nil
+      return unless data.key?('source')
+      @source = TpRef.new(data['source'], @parent_path)
+    end
+
+    def setup_destination(data)
+      @destination = nil
+      return unless data.key?('destination')
+      @destination = TpRef.new(data['destination'], @parent_path)
+    end
+
+    def diff_link_tp(attr, other)
+      result = send(attr) == other.send(attr) ? 'kept' : 'changed'
+      d_tp = TpRef.new(send(attr).to_data(attr), @parent_path)
+      d_tp.diff_state = DiffState.new(forward: result, pair: other)
+      d_tp
     end
   end
 end

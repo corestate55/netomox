@@ -1,9 +1,12 @@
 module TopoChecker
   # Base class for supporting object reference
   class SupportingRefBase
+    attr_accessor :diff_state
+
     def initialize(ref_key, refs = [])
       @ref_key = ref_key
       @refs = refs
+      @diff_state = nil
     end
 
     def to_s

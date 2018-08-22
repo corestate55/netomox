@@ -3,16 +3,16 @@ require_relative 'topo_node'
 require_relative 'topo_link'
 require_relative 'topo_support_network'
 require_relative 'topo_network_attr'
-require_relative 'topo_object_base'
+require_relative 'topo_base'
 
 module TopoChecker
   # Network for topology data
   class Network < TopoObjectBase
-    attr_reader :network_types, :nodes, :links
+    attr_accessor :network_types, :nodes, :links
 
     def initialize(data)
       super(data['network-id'])
-      @network_types = data['network-types']
+      setup_network_types(data)
       setup_nodes(data)
       setup_links(data)
       setup_supports(data, 'supporting-network', SupportingNetwork)
@@ -41,8 +41,13 @@ module TopoChecker
 
     private
 
+    def setup_network_types(data)
+      @network_types = data['network-types'] || []
+    end
+
     def setup_nodes(data)
       @nodes = []
+      return unless data.key?('node')
       @nodes = data['node'].map do |node|
         create_node(node)
       end
@@ -50,7 +55,9 @@ module TopoChecker
 
     def setup_links(data)
       @links = []
-      @links = data["#{NS_TOPO}:link"].map do |link|
+      link_key = "#{NS_TOPO}:link"
+      return unless data.key?(link_key)
+      @links = data[link_key].map do |link|
         create_link(link)
       end
     end

@@ -2,7 +2,7 @@ require_relative 'topo_networks'
 
 module TopoChecker
   # Networks for Topology data (operations for multiple networks)
-  class Networks
+  class Networks < TopoObjectBase
     def check_all_supporting_networks
       all_networks do |nw|
         nw.supports.each do |snw|

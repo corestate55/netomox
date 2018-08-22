@@ -1,14 +1,12 @@
 require_relative 'topo_const'
 require_relative 'topo_support_tp'
 require_relative 'topo_tp_attr'
-require_relative 'topo_diff'
-require_relative 'topo_object_base'
+require_relative 'topo_base'
 
 module TopoChecker
   # Termination point for topology data
   class TerminationPoint < TopoObjectBase
     attr_reader :ref_count
-    include TopoDiff
 
     def initialize(data, parent_path)
       super(data['tp-id'], parent_path)
@@ -20,17 +18,16 @@ module TopoChecker
       ])
     end
 
-    def eql?(other)
-      @name == other.name
-    end
-
     def to_s
       "term_point:#{@name}"
     end
 
-    def -(other)
-      diff_supports(other)
-      diff_attribute(other)
+    def diff(other)
+      d_tp = TerminationPoint.new({'tp-id' => @name}, @parent_path)
+      d_tp.supports = diff_supports(other)
+      d_tp.attribute = diff_attribute(other)
+      d_tp.diff_state = @diff_state
+      d_tp
     end
 
     def ref_count_up
