@@ -1,3 +1,4 @@
+model/test*.json
 db_info.json
 *.gem
 *.rbc
