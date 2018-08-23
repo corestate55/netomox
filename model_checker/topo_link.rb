@@ -20,11 +20,33 @@ module TopoChecker
     end
 
     def diff(other)
+      # forward check
       d_link = Link.new({'link-id' => @name}, @parent_path)
       d_link.source = diff_link_tp(:source, other)
       d_link.destination = diff_link_tp(:destination, other)
       d_link.supports = diff_supports(other)
       d_link.attribute = diff_attribute(other)
+      d_link.diff_state = @diff_state
+
+      # backward check
+      diff_states = []
+      %i[source destination supports attribute].each do |attr|
+        case d_link.send(attr)
+        when Array then
+          next if d_link.send(attr).empty? # TODO: OK?
+          diff_states.push(d_link.send(attr).map { |d| d.diff_state.forward })
+        else
+          diff_states.push(d_link.send(attr).diff_state.forward)
+        end
+      end
+
+      if diff_states.flatten.all?(:kept)
+        d_link.diff_state.backward = :kept
+      else
+        d_link.diff_state.backward = :changed
+      end
+
+      # return
       d_link
     end
 
@@ -64,7 +86,7 @@ module TopoChecker
     end
 
     def diff_link_tp(attr, other)
-      result = send(attr) == other.send(attr) ? 'kept' : 'changed'
+      result = send(attr) == other.send(attr) ? :kept : :changed
       d_tp = TpRef.new(send(attr).to_data(attr), @parent_path)
       d_tp.diff_state = DiffState.new(forward: result, pair: other)
       d_tp

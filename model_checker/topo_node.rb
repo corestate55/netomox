@@ -20,6 +20,7 @@ module TopoChecker
     end
 
     def diff(other)
+      # forward check
       d_node = Node.new({'node-id' => @name}, @parent_path)
       d_tp = diff_list(:termination_points, other)
       d_node.termination_points = d_tp.map do |dt|
@@ -32,6 +33,26 @@ module TopoChecker
       d_node.supports = diff_supports(other)
       d_node.attribute = diff_attribute(other)
       d_node.diff_state = @diff_state
+
+      # backward check
+      diff_states = []
+      %i[termination_points supports attribute].each do |attr|
+        case d_node.send(attr)
+        when Array then
+          next if d_node.send(attr).empty? # TODO: OK?
+          diff_states.push(d_node.send(attr).map { |d| d.diff_state.forward })
+        else
+          diff_states.push(d_node.send(attr).diff_state.forward)
+        end
+      end
+
+      if diff_states.flatten.all?(:kept)
+        d_node.diff_state.backward = :kept
+      else
+        d_node.diff_state.backward = :changed
+      end
+
+      # return
       d_node
     end
 

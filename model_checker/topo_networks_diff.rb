@@ -5,6 +5,8 @@ module TopoChecker
   class Networks < TopoObjectBase
     def diff(other)
       d_nws = Networks.new({})
+
+      # forward check
       nws_diff = diff_list(:networks, other)
       d_nws.networks = nws_diff.map do |nd|
         if nd.diff_state.forward == :kept
@@ -13,6 +15,16 @@ module TopoChecker
           nd
         end
       end
+
+      # backward check
+      diff_states = d_nws.networks.map { |d| d.diff_state.forward }
+      if diff_states.all?(:kept)
+        d_nws.diff_state = DiffState.new(backward: :kept)
+      else
+        d_nws.diff_state = DiffState.new(backward: :changed)
+      end
+
+      # return
       d_nws
     end
   end

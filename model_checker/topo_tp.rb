@@ -32,10 +32,31 @@ module TopoChecker
     end
 
     def diff(other)
+      # forward check
       d_tp = TerminationPoint.new({'tp-id' => @name}, @parent_path)
       d_tp.supports = diff_supports(other)
       d_tp.attribute = diff_attribute(other)
       d_tp.diff_state = @diff_state
+
+      # backward check
+      diff_states = []
+      %i[supports attribute].each do |attr|
+        case d_tp.send(attr)
+        when Array then
+          next if d_tp.send(attr).empty? # TODO: OK?
+          diff_states.push(d_tp.send(attr).map { |d| d.diff_state.forward })
+        else
+          diff_states.push(d_tp.send(attr).diff_state.forward)
+        end
+      end
+
+      if diff_states.flatten.all?(:kept)
+        d_tp.diff_state.backward = :kept
+      else
+        d_tp.diff_state.backward = :changed
+      end
+
+      # return
       d_tp
     end
 
