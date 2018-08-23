@@ -61,8 +61,8 @@ module NWTopoDSL
                src_node
              end
       @links.push(
-        Link.new(args[0], args[1], args[2], args[3], &block),
-        Link.new(args[2], args[3], args[0], args[1], &block)
+        Link.new(args[0], args[1], args[2], args[3], @type, &block),
+        Link.new(args[2], args[3], args[0], args[1], @type, &block)
       )
     end
 
