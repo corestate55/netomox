@@ -6,7 +6,7 @@ module TopoChecker
     def initialize(ref_key, refs = [])
       @ref_key = ref_key
       @refs = refs
-      @diff_state = DiffState.new() # empty state
+      @diff_state = DiffState.new # empty state
       @path = 'attribute' # TODO: dummy for #to_data
     end
 
@@ -37,7 +37,8 @@ module TopoChecker
       end
     end
 
-    def -(other) ## TODO
+    def -(other)
+      # TODO: method implement
       changed_attrs = []
       @refs.each do |attr|
         if send(attr) != other.send(attr)

@@ -2,6 +2,7 @@ require 'json'
 require 'optparse'
 require_relative 'model_checker/topo_networks_diff'
 require_relative 'model_checker/graph_networks_ops'
+require_relative 'model_checker/diff_view'
 
 opt = OptionParser.new
 option = {}
@@ -91,5 +92,9 @@ if option[:diff]
   d_nws = nws1.diff(nws2)
 
   # test
-  puts JSON.pretty_generate(d_nws.to_data)
+  json_str = JSON.pretty_generate(d_nws.to_data)
+  diff_view = TopoChecker::DiffView.new(json_str)
+  puts diff_view
+  puts '-----------------'
+  puts json_str
 end

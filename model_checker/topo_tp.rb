@@ -11,11 +11,14 @@ module TopoChecker
     def initialize(data, parent_path)
       super(data['tp-id'], parent_path)
       @ref_count = 0
-      setup_supports(data, 'supporting-termination-point', SupportingTerminationPoint)
-      setup_attribute(data, [
-        { key: "#{NS_L2NW}:l2-termination-point-attributes", klass: L2TPAttribute },
-        { key: "#{NS_L3NW}:l3-termination-point-attributes", klass: L3TPAttribute }
-      ])
+      key = 'supporting-termination-point' # alias
+      setup_supports(data, key, SupportingTerminationPoint)
+      key = 'termination-point-attributes' # alias
+      key_klass_list = [
+        { key: "#{NS_L2NW}:l2-#{key}", klass: L2TPAttribute },
+        { key: "#{NS_L3NW}:l3-#{key}", klass: L3TPAttribute }
+      ]
+      setup_attribute(data, key_klass_list)
     end
 
     def to_s
@@ -33,7 +36,7 @@ module TopoChecker
 
     def diff(other)
       # forward check
-      d_tp = TerminationPoint.new({'tp-id' => @name}, @parent_path)
+      d_tp = TerminationPoint.new({ 'tp-id' => @name }, @parent_path)
       d_tp.supports = diff_supports(other)
       d_tp.attribute = diff_attribute(other)
       d_tp.diff_state = @diff_state
@@ -50,11 +53,11 @@ module TopoChecker
         end
       end
 
-      if diff_states.flatten.all?(:kept)
-        d_tp.diff_state.backward = :kept
-      else
-        d_tp.diff_state.backward = :changed
-      end
+      d_tp.diff_state.backward = if diff_states.flatten.all?(:kept)
+                                   :kept
+                                 else
+                                   :changed
+                                 end
 
       # return
       d_tp

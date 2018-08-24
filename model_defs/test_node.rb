@@ -5,6 +5,7 @@ model_dir = 'model/'
 
 # test data for node diff
 
+# rubocop:disable Metrics/BlockLength
 test_node1 = NWTopoDSL::Networks.new do
   network 'layerX' do
     type NWTopoDSL::NWTYPE_L2
@@ -66,6 +67,7 @@ test_node2 = NWTopoDSL::Networks.new do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
 
 File.open("#{model_dir}/test_node1.json", 'w') do |file|
   file.write(JSON.pretty_generate(test_node1.topo_data))

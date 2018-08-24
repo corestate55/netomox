@@ -6,7 +6,7 @@ model_dir = 'model/'
 # test data for network diff
 # TODO: network type check
 
-test_nw1 = NWTopoDSL::Networks.new do
+test_network1 = NWTopoDSL::Networks.new do
   network 'nw_kept'
   network 'nw_deleted'
 
@@ -34,7 +34,7 @@ test_nw1 = NWTopoDSL::Networks.new do
   end
 end
 
-test_nw2 = NWTopoDSL::Networks.new do
+test_network2 = NWTopoDSL::Networks.new do
   network 'nw_kept'
   network 'nw_added'
 
@@ -62,10 +62,10 @@ test_nw2 = NWTopoDSL::Networks.new do
   end
 end
 
-File.open("#{model_dir}/test_nw1.json", 'w') do |file|
-  file.write(JSON.pretty_generate(test_nw1.topo_data))
+File.open("#{model_dir}/test_network1.json", 'w') do |file|
+  file.write(JSON.pretty_generate(test_network1.topo_data))
 end
 
-File.open("#{model_dir}/test_nw2.json", 'w') do |file|
-  file.write(JSON.pretty_generate(test_nw2.topo_data))
+File.open("#{model_dir}/test_network2.json", 'w') do |file|
+  file.write(JSON.pretty_generate(test_network2.topo_data))
 end

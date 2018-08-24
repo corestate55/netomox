@@ -13,15 +13,16 @@ module TopoChecker
       setup_source(data)
       setup_destination(data)
       setup_supports(data, 'supporting-link', SupportingLink)
-      setup_attribute(data,[
+      key_klass_list = [
         { key: "#{NS_L2NW}:l2-link-attributes", klass: L2LinkAttribute },
-        { key: "#{NS_L3NW}:l3-link-attributes", klass: L3LinkAttribute}
-      ])
+        { key: "#{NS_L3NW}:l3-link-attributes", klass: L3LinkAttribute }
+      ]
+      setup_attribute(data, key_klass_list)
     end
 
     def diff(other)
       # forward check
-      d_link = Link.new({'link-id' => @name}, @parent_path)
+      d_link = Link.new({ 'link-id' => @name }, @parent_path)
       d_link.source = diff_link_tp(:source, other)
       d_link.destination = diff_link_tp(:destination, other)
       d_link.supports = diff_supports(other)
@@ -40,11 +41,11 @@ module TopoChecker
         end
       end
 
-      if diff_states.flatten.all?(:kept)
-        d_link.diff_state.backward = :kept
-      else
-        d_link.diff_state.backward = :changed
-      end
+      d_link.diff_state.backward = if diff_states.flatten.all?(:kept)
+                                     :kept
+                                   else
+                                     :changed
+                                   end
 
       # return
       d_link

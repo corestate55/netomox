@@ -1,4 +1,5 @@
 module TopoChecker
+  # Diff state container
   class DiffState
     attr_accessor :forward, :backward, :pair
 
@@ -6,6 +7,16 @@ module TopoChecker
       @forward = forward
       @backward = backward
       @pair = pair
+    end
+
+    def detect?
+      if %i[added deleted].include?(@forward)
+        @forward
+      elsif [@forward, @backward].include?(:changed)
+        :changed
+      else
+        :kept
+      end
     end
 
     def to_s
@@ -26,6 +37,7 @@ module TopoChecker
     end
   end
 
+  # Diff functions for Mix-in
   module TopoDiff
     def diff_list(attr, other)
       results = []
@@ -68,7 +80,8 @@ module TopoChecker
 
     def diff_attribute(other)
       result = diff_single_value(@attribute, other.attribute)
-      other.attribute.diff_state = DiffState.new(forward: result, pair: @attribute)
+      arg = { forward: result, pair: @attribute }
+      other.attribute.diff_state = DiffState.new(arg)
       other.attribute
     end
   end

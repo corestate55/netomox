@@ -6,7 +6,7 @@ module TopoChecker
     def initialize(keys, keys_with_default = [])
       @keys = keys
       @keys_with_default = keys_with_default # keys to except empty check
-      @diff_state = DiffState.new() # empty state
+      @diff_state = DiffState.new # empty state
       @path = 'attribute' # TODO: dummy for #to_data
     end
 

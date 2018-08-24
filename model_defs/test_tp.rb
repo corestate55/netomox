@@ -16,6 +16,7 @@ access_vlan_a_change = {
   vlan_id_names: [vlan_a]
 }
 
+# rubocop:disable Metrics/BlockLength
 test_tp1 = NWTopoDSL::Networks.new do
   network 'layerX' do
     type NWTopoDSL::NWTYPE_L2
@@ -81,6 +82,7 @@ test_tp2 = NWTopoDSL::Networks.new do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
 
 File.open("#{model_dir}/test_tp1.json", 'w') do |file|
   file.write(JSON.pretty_generate(test_tp1.topo_data))

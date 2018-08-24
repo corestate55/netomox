@@ -16,10 +16,11 @@ module TopoChecker
       setup_nodes(data)
       setup_links(data)
       setup_supports(data, 'supporting-network', SupportingNetwork)
-      setup_attribute(data,[
+      key_klass_list = [
         { key: "#{NS_L2NW}:l2-network-attributes", klass: L2NetworkAttribute },
         { key: "#{NS_L3NW}:l3-topology-attributes", klass: L3NetworkAttribute }
-      ])
+      ]
+      setup_attribute(data, key_klass_list)
     end
 
     def find_link(source, destination)

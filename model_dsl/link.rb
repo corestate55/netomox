@@ -51,6 +51,7 @@ module NWTopoDSL
 
   # link (unidirectional)
   class Link < DSLObjectBase
+    # rubocop:disable Metrics/ParameterLists
     def initialize(src_node, src_tp, dst_node, dst_tp, nw_type, &block)
       @name = [src_node, src_tp, dst_node, dst_tp].join(',')
       @source = SrcTPRef.new(src_node, src_tp)
@@ -60,6 +61,7 @@ module NWTopoDSL
       @attribute = {} # for augments
       register(&block) if block_given?
     end
+    # rubocop:enable Metrics/ParameterLists
 
     def support(nw_ref, link_ref = false)
       if link_ref

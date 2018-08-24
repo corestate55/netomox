@@ -18,11 +18,11 @@ module TopoChecker
 
       # backward check
       diff_states = d_nws.networks.map { |d| d.diff_state.forward }
-      if diff_states.all?(:kept)
-        d_nws.diff_state = DiffState.new(backward: :kept)
-      else
-        d_nws.diff_state = DiffState.new(backward: :changed)
-      end
+      d_nws.diff_state = if diff_states.all?(:kept)
+                           DiffState.new(backward: :kept)
+                         else
+                           DiffState.new(backward: :changed)
+                         end
 
       # return
       d_nws

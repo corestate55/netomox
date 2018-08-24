@@ -13,15 +13,16 @@ module TopoChecker
       super(data['node-id'], parent_path)
       setup_termination_points(data)
       setup_supports(data, 'supporting-node', SupportingNode)
-      setup_attribute(data,[
+      key_klass_list = [
         { key: "#{NS_L2NW}:l2-node-attributes", klass: L2NodeAttribute },
         { key: "#{NS_L3NW}:l3-node-attributes", klass: L3NodeAttribute }
-      ])
+      ]
+      setup_attribute(data, key_klass_list)
     end
 
     def diff(other)
       # forward check
-      d_node = Node.new({'node-id' => @name}, @parent_path)
+      d_node = Node.new({ 'node-id' => @name }, @parent_path)
       d_tp = diff_list(:termination_points, other)
       d_node.termination_points = d_tp.map do |dt|
         if dt.diff_state.forward == :kept
@@ -46,11 +47,11 @@ module TopoChecker
         end
       end
 
-      if diff_states.flatten.all?(:kept)
-        d_node.diff_state.backward = :kept
-      else
-        d_node.diff_state.backward = :changed
-      end
+      d_node.diff_state.backward = if diff_states.flatten.all?(:kept)
+                                     :kept
+                                   else
+                                     :changed
+                                   end
 
       # return
       d_node
