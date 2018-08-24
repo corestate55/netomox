@@ -28,25 +28,8 @@ module TopoChecker
       d_link.supports = diff_supports(other)
       d_link.attribute = diff_attribute(other)
       d_link.diff_state = @diff_state
-
       # backward check
-      diff_states = []
-      %i[source destination supports attribute].each do |attr|
-        case d_link.send(attr)
-        when Array then
-          next if d_link.send(attr).empty? # TODO: OK?
-          diff_states.push(d_link.send(attr).map { |d| d.diff_state.forward })
-        else
-          diff_states.push(d_link.send(attr).diff_state.forward)
-        end
-      end
-
-      d_link.diff_state.backward = if diff_states.flatten.all?(:kept)
-                                     :kept
-                                   else
-                                     :changed
-                                   end
-
+      d_link.diff_backward_check(%i[source destination supports attribute])
       # return
       d_link
     end

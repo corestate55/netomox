@@ -1,44 +1,53 @@
-module TopoChecker
-  # Diff state container
-  class DiffState
-    attr_accessor :forward, :backward, :pair
+require_relative 'topo_diff_state'
 
-    def initialize(forward: nil, backward: nil, pair: nil)
-      @forward = forward
-      @backward = backward
-      @pair = pair
+module TopoChecker
+  # Diff functions for Mix-in
+  # NOTICE: who receive this methods? (receiver?)
+  # when (a) - (b) => (c)
+  module TopoDiff
+    def diff_supports(other)
+      # receiver of this method will be (a), other will be (b)
+      diff_list(:supports, other)
     end
 
-    def detect?
-      if %i[added deleted].include?(@forward)
-        @forward
-      elsif [@forward, @backward].include?(:changed)
-        :changed
-      else
-        :kept
+    def diff_attribute(other)
+      # receiver of this method will be (a), other will be (b)
+      result = diff_single_value(@attribute, other.attribute)
+      arg = { forward: result, pair: @attribute }
+      other.attribute.diff_state = DiffState.new(arg)
+      other.attribute
+    end
+
+    def diff_forward_check_of(attr, other)
+      # receiver of this method will be (a), other will be (b)
+      obj_diff = diff_list(attr, other)
+      obj_diff.map do |od|
+        if od.diff_state.forward == :kept
+          od.diff_state.pair.diff(od)
+        else
+          od
+        end
       end
     end
 
-    def to_s
-      name = @pair && !@pair.empty? ? @pair.name : ''
-      "diff_state: fwd:#{@forward}, bwd:#{@backward}, pair:#{name}"
+    def diff_backward_check(attrs)
+      # receiver of this method will be (c)
+      diff_states = []
+      attrs.each do |attr|
+        case send(attr)
+        when Array then
+          next if send(attr).empty? # TODO: OK?
+          states = send(attr).map { |d| d.diff_state.forward }
+          diff_states.push(states)
+        else
+          diff_states.push(send(attr).diff_state.forward)
+        end
+      end
+      @diff_state.backward = backward_state_from(diff_states)
     end
 
-    def to_data
-      {
-        forward: @forward,
-        backward: @backward,
-        pair: @pair.nil? ? '' : @pair.path # TODO
-      }
-    end
+    private
 
-    def empty?
-      !(@forward || @backward || @pair)
-    end
-  end
-
-  # Diff functions for Mix-in
-  module TopoDiff
     def diff_list(attr, other)
       results = []
       send(attr).each do |lhs|
@@ -62,10 +71,6 @@ module TopoChecker
       results
     end
 
-    def diff_supports(other)
-      diff_list(:supports, other)
-    end
-
     def diff_single_value(lhs, rhs)
       if lhs == rhs
         :kept
@@ -78,11 +83,12 @@ module TopoChecker
       end
     end
 
-    def diff_attribute(other)
-      result = diff_single_value(@attribute, other.attribute)
-      arg = { forward: result, pair: @attribute }
-      other.attribute.diff_state = DiffState.new(arg)
-      other.attribute
+    def backward_state_from(diff_states)
+      if diff_states.flatten.all?(:kept)
+        :kept
+      else
+        :changed
+      end
     end
   end
 end

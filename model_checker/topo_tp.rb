@@ -40,25 +40,8 @@ module TopoChecker
       d_tp.supports = diff_supports(other)
       d_tp.attribute = diff_attribute(other)
       d_tp.diff_state = @diff_state
-
       # backward check
-      diff_states = []
-      %i[supports attribute].each do |attr|
-        case d_tp.send(attr)
-        when Array then
-          next if d_tp.send(attr).empty? # TODO: OK?
-          diff_states.push(d_tp.send(attr).map { |d| d.diff_state.forward })
-        else
-          diff_states.push(d_tp.send(attr).diff_state.forward)
-        end
-      end
-
-      d_tp.diff_state.backward = if diff_states.flatten.all?(:kept)
-                                   :kept
-                                 else
-                                   :changed
-                                 end
-
+      d_tp.diff_backward_check(%i[supports attribute])
       # return
       d_tp
     end

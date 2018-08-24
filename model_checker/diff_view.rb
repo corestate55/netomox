@@ -95,13 +95,13 @@ module TopoChecker
       when :added then :green
       when :deleted then :red
       when :changed then :yellow
+      else '' # no color
       end
-      # else nil
     end
 
     def color_tags
       color = color_by_diff_state
-      color.nil? ? ['', ''] : %W[<#{color}> </#{color}>]
+      color.empty? ? ['', ''] : %W[<#{color}> </#{color}>]
     end
   end
 end
