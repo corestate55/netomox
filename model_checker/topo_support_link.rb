@@ -21,7 +21,8 @@ module TopoChecker
     def to_data(direction)
       {
         "#{direction}-node" => @node_ref,
-        "#{direction}-tp" => @tp_ref
+        "#{direction}-tp" => @tp_ref,
+        '_diff_state_' => @diff_state.to_data
       }
     end
   end

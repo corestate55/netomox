@@ -46,6 +46,10 @@ module TopoChecker
       d_tp
     end
 
+    def fill_diff_state
+      fill_diff_state_of(%i[supports attribute])
+    end
+
     def ref_count_up
       @ref_count += 1
     end

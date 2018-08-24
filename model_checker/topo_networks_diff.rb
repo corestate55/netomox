@@ -13,5 +13,9 @@ module TopoChecker
       # return
       d_networks
     end
+
+    def fill_diff_state
+      fill_diff_state_of(%i[networks])
+    end
   end
 end

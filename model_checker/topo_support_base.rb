@@ -27,6 +27,12 @@ module TopoChecker
       sent_ref_list.join('/')
     end
 
+    def empty?
+      @ref_key.inject(true) do |m, k|
+        m && send(k).empty?
+      end
+    end
+
     def ==(other)
       eql?(other)
     end

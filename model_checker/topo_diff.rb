@@ -23,9 +23,13 @@ module TopoChecker
       obj_diff = diff_list(attr, other)
       obj_diff.map do |od|
         if od.diff_state.forward == :kept
-          od.diff_state.pair.diff(od)
+          # take diff for kept(or changed) object recursively
+          lhs = od.diff_state.pair
+          lhs.diff(od)
         else
-          od
+          # mark all chkld attr by diff_state itself recursively
+          od.fill_diff_state
+          od # must return itself
         end
       end
     end
@@ -34,41 +38,59 @@ module TopoChecker
       # receiver of this method will be (c)
       diff_states = []
       attrs.each do |attr|
-        case send(attr)
-        when Array then
-          next if send(attr).empty? # TODO: OK?
-          states = send(attr).map { |d| d.diff_state.forward }
-          diff_states.push(states)
-        else
-          diff_states.push(send(attr).diff_state.forward)
-        end
+        diff_states.push(pick_forward_state(send(attr)))
       end
       @diff_state.backward = backward_state_from(diff_states)
     end
 
     private
 
+    def fill_diff_state_of(attrs)
+      attrs.each do |attr|
+        case send(attr)
+        when Array then
+          fill_array_diff_state(send(attr))
+        else
+          set_diff_state(send(attr), forward: @diff_state.forward)
+        end
+      end
+    end
+
+    def fill_array_diff_state(child_array)
+      child_array.each do |child|
+        set_diff_state(child, forward: @diff_state.forward)
+        child.fill_diff_state # recursive state marking
+      end
+    end
+
     def diff_list(attr, other)
       results = []
       send(attr).each do |lhs|
         rhs = other.send(attr).find { |r| lhs == r }
-        if rhs
-          # lhs found in rhs -> kept
-          rhs.diff_state = DiffState.new(forward: :kept, pair: lhs)
-          results.push(rhs)
-        else
-          # lhs only in self -> deleted
-          lhs.diff_state = DiffState.new(forward: :deleted)
-          results.push(lhs)
-        end
+        # kept when lhs found in rhs or deleted when not found
+        results.push(select_diff_list(lhs, rhs))
       end
       other.send(attr).each do |rhs|
         next if send(attr).find { |l| rhs == l }
         # rhs only in other -> added
-        rhs.diff_state = DiffState.new(forward: :added)
-        results.push(rhs)
+        results.push(set_diff_state(rhs, forward: :added))
       end
       results
+    end
+
+    def select_diff_list(lhs, rhs)
+      if rhs
+        # lhs found in rhs -> kept
+        set_diff_state(rhs, forward: :kept, pair: lhs)
+      else
+        # lhs only in self -> deleted
+        set_diff_state(lhs, forward: :deleted)
+      end
+    end
+
+    def set_diff_state(rlhs, state_hash)
+      rlhs.diff_state = DiffState.new(state_hash)
+      rlhs # set diff state and return itself
     end
 
     def diff_single_value(lhs, rhs)
@@ -80,6 +102,16 @@ module TopoChecker
         :deleted
       else
         :changed
+      end
+    end
+
+    def pick_forward_state(child_obj)
+      case child_obj
+      when Array then
+        return if child_obj.empty? # TODO: OK?
+        child_obj.map { |d| d.diff_state.forward }
+      else
+        child_obj.diff_state.forward
       end
     end
 

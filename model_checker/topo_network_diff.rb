@@ -16,5 +16,9 @@ module TopoChecker
       # return
       d_network
     end
+
+    def fill_diff_state
+      fill_diff_state_of(%i[nodes links supports attribute])
+    end
   end
 end

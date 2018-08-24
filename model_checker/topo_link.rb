@@ -23,8 +23,8 @@ module TopoChecker
     def diff(other)
       # forward check
       d_link = Link.new({ 'link-id' => @name }, @parent_path)
-      d_link.source = diff_link_tp(:source, other)
-      d_link.destination = diff_link_tp(:destination, other)
+      d_link.source = diff_link_tp(:source, 'source', other)
+      d_link.destination = diff_link_tp(:destination, 'dest', other)
       d_link.supports = diff_supports(other)
       d_link.attribute = diff_attribute(other)
       d_link.diff_state = @diff_state
@@ -32,6 +32,10 @@ module TopoChecker
       d_link.diff_backward_check(%i[source destination supports attribute])
       # return
       d_link
+    end
+
+    def fill_diff_state
+      fill_diff_state_of(%i[source destination supports attribute])
     end
 
     def eql?(other)
@@ -49,7 +53,7 @@ module TopoChecker
         'link-id' => @name,
         '_diff_state_' => @diff_state.to_data,
         'source' => @source.to_data('source'),
-        'destination' => @destination.to_data('destination'),
+        'destination' => @destination.to_data('dest'),
         'supporting-link' => @supports.map(&:to_data),
         'link-attributes' => @attribute.to_data # TODO: attribute key
       }
@@ -69,9 +73,9 @@ module TopoChecker
       @destination = TpRef.new(data['destination'], @parent_path)
     end
 
-    def diff_link_tp(attr, other)
+    def diff_link_tp(attr, to_data_key, other)
       result = send(attr) == other.send(attr) ? :kept : :changed
-      d_tp = TpRef.new(send(attr).to_data(attr), @parent_path)
+      d_tp = TpRef.new(send(attr).to_data(to_data_key), @parent_path)
       d_tp.diff_state = DiffState.new(forward: result, pair: other)
       d_tp
     end
