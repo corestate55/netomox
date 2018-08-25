@@ -32,10 +32,11 @@ module NWTopoDSL
     end
 
     def topo_data
+      # TODO: router-id is now single value, but it must be leaf-list
       {
         'name': @name,
         'flag': @flags,
-        'router-id': @router_id,
+        'router-id': [@router_id],
         'prefix': @prefixes.map(&:topo_data)
       }
     end

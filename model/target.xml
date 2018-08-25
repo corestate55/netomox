@@ -159,14 +159,6 @@
           <nt:dest-node>R2</nt:dest-node>
           <nt:dest-tp>Po1</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>R1,Fa0,R2,Fa0</nt:link-ref>
-        </nt:supporting-link>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>R1,Fa1,R2,Fa1</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>R2,Po1,R1,Po1</nt:link-id>
@@ -178,14 +170,6 @@
           <nt:dest-node>R1</nt:dest-node>
           <nt:dest-tp>Po1</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>R2,Fa0,R1,Fa0</nt:link-ref>
-        </nt:supporting-link>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>R2,Fa1,R1,Fa1</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>R1,Fa2,SW1,Fa1</nt:link-id>
@@ -345,9 +329,6 @@
     <nw:network>
       <nw:network-id>target-L1.5</nw:network-id>
       <nw:network-types/>
-      <nw:supporting-network>
-        <nw:network-ref>target-L1</nw:network-ref>
-      </nw:supporting-network>
       <nw:node>
         <nw:node-id>HYP1-vSW1</nw:node-id>
         <nt:termination-point>
@@ -441,21 +422,15 @@
           <nt:dest-tp>p2</nt:dest-tp>
         </nt:destination>
       </nt:link>
+      <nw:supporting-network>
+        <nw:network-ref>target-L1</nw:network-ref>
+      </nw:supporting-network>
     </nw:network>
     <nw:network>
       <nw:network-id>target-L2</nw:network-id>
       <nw:network-types>
         <l2t:l2-network/>
       </nw:network-types>
-      <l2t:l2-network-attributes>
-        <l2t:name>L2 of target network</l2t:name>
-      </l2t:l2-network-attributes>
-      <nw:supporting-network>
-        <nw:network-ref>target-L1</nw:network-ref>
-      </nw:supporting-network>
-      <nw:supporting-network>
-        <nw:network-ref>target-L1.5</nw:network-ref>
-      </nw:supporting-network>
       <nw:node>
         <nw:node-id>R1-GRT</nw:node-id>
         <nt:termination-point>
@@ -480,14 +455,18 @@
             <l2t:maximum-frame-size>1500</l2t:maximum-frame-size>
             <l2t:mac-address/>
             <l2t:eth-encapsulation>l2t:</l2t:eth-encapsulation>
-            <l2t:port-vlan-id>10</l2t:port-vlan-id>
+            <l2t:port-vlan-id>20</l2t:port-vlan-id>
             <l2t:vlan-id-name>
-              <l2t:vlan-id>10</l2t:vlan-id>
-              <l2t:vlan-name>Seg.A</l2t:vlan-name>
+              <l2t:vlan-id>20</l2t:vlan-id>
+              <l2t:vlan-name>Seg.B</l2t:vlan-name>
             </l2t:vlan-id-name>
             <l2t:tp-state>in-use</l2t:tp-state>
           </l2t:l2-termination-point-attributes>
         </nt:termination-point>
+        <nw:supporting-node>
+          <nw:network-ref>target-L1</nw:network-ref>
+          <nw:node-ref>R1</nw:node-ref>
+        </nw:supporting-node>
         <l2t:l2-node-attributes>
           <l2t:name>R1-GRT</l2t:name>
           <l2t:description>L2 of R1-GRT</l2t:description>
@@ -496,15 +475,23 @@
           <l2t:sys-mac-address/>
           <l2t:management-vid>10</l2t:management-vid>
         </l2t:l2-node-attributes>
-        <nw:supporting-node>
-          <nw:network-ref>target-L1</nw:network-ref>
-          <nw:node-ref>R1</nw:node-ref>
-        </nw:supporting-node>
       </nw:node>
       <nw:node>
         <nw:node-id>R1-BR-VL10</nw:node-id>
         <nt:termination-point>
           <nt:tp-id>p1</nt:tp-id>
+          <l2t:l2-termination-point-attributes>
+            <l2t:description/>
+            <l2t:maximum-frame-size>1500</l2t:maximum-frame-size>
+            <l2t:mac-address/>
+            <l2t:eth-encapsulation>l2t:</l2t:eth-encapsulation>
+            <l2t:port-vlan-id>10</l2t:port-vlan-id>
+            <l2t:vlan-id-name>
+              <l2t:vlan-id>10</l2t:vlan-id>
+              <l2t:vlan-name>Seg.A</l2t:vlan-name>
+            </l2t:vlan-id-name>
+            <l2t:tp-state>in-use</l2t:tp-state>
+          </l2t:l2-termination-point-attributes>
         </nt:termination-point>
         <nt:termination-point>
           <nt:tp-id>p2</nt:tp-id>
@@ -531,6 +518,18 @@
         <nw:node-id>R1-BR-VL20</nw:node-id>
         <nt:termination-point>
           <nt:tp-id>p1</nt:tp-id>
+          <l2t:l2-termination-point-attributes>
+            <l2t:description/>
+            <l2t:maximum-frame-size>1500</l2t:maximum-frame-size>
+            <l2t:mac-address/>
+            <l2t:eth-encapsulation>l2t:</l2t:eth-encapsulation>
+            <l2t:port-vlan-id>20</l2t:port-vlan-id>
+            <l2t:vlan-id-name>
+              <l2t:vlan-id>20</l2t:vlan-id>
+              <l2t:vlan-name>Seg.B</l2t:vlan-name>
+            </l2t:vlan-id-name>
+            <l2t:tp-state>in-use</l2t:tp-state>
+          </l2t:l2-termination-point-attributes>
         </nt:termination-point>
         <nt:termination-point>
           <nt:tp-id>p2</nt:tp-id>
@@ -561,6 +560,10 @@
         <nt:termination-point>
           <nt:tp-id>p2</nt:tp-id>
         </nt:termination-point>
+        <nw:supporting-node>
+          <nw:network-ref>target-L1</nw:network-ref>
+          <nw:node-ref>R2</nw:node-ref>
+        </nw:supporting-node>
         <l2t:l2-node-attributes>
           <l2t:name>R2-GRT</l2t:name>
           <l2t:description>L2 of R2-GRT</l2t:description>
@@ -569,10 +572,6 @@
           <l2t:sys-mac-address/>
           <l2t:management-vid>10</l2t:management-vid>
         </l2t:l2-node-attributes>
-        <nw:supporting-node>
-          <nw:network-ref>target-L1</nw:network-ref>
-          <nw:node-ref>R2</nw:node-ref>
-        </nw:supporting-node>
       </nw:node>
       <nw:node>
         <nw:node-id>R2-BR-VL10</nw:node-id>
@@ -1034,7 +1033,7 @@
         </nt:destination>
       </nt:link>
       <nt:link>
-        <nt:link-id>R2-GRT,p1,R1-BR-VL10,p1</nt:link-id>
+        <nt:link-id>R2-GRT,p1,R2-BR-VL10,p1</nt:link-id>
         <nt:source>
           <nt:source-node>R2-GRT</nt:source-node>
           <nt:source-tp>p1</nt:source-tp>
@@ -1056,7 +1055,7 @@
         </nt:destination>
       </nt:link>
       <nt:link>
-        <nt:link-id>R2-GRT,p2,R1-BR-VL20,p2</nt:link-id>
+        <nt:link-id>R2-GRT,p2,R2-BR-VL20,p1</nt:link-id>
         <nt:source>
           <nt:source-node>R2-GRT</nt:source-node>
           <nt:source-tp>p2</nt:source-tp>
@@ -1067,7 +1066,7 @@
         </nt:destination>
       </nt:link>
       <nt:link>
-        <nt:link-id>R2-BR-VL20,p2,R1-GRT,p2</nt:link-id>
+        <nt:link-id>R2-BR-VL20,p1,R2-GRT,p2</nt:link-id>
         <nt:source>
           <nt:source-node>R2-BR-VL20</nt:source-node>
           <nt:source-tp>p1</nt:source-tp>
@@ -1087,10 +1086,6 @@
           <nt:dest-node>R2-BR-VL10</nt:dest-node>
           <nt:dest-tp>p2</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>R1,Po1,R2,Po1</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>R2-BR-VL10,p2,R1-BR-VL10,p2</nt:link-id>
@@ -1102,10 +1097,6 @@
           <nt:dest-node>R1-BR-VL10</nt:dest-node>
           <nt:dest-tp>p2</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>R2,Po1,R1,Po1</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>R1-BR-VL20,p2,R2-BR-VL20,p2</nt:link-id>
@@ -1117,10 +1108,6 @@
           <nt:dest-node>R2-BR-VL20</nt:dest-node>
           <nt:dest-tp>p2</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>R1,Po1,R2,Po1</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>R2-BR-VL20,p2,R1-BR-VL20,p2</nt:link-id>
@@ -1132,10 +1119,6 @@
           <nt:dest-node>R1-BR-VL20</nt:dest-node>
           <nt:dest-tp>p2</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>R2,Po1,R1,Po1</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>R1-BR-VL10,p3,SW1-BR-VL10,p1</nt:link-id>
@@ -1147,10 +1130,6 @@
           <nt:dest-node>SW1-BR-VL10</nt:dest-node>
           <nt:dest-tp>p1</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>R1,Fa2,SW1,Fa1</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>SW1-BR-VL10,p1,R1-BR-VL10,p3</nt:link-id>
@@ -1162,10 +1141,6 @@
           <nt:dest-node>R1-BR-VL10</nt:dest-node>
           <nt:dest-tp>p3</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>SW1,Fa1,R1,Fa2</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>R1-BR-VL20,p3,SW1-BR-VL20,p1</nt:link-id>
@@ -1177,10 +1152,6 @@
           <nt:dest-node>SW1-BR-VL20</nt:dest-node>
           <nt:dest-tp>p1</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>R1,Fa2,SW1,Fa1</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>SW1-BR-VL20,p1,R1-BR-VL20,p3</nt:link-id>
@@ -1192,10 +1163,6 @@
           <nt:dest-node>R1-BR-VL20</nt:dest-node>
           <nt:dest-tp>p3</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>SW1,Fa1,R1,Fa2</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>R2-BR-VL10,p3,SW2-BR-VL10,p1</nt:link-id>
@@ -1207,10 +1174,6 @@
           <nt:dest-node>SW2-BR-VL10</nt:dest-node>
           <nt:dest-tp>p1</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>R2,Fa2,SW2,Fa1</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>SW2-BR-VL10,p1,R2-BR-VL10,p3</nt:link-id>
@@ -1222,10 +1185,6 @@
           <nt:dest-node>R2-BR-VL10</nt:dest-node>
           <nt:dest-tp>p3</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>SW2,Fa1,R2,Fa2</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>R2-BR-VL20,p3,SW2-BR-VL20,p1</nt:link-id>
@@ -1237,10 +1196,6 @@
           <nt:dest-node>SW2-BR-VL20</nt:dest-node>
           <nt:dest-tp>p1</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>R2,Fa2,SW2,Fa1</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>SW2-BR-VL20,p1,R2-BR-VL20,p3</nt:link-id>
@@ -1252,10 +1207,6 @@
           <nt:dest-node>R2-BR-VL20</nt:dest-node>
           <nt:dest-tp>p3</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>SW2,Fa1,R2,Fa2</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>SW1-BR-VL10,p2,SW2-BR-VL10,p2</nt:link-id>
@@ -1267,10 +1218,6 @@
           <nt:dest-node>SW2-BR-VL10</nt:dest-node>
           <nt:dest-tp>p2</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>SW1,Fa0,SW2,Fa0</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>SW2-BR-VL10,p2,SW1-BR-VL10,p2</nt:link-id>
@@ -1282,10 +1229,6 @@
           <nt:dest-node>SW1-BR-VL10</nt:dest-node>
           <nt:dest-tp>p2</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>SW2,Fa0,SW1,Fa0</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>SW1-BR-VL20,p2,SW2-BR-VL20,p2</nt:link-id>
@@ -1297,10 +1240,6 @@
           <nt:dest-node>SW2-BR-VL20</nt:dest-node>
           <nt:dest-tp>p2</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>SW1,Fa0,SW2,Fa0</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>SW2-BR-VL20,p2,SW1-BR-VL20,p2</nt:link-id>
@@ -1312,10 +1251,6 @@
           <nt:dest-node>SW1-BR-VL20</nt:dest-node>
           <nt:dest-tp>p2</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>SW2,Fa0,SW1,Fa0</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>SW1-BR-VL30,p2,SW2-BR-VL30,p2</nt:link-id>
@@ -1349,10 +1284,6 @@
           <nt:dest-node>HYP1-vSW1-BR-VL10</nt:dest-node>
           <nt:dest-tp>p1</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>SW1,Fa2,HYP1,eth0</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>HYP1-vSW1-BR-VL10,p1,SW1-BR-VL10,p3</nt:link-id>
@@ -1364,10 +1295,6 @@
           <nt:dest-node>SW1-BR-VL10</nt:dest-node>
           <nt:dest-tp>p3</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>HYP1,eth0,SW1,Fa2</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>SW1-BR-VL20,p3,HYP1-vSW1-BR-VL20,p1</nt:link-id>
@@ -1379,10 +1306,6 @@
           <nt:dest-node>HYP1-vSW1-BR-VL20</nt:dest-node>
           <nt:dest-tp>p1</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>SW1,Fa2,HYP1,eth0</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>HYP1-vSW1-BR-VL20,p1,SW1-BR-VL20,p3</nt:link-id>
@@ -1394,10 +1317,6 @@
           <nt:dest-node>SW1-BR-VL20</nt:dest-node>
           <nt:dest-tp>p3</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>HYP1,eth0,SW1,Fa2</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>SW2-BR-VL10,p3,HYP1-vSW1-BR-VL10,p2</nt:link-id>
@@ -1409,10 +1328,6 @@
           <nt:dest-node>HYP1-vSW1-BR-VL10</nt:dest-node>
           <nt:dest-tp>p2</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>SW2,Fa2,HYP1,eth1</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>HYP1-vSW1-BR-VL10,p2,SW2-BR-VL10,p3</nt:link-id>
@@ -1424,10 +1339,6 @@
           <nt:dest-node>SW2-BR-VL10</nt:dest-node>
           <nt:dest-tp>p3</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>HYP1,eth1,SW2,Fa2</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>SW2-BR-VL20,p3,HYP1-vSW1-BR-VL20,p2</nt:link-id>
@@ -1439,10 +1350,6 @@
           <nt:dest-node>HYP1-vSW1-BR-VL20</nt:dest-node>
           <nt:dest-tp>p2</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>SW2,Fa2,HYP1,eth1</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>HYP1-vSW1-BR-VL20,p2,SW2-BR-VL20,p3</nt:link-id>
@@ -1454,10 +1361,6 @@
           <nt:dest-node>SW2-BR-VL20</nt:dest-node>
           <nt:dest-tp>p3</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>HYP1,eth1,SW2,Fa2</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>SW2-BR-VL10,p4,SV1,eth0</nt:link-id>
@@ -1469,10 +1372,6 @@
           <nt:dest-node>SV1</nt:dest-node>
           <nt:dest-tp>eth0</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>SW2,Fa3,SV1,eth0</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>SV1,eth0,SW2-BR-VL10,p4</nt:link-id>
@@ -1484,10 +1383,6 @@
           <nt:dest-node>SW2-BR-VL10</nt:dest-node>
           <nt:dest-tp>p4</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>SV1,eth0,SW2,Fa3</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>SW2-BR-VL20,p4,SV2,eth0.20</nt:link-id>
@@ -1499,10 +1394,6 @@
           <nt:dest-node>SV2</nt:dest-node>
           <nt:dest-tp>eth0.20</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>SW2,Fa4,SV2,eth0</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>SV2,eth0.20,SW2-BR-VL20,p4</nt:link-id>
@@ -1514,10 +1405,6 @@
           <nt:dest-node>SW2-BR-VL20</nt:dest-node>
           <nt:dest-tp>p4</nt:dest-tp>
         </nt:destination>
-        <nt:supporting-link>
-          <nt:network-ref>target-L1</nt:network-ref>
-          <nt:link-ref>SV2,eth0,SW2,Fa4</nt:link-ref>
-        </nt:supporting-link>
       </nt:link>
       <nt:link>
         <nt:link-id>HYP1-vSW1-BR-VL10,p3,VM1,eth0</nt:link-id>
@@ -1651,44 +1538,42 @@
           <nt:dest-tp>p3</nt:dest-tp>
         </nt:destination>
       </nt:link>
+      <nw:supporting-network>
+        <nw:network-ref>target-L1</nw:network-ref>
+      </nw:supporting-network>
+      <nw:supporting-network>
+        <nw:network-ref>target-L1.5</nw:network-ref>
+      </nw:supporting-network>
+      <l2t:l2-network-attributes>
+        <l2t:name>L2 of target network</l2t:name>
+        <l2t:flag>l2t:layer2</l2t:flag>
+      </l2t:l2-network-attributes>
     </nw:network>
     <nw:network>
       <nw:network-id>target-L3</nw:network-id>
       <nw:network-types>
         <l3t:l3-unicast-topology/>
       </nw:network-types>
-      <nw:supporting-network>
-        <nw:network-ref>target-L1.5</nw:network-ref>
-      </nw:supporting-network>
-      <nw:supporting-network>
-        <nw:network-ref>target-L2</nw:network-ref>
-      </nw:supporting-network>
-      <nw:supporting-network>
-        <nw:network-ref>target-L1</nw:network-ref>
-      </nw:supporting-network>
       <nw:node>
         <nw:node-id>GRT-vRT</nw:node-id>
         <nt:termination-point>
           <nt:tp-id>p1</nt:tp-id>
+          <nt:supporting-termination-point>
+            <nt:network-ref>target-L3</nt:network-ref>
+            <nt:node-ref>R1-GRT</nt:node-ref>
+            <nt:tp-ref>p1</nt:tp-ref>
+          </nt:supporting-termination-point>
+          <nt:supporting-termination-point>
+            <nt:network-ref>target-L3</nt:network-ref>
+            <nt:node-ref>R2-GRT</nt:node-ref>
+            <nt:tp-ref>p1</nt:tp-ref>
+          </nt:supporting-termination-point>
           <l3t:l3-termination-point-attributes>
             <l3t:ip-address>192.168.10.254</l3t:ip-address>
           </l3t:l3-termination-point-attributes>
-          <nt:supporting-termination-point>
-            <nt:network-ref>target-L3</nt:network-ref>
-            <nt:node-ref>R1-GRT</nt:node-ref>
-            <nt:tp-ref>p1</nt:tp-ref>
-          </nt:supporting-termination-point>
-          <nt:supporting-termination-point>
-            <nt:network-ref>target-L3</nt:network-ref>
-            <nt:node-ref>R2-GRT</nt:node-ref>
-            <nt:tp-ref>p1</nt:tp-ref>
-          </nt:supporting-termination-point>
         </nt:termination-point>
         <nt:termination-point>
           <nt:tp-id>p2</nt:tp-id>
-          <l3t:l3-termination-point-attributes>
-            <l3t:ip-address>192.168.20.254</l3t:ip-address>
-          </l3t:l3-termination-point-attributes>
           <nt:supporting-termination-point>
             <nt:network-ref>target-L3</nt:network-ref>
             <nt:node-ref>R1-GRT</nt:node-ref>
@@ -1699,20 +1584,10 @@
             <nt:node-ref>R2-GRT</nt:node-ref>
             <nt:tp-ref>p2</nt:tp-ref>
           </nt:supporting-termination-point>
+          <l3t:l3-termination-point-attributes>
+            <l3t:ip-address>192.168.20.254</l3t:ip-address>
+          </l3t:l3-termination-point-attributes>
         </nt:termination-point>
-        <l3t:l3-node-attributes>
-          <l3t:prefix>
-            <l3t:prefix>192.168.10.0/24</l3t:prefix>
-            <l3t:metric>100</l3t:metric>
-          </l3t:prefix>
-          <l3t:prefix>
-            <l3t:prefix>192.168.20.0/24</l3t:prefix>
-            <l3t:metric>100</l3t:metric>
-          </l3t:prefix>
-          <l3t:flag>l3t:fhrp-virtual-router</l3t:flag>
-          <l3t:flag>l3t:default-gateway</l3t:flag>
-          <l3t:flag>l3t:pseudo-node</l3t:flag>
-        </l3t:l3-node-attributes>
         <nw:supporting-node>
           <nw:network-ref>target-L3</nw:network-ref>
           <nw:node-ref>R1-GRT</nw:node-ref>
@@ -1721,35 +1596,55 @@
           <nw:network-ref>target-L3</nw:network-ref>
           <nw:node-ref>R2-GRT</nw:node-ref>
         </nw:supporting-node>
+        <l3t:l3-node-attributes>
+          <l3t:name/>
+          <l3t:flag>l3t:fhrp-virtual-router</l3t:flag>
+          <l3t:flag>l3t:default-gateway</l3t:flag>
+          <l3t:flag>l3t:pseudo-node</l3t:flag>
+          <l3t:router-id/>
+          <l3t:prefix>
+            <l3t:prefix>192.168,10.0/24</l3t:prefix>
+            <l3t:metric>100</l3t:metric>
+          </l3t:prefix>
+          <l3t:prefix>
+            <l3t:prefix>192.168.20.0/24</l3t:prefix>
+            <l3t:metric>100</l3t:metric>
+          </l3t:prefix>
+        </l3t:l3-node-attributes>
       </nw:node>
       <nw:node>
         <nw:node-id>R1-GRT</nw:node-id>
         <nt:termination-point>
           <nt:tp-id>p1</nt:tp-id>
-          <l3t:l3-termination-point-attributes>
-            <l3t:ip-address>192.168.10.253</l3t:ip-address>
-          </l3t:l3-termination-point-attributes>
           <nt:supporting-termination-point>
             <nt:network-ref>target-L2</nt:network-ref>
             <nt:node-ref>R1-GRT</nt:node-ref>
             <nt:tp-ref>p1</nt:tp-ref>
           </nt:supporting-termination-point>
+          <l3t:l3-termination-point-attributes>
+            <l3t:ip-address>192.168.10.253</l3t:ip-address>
+          </l3t:l3-termination-point-attributes>
         </nt:termination-point>
         <nt:termination-point>
           <nt:tp-id>p2</nt:tp-id>
-          <l3t:l3-termination-point-attributes>
-            <l3t:ip-address>192.168.20.253</l3t:ip-address>
-          </l3t:l3-termination-point-attributes>
           <nt:supporting-termination-point>
             <nt:network-ref>target-L2</nt:network-ref>
             <nt:node-ref>R1-GRT</nt:node-ref>
             <nt:tp-ref>p2</nt:tp-ref>
           </nt:supporting-termination-point>
+          <l3t:l3-termination-point-attributes>
+            <l3t:ip-address>192.168.20.253</l3t:ip-address>
+          </l3t:l3-termination-point-attributes>
         </nt:termination-point>
+        <nw:supporting-node>
+          <nw:network-ref>target-L2</nw:network-ref>
+          <nw:node-ref>R1-GRT</nw:node-ref>
+        </nw:supporting-node>
         <l3t:l3-node-attributes>
+          <l3t:name/>
           <l3t:router-id>192.168.0.1</l3t:router-id>
           <l3t:prefix>
-            <l3t:prefix>192.168.10.0/24</l3t:prefix>
+            <l3t:prefix>192.168,10.0/24</l3t:prefix>
             <l3t:metric>100</l3t:metric>
           </l3t:prefix>
           <l3t:prefix>
@@ -1757,39 +1652,40 @@
             <l3t:metric>100</l3t:metric>
           </l3t:prefix>
         </l3t:l3-node-attributes>
-        <nw:supporting-node>
-          <nw:network-ref>target-L2</nw:network-ref>
-          <nw:node-ref>R1-GRT</nw:node-ref>
-        </nw:supporting-node>
       </nw:node>
       <nw:node>
         <nw:node-id>R2-GRT</nw:node-id>
         <nt:termination-point>
           <nt:tp-id>p1</nt:tp-id>
-          <l3t:l3-termination-point-attributes>
-            <l3t:ip-address>192.168.10.252</l3t:ip-address>
-          </l3t:l3-termination-point-attributes>
           <nt:supporting-termination-point>
             <nt:network-ref>target-L2</nt:network-ref>
             <nt:node-ref>R2-GRT</nt:node-ref>
             <nt:tp-ref>p1</nt:tp-ref>
           </nt:supporting-termination-point>
+          <l3t:l3-termination-point-attributes>
+            <l3t:ip-address>192.168.10.252</l3t:ip-address>
+          </l3t:l3-termination-point-attributes>
         </nt:termination-point>
         <nt:termination-point>
           <nt:tp-id>p2</nt:tp-id>
-          <l3t:l3-termination-point-attributes>
-            <l3t:ip-address>192.168.20.252</l3t:ip-address>
-          </l3t:l3-termination-point-attributes>
           <nt:supporting-termination-point>
             <nt:network-ref>target-L2</nt:network-ref>
             <nt:node-ref>R2-GRT</nt:node-ref>
             <nt:tp-ref>p2</nt:tp-ref>
           </nt:supporting-termination-point>
+          <l3t:l3-termination-point-attributes>
+            <l3t:ip-address>192.168.20.252</l3t:ip-address>
+          </l3t:l3-termination-point-attributes>
         </nt:termination-point>
+        <nw:supporting-node>
+          <nw:network-ref>target-L2</nw:network-ref>
+          <nw:node-ref>R2-GRT</nw:node-ref>
+        </nw:supporting-node>
         <l3t:l3-node-attributes>
+          <l3t:name/>
           <l3t:router-id>192.168.0.2</l3t:router-id>
           <l3t:prefix>
-            <l3t:prefix>192.168.10.0/24</l3t:prefix>
+            <l3t:prefix>192.168,10.0/24</l3t:prefix>
             <l3t:metric>100</l3t:metric>
           </l3t:prefix>
           <l3t:prefix>
@@ -1797,10 +1693,6 @@
             <l3t:metric>100</l3t:metric>
           </l3t:prefix>
         </l3t:l3-node-attributes>
-        <nw:supporting-node>
-          <nw:network-ref>target-L2</nw:network-ref>
-          <nw:node-ref>R2-GRT</nw:node-ref>
-        </nw:supporting-node>
       </nw:node>
       <nw:node>
         <nw:node-id>Seg.A</nw:node-id>
@@ -1829,14 +1721,6 @@
             <nt:tp-ref>p4</nt:tp-ref>
           </nt:supporting-termination-point>
         </nt:termination-point>
-        <l3t:l3-node-attributes>
-          <l3t:prefix>
-            <l3t:prefix>192.168.10.0/24</l3t:prefix>
-            <l3t:metric>100</l3t:metric>
-          </l3t:prefix>
-          <l3t:flag>l3t:l3-segment</l3t:flag>
-          <l3t:flag>l3t:pseudo-node</l3t:flag>
-        </l3t:l3-node-attributes>
         <nw:supporting-node>
           <nw:network-ref>target-L2</nw:network-ref>
           <nw:node-ref>R1-BR-VL10</nw:node-ref>
@@ -1857,6 +1741,16 @@
           <nw:network-ref>target-L2</nw:network-ref>
           <nw:node-ref>HYP1-vSW1-BR-VL10</nw:node-ref>
         </nw:supporting-node>
+        <l3t:l3-node-attributes>
+          <l3t:name/>
+          <l3t:flag>l3t:l3-segment</l3t:flag>
+          <l3t:flag>l3t:pseudo-node</l3t:flag>
+          <l3t:router-id/>
+          <l3t:prefix>
+            <l3t:prefix>192.168,10.0/24</l3t:prefix>
+            <l3t:metric>100</l3t:metric>
+          </l3t:prefix>
+        </l3t:l3-node-attributes>
       </nw:node>
       <nw:node>
         <nw:node-id>Seg.B</nw:node-id>
@@ -1885,14 +1779,6 @@
             <nt:tp-ref>p4</nt:tp-ref>
           </nt:supporting-termination-point>
         </nt:termination-point>
-        <l3t:l3-node-attributes>
-          <l3t:prefix>
-            <l3t:prefix>192.168.20.0/24</l3t:prefix>
-            <l3t:metric>100</l3t:metric>
-          </l3t:prefix>
-          <l3t:flag>l3t:l3-segment</l3t:flag>
-          <l3t:flag>l3t:pseudo-node</l3t:flag>
-        </l3t:l3-node-attributes>
         <nw:supporting-node>
           <nw:network-ref>target-L2</nw:network-ref>
           <nw:node-ref>R1-BR-VL20</nw:node-ref>
@@ -1913,6 +1799,16 @@
           <nw:network-ref>target-L2</nw:network-ref>
           <nw:node-ref>HYP1-vSW1-BR-VL20</nw:node-ref>
         </nw:supporting-node>
+        <l3t:l3-node-attributes>
+          <l3t:name/>
+          <l3t:flag>l3t:l3-segment</l3t:flag>
+          <l3t:flag>l3t:pseudo-node</l3t:flag>
+          <l3t:router-id/>
+          <l3t:prefix>
+            <l3t:prefix>192.168.20.0/24</l3t:prefix>
+            <l3t:metric>100</l3t:metric>
+          </l3t:prefix>
+        </l3t:l3-node-attributes>
       </nw:node>
       <nw:node>
         <nw:node-id>Seg.C</nw:node-id>
@@ -1932,14 +1828,6 @@
             <nt:tp-ref>p3</nt:tp-ref>
           </nt:supporting-termination-point>
         </nt:termination-point>
-        <l3t:l3-node-attributes>
-          <l3t:prefix>
-            <l3t:prefix>192.168.30.0/24</l3t:prefix>
-            <l3t:metric>100</l3t:metric>
-          </l3t:prefix>
-          <l3t:flag>l3t:l3-segment</l3t:flag>
-          <l3t:flag>l3t:pseudo-node</l3t:flag>
-        </l3t:l3-node-attributes>
         <nw:supporting-node>
           <nw:network-ref>target-L2</nw:network-ref>
           <nw:node-ref>SW1-BR-VL30</nw:node-ref>
@@ -1952,56 +1840,74 @@
           <nw:network-ref>target-L2</nw:network-ref>
           <nw:node-ref>HYP1-vSW1-BR-VL30</nw:node-ref>
         </nw:supporting-node>
+        <l3t:l3-node-attributes>
+          <l3t:name/>
+          <l3t:flag>l3t:l3-segment</l3t:flag>
+          <l3t:flag>l3t:pseudo-node</l3t:flag>
+          <l3t:router-id/>
+          <l3t:prefix>
+            <l3t:prefix>192.168.30.0/24</l3t:prefix>
+            <l3t:metric>100</l3t:metric>
+          </l3t:prefix>
+        </l3t:l3-node-attributes>
       </nw:node>
       <nw:node>
         <nw:node-id>VM1</nw:node-id>
         <nt:termination-point>
           <nt:tp-id>eth0</nt:tp-id>
-          <l3t:l3-termination-point-attributes>
-            <l3t:ip-address>192.168.10.11</l3t:ip-address>
-          </l3t:l3-termination-point-attributes>
           <nt:supporting-termination-point>
             <nt:network-ref>target-L2</nt:network-ref>
             <nt:node-ref>VM1</nt:node-ref>
             <nt:tp-ref>eth0</nt:tp-ref>
           </nt:supporting-termination-point>
+          <l3t:l3-termination-point-attributes>
+            <l3t:ip-address>192.168.10.11</l3t:ip-address>
+          </l3t:l3-termination-point-attributes>
         </nt:termination-point>
-        <l3t:l3-node-attributes>
-          <l3t:prefix>
-            <l3t:prefix>192.168.10.0/24</l3t:prefix>
-            <l3t:metric>100</l3t:metric>
-          </l3t:prefix>
-        </l3t:l3-node-attributes>
         <nw:supporting-node>
           <nw:network-ref>target-L2</nw:network-ref>
           <nw:node-ref>VM1</nw:node-ref>
         </nw:supporting-node>
+        <l3t:l3-node-attributes>
+          <l3t:name/>
+          <l3t:router-id/>
+          <l3t:prefix>
+            <l3t:prefix>192.168,10.0/24</l3t:prefix>
+            <l3t:metric>100</l3t:metric>
+          </l3t:prefix>
+        </l3t:l3-node-attributes>
       </nw:node>
       <nw:node>
         <nw:node-id>VM2</nw:node-id>
         <nt:termination-point>
           <nt:tp-id>eth0.20</nt:tp-id>
-          <l3t:l3-termination-point-attributes>
-            <l3t:ip-address>192.168.20.2</l3t:ip-address>
-          </l3t:l3-termination-point-attributes>
           <nt:supporting-termination-point>
             <nt:network-ref>target-L2</nt:network-ref>
             <nt:node-ref>VM2</nt:node-ref>
             <nt:tp-ref>eth0.20</nt:tp-ref>
           </nt:supporting-termination-point>
+          <l3t:l3-termination-point-attributes>
+            <l3t:ip-address>192.168.20.2</l3t:ip-address>
+          </l3t:l3-termination-point-attributes>
         </nt:termination-point>
         <nt:termination-point>
           <nt:tp-id>eth0.30</nt:tp-id>
-          <l3t:l3-termination-point-attributes>
-            <l3t:ip-address>192.168.30.2</l3t:ip-address>
-          </l3t:l3-termination-point-attributes>
           <nt:supporting-termination-point>
             <nt:network-ref>target-L2</nt:network-ref>
             <nt:node-ref>VM2</nt:node-ref>
             <nt:tp-ref>eth0.30</nt:tp-ref>
           </nt:supporting-termination-point>
+          <l3t:l3-termination-point-attributes>
+            <l3t:ip-address>192.168.30.2</l3t:ip-address>
+          </l3t:l3-termination-point-attributes>
         </nt:termination-point>
+        <nw:supporting-node>
+          <nw:network-ref>target-L2</nw:network-ref>
+          <nw:node-ref>VM2</nw:node-ref>
+        </nw:supporting-node>
         <l3t:l3-node-attributes>
+          <l3t:name/>
+          <l3t:router-id/>
           <l3t:prefix>
             <l3t:prefix>192.168.20.0/24</l3t:prefix>
             <l3t:metric>100</l3t:metric>
@@ -2011,60 +1917,64 @@
             <l3t:metric>100</l3t:metric>
           </l3t:prefix>
         </l3t:l3-node-attributes>
-        <nw:supporting-node>
-          <nw:network-ref>target-L2</nw:network-ref>
-          <nw:node-ref>VM2</nw:node-ref>
-        </nw:supporting-node>
       </nw:node>
       <nw:node>
         <nw:node-id>SV1</nw:node-id>
         <nt:termination-point>
           <nt:tp-id>eth0</nt:tp-id>
-          <l3t:l3-termination-point-attributes>
-            <l3t:ip-address>192.168.10.31</l3t:ip-address>
-          </l3t:l3-termination-point-attributes>
           <nt:supporting-termination-point>
             <nt:network-ref>target-L2</nt:network-ref>
             <nt:node-ref>SV1</nt:node-ref>
             <nt:tp-ref>eth0</nt:tp-ref>
           </nt:supporting-termination-point>
+          <l3t:l3-termination-point-attributes>
+            <l3t:ip-address>192.168.10.31</l3t:ip-address>
+          </l3t:l3-termination-point-attributes>
         </nt:termination-point>
-        <l3t:l3-node-attributes>
-          <l3t:prefix>
-            <l3t:prefix>192.168.10.0/24</l3t:prefix>
-            <l3t:metric>100</l3t:metric>
-          </l3t:prefix>
-        </l3t:l3-node-attributes>
         <nw:supporting-node>
           <nw:network-ref>target-L2</nw:network-ref>
           <nw:node-ref>SV1</nw:node-ref>
         </nw:supporting-node>
+        <l3t:l3-node-attributes>
+          <l3t:name/>
+          <l3t:router-id/>
+          <l3t:prefix>
+            <l3t:prefix>192.168,10.0/24</l3t:prefix>
+            <l3t:metric>100</l3t:metric>
+          </l3t:prefix>
+        </l3t:l3-node-attributes>
       </nw:node>
       <nw:node>
         <nw:node-id>SV2</nw:node-id>
         <nt:termination-point>
           <nt:tp-id>eth0.20</nt:tp-id>
-          <l3t:l3-termination-point-attributes>
-            <l3t:ip-address>192.168.20.4</l3t:ip-address>
-          </l3t:l3-termination-point-attributes>
           <nt:supporting-termination-point>
             <nt:network-ref>target-L2</nt:network-ref>
             <nt:node-ref>SV2</nt:node-ref>
             <nt:tp-ref>eth0.20</nt:tp-ref>
           </nt:supporting-termination-point>
+          <l3t:l3-termination-point-attributes>
+            <l3t:ip-address>192.168.20.4</l3t:ip-address>
+          </l3t:l3-termination-point-attributes>
         </nt:termination-point>
         <nt:termination-point>
           <nt:tp-id>eth0.30</nt:tp-id>
-          <l3t:l3-termination-point-attributes>
-            <l3t:ip-address>192.168.30.4</l3t:ip-address>
-          </l3t:l3-termination-point-attributes>
           <nt:supporting-termination-point>
             <nt:network-ref>target-L2</nt:network-ref>
             <nt:node-ref>SV2</nt:node-ref>
             <nt:tp-ref>eth0.30</nt:tp-ref>
           </nt:supporting-termination-point>
+          <l3t:l3-termination-point-attributes>
+            <l3t:ip-address>192.168.30.4</l3t:ip-address>
+          </l3t:l3-termination-point-attributes>
         </nt:termination-point>
+        <nw:supporting-node>
+          <nw:network-ref>target-L2</nw:network-ref>
+          <nw:node-ref>SV2</nw:node-ref>
+        </nw:supporting-node>
         <l3t:l3-node-attributes>
+          <l3t:name/>
+          <l3t:router-id/>
           <l3t:prefix>
             <l3t:prefix>192.168.20.0/24</l3t:prefix>
             <l3t:metric>100</l3t:metric>
@@ -2074,10 +1984,6 @@
             <l3t:metric>100</l3t:metric>
           </l3t:prefix>
         </l3t:l3-node-attributes>
-        <nw:supporting-node>
-          <nw:network-ref>target-L2</nw:network-ref>
-          <nw:node-ref>SV2</nw:node-ref>
-        </nw:supporting-node>
       </nw:node>
       <nt:link>
         <nt:link-id>GRT-vRT,p1,Seg.A,p0</nt:link-id>
@@ -2343,6 +2249,20 @@
           <nt:dest-tp>eth0.30</nt:dest-tp>
         </nt:destination>
       </nt:link>
+      <nw:supporting-network>
+        <nw:network-ref>target-L1.5</nw:network-ref>
+      </nw:supporting-network>
+      <nw:supporting-network>
+        <nw:network-ref>target-L2</nw:network-ref>
+      </nw:supporting-network>
+      <nw:supporting-network>
+        <nw:network-ref>target-L1</nw:network-ref>
+      </nw:supporting-network>
+      <l3t:l3-topology-attributes>
+        <l3t:name>L3 of target network</l3t:name>
+        <l3t:flag>l3t:layer3</l3t:flag>
+        <l3t:flag>l3t:unicast</l3t:flag>
+      </l3t:l3-topology-attributes>
     </nw:network>
   </nw:networks>
 </nc:data>

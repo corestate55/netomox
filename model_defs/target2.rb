@@ -1,9 +1,9 @@
 require 'json'
 require_relative '../model_dsl/dsl'
-require_relative 'target3/layer1'
-require_relative 'target3/layer15'
-require_relative 'target3/layer2'
-require_relative 'target3/layer3'
+require_relative 'target/layer1'
+require_relative 'target/layer15'
+require_relative 'target2/layer2'
+require_relative 'target2/layer3'
 
 nws = NWTopoDSL::Networks.new
 nws.networks.push(

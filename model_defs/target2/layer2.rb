@@ -18,10 +18,6 @@ def make_target_layer2
       eth_encap: '802.1q',
       vlan_id_names: [vlan_a, vlan_b]
     }
-    trunk_vlan_abc = {
-      eth_encap: '802.1q',
-      vlan_id_names: [vlan_a, vlan_b, vlan_c]
-    }
     access_vlan_a = {
       port_vlan_id: 10,
       vlan_id_names: [vlan_a]
@@ -48,7 +44,7 @@ def make_target_layer2
       support %w[target-L1 R1]
     end
 
-    node 'R1-BR' do
+    node 'R1-BR-VL10' do
       term_point 'p1' do
         attribute(trunk_vlan_ab)
       end
@@ -76,7 +72,7 @@ def make_target_layer2
       support %w[target-L1 R2]
     end
 
-    node 'R2-BR' do
+    node 'R2-BR-VL10' do
       term_point 'p1' do
         attribute(trunk_vlan_ab)
       end
@@ -91,45 +87,45 @@ def make_target_layer2
       support %w[target-L1 R2]
     end
 
-    node 'SW1-BR' do
-      attribute(
-        name: 'SW1-BR',
-        descr: 'L2 bridge of SW1',
-        mgmt_addrs: %w[192.168.10.1],
-        mgmt_vid: 10
-      )
+    node 'SW1-BR-VL10' do
       term_point 'p1' do
         attribute(trunk_vlan_ab)
         support %w[target-L1 SW1 Fa1]
       end
       term_point 'p2' do
-        attribute(trunk_vlan_abc)
+        attribute(trunk_vlan_ab)
         support %w[target-L1 SW1 Fa0]
       end
       term_point 'p3' do
-        attribute(trunk_vlan_abc)
+        attribute(trunk_vlan_ab)
         support %w[target-L1 SW1 Fa2]
       end
       support %w[target-L1 SW1]
     end
 
-    node 'SW2-BR' do
-      attribute(
-        name: 'SW2-BR',
-        descr: 'L2 bridge of SW2',
-        mgmt_addrs: %w[192.168.10.2],
-        mgmt_vid: 10
-      )
+    node 'SW1-BR-VL30' do
+      term_point 'p1' do
+        attribute(trunk_vlan_c)
+        support %w[target-L1 SW1 Fa2]
+      end
+      term_point 'p2' do
+        attribute(trunk_vlan_c)
+        support %w[target-L1 SW1 Fa0]
+      end
+      support %w[target-L1 SW1]
+    end
+
+    node 'SW2-BR-VL10' do
       term_point 'p1' do
         attribute(trunk_vlan_ab)
         support %w[target-L1 SW2 Fa1]
       end
       term_point 'p2' do
-        attribute(trunk_vlan_abc)
+        attribute(trunk_vlan_ab) # TODO: blocking
         support %w[target-L1 SW2 Fa0]
       end
       term_point 'p3' do
-        attribute(trunk_vlan_abc)
+        attribute(trunk_vlan_ab)
         support %w[target-L1 SW2 Fa2]
       end
       term_point 'p4' do
@@ -140,20 +136,32 @@ def make_target_layer2
         attribute(trunk_vlan_b)
         support %w[target-L1 SW2 Fa4]
       end
-      term_point 'p6' do
+      support %w[target-L1 SW2]
+    end
+
+    node 'SW2-BR-VL30' do
+      term_point 'p1' do
+        attribute(trunk_vlan_c)
+        support %w[target-L1 SW2 Fa2]
+      end
+      term_point 'p2' do
+        attribute(trunk_vlan_c)
+        support %w[target-L1 SW2 Fa0]
+      end
+      term_point 'p3' do
         attribute(trunk_vlan_c)
         support %w[target-L1 SW2 Fa4]
       end
       support %w[target-L1 SW2]
     end
 
-    node 'HYP1-vSW1-BR' do
+    node 'HYP1-vSW1-BR-VL10' do
       term_point 'p1' do
-        attribute(trunk_vlan_abc)
+        attribute(trunk_vlan_ab)
         support %w[target-L1.5 HYP1-vSW1 eth0]
       end
       term_point 'p2' do
-        attribute(trunk_vlan_abc)
+        attribute(trunk_vlan_ab)
         support %w[target-L1.5 HYP1-vSW1 eth1]
       end
       term_point 'p3' do
@@ -164,7 +172,19 @@ def make_target_layer2
         attribute(trunk_vlan_b)
         support %w[target-L1.5 HYP1-vSW1 p2]
       end
-      term_point 'p5' do
+      support %w[target-L1.5 HYP1-vSW1]
+    end
+
+    node 'HYP1-vSW1-BR-VL30' do
+      term_point 'p1' do
+        attribute(trunk_vlan_c)
+        support %w[target-L1.5 HYP1-vSW1 eth0]
+      end
+      term_point 'p2' do
+        attribute(trunk_vlan_c)
+        support %w[target-L1.5 HYP1-vSW1 eth1]
+      end
+      term_point 'p3' do
         attribute(trunk_vlan_c)
         support %w[target-L1.5 HYP1-vSW1 p2]
       end
@@ -190,7 +210,6 @@ def make_target_layer2
       end
       support %w[target-L1.5 VM2]
     end
-
     node 'SV1' do
       term_point 'eth0' do
         attribute(access_vlan_a)
@@ -211,27 +230,30 @@ def make_target_layer2
       support %w[target-L1 SV2]
     end
 
-    bdlink %w[R1-GRT p1 R1-BR p1]
-    bdlink %w[R2-GRT p1 R2-BR p1]
-    bdlink %w[R1-BR p2 R2-BR p2]
+    bdlink %w[R1-GRT p1 R1-BR-VL10 p1]
+    bdlink %w[R2-GRT p1 R2-BR-VL10 p1]
+    bdlink %w[R1-BR-VL10 p2 R2-BR-VL10 p2]
     # support %w[target-L1 R1,Po1,R2,Po1]
-    bdlink %w[R1-BR p3 SW1-BR p1]
+    bdlink %w[R1-BR-VL10 p3 SW1-BR-VL10 p1]
     # support %w[target-L1 R1,Fa2,SW1,Fa1]
-    bdlink %w[R2-BR p3 SW2-BR p1]
+    bdlink %w[R2-BR-VL10 p3 SW2-BR-VL10 p1]
     # support %w[target-L1 R2,Fa2,SW2,Fa1]
-    bdlink %w[SW1-BR p2 SW2-BR p2]
+    bdlink %w[SW1-BR-VL10 p2 SW2-BR-VL10 p2]
     # support %w[target-L1 SW1,Fa0,SW2,Fa0]
-    bdlink %w[SW1-BR p3 HYP1-vSW1-BR p1]
+    bdlink %w[SW1-BR-VL30 p2 SW2-BR-VL30 p2]
+    bdlink %w[SW1-BR-VL10 p3 HYP1-vSW1-BR-VL10 p1]
     # support %w[target-L1 SW1,Fa2,HYP1,eth0]
-    bdlink %w[SW2-BR p3 HYP1-vSW1-BR p2]
+    bdlink %w[SW2-BR-VL10 p3 HYP1-vSW1-BR-VL10 p2]
     # support %w[target-L1 SW2,Fa2,HYP1,eth1]
-    bdlink %w[SW2-BR p4 SV1 eth0]
+    bdlink %w[SW2-BR-VL10 p4 SV1 eth0]
     # support %w[target-L1 SW2,Fa3,SV1,eth0]
-    bdlink %w[HYP1-vSW1-BR p3 VM1 eth0]
-    bdlink %w[HYP1-vSW1-BR p4 VM2 eth0.20]
-    bdlink %w[SW2-BR p5 SV2 eth0.20]
-    bdlink %w[HYP1-vSW1-BR p5 VM2 eth0.30]
-    bdlink %w[SW2-BR p6 SV2 eth0.30]
+    bdlink %w[HYP1-vSW1-BR-VL10 p3 VM1 eth0]
+    bdlink %w[SW1-BR-VL30 p1 HYP1-vSW1-BR-VL30 p1]
+    bdlink %w[SW2-BR-VL30 p1 HYP1-vSW1-BR-VL30 p2]
+    bdlink %w[SW2-BR-VL30 p3 SV2 eth0.30]
+    bdlink %w[HYP1-vSW1-BR-VL30 p3 VM2 eth0.30]
+    bdlink %w[HYP1-vSW1-BR-VL10 p4 VM2 eth0.20]
+    bdlink %w[SW2-BR-VL10 p5 SV2 eth0.20]
   end
 end
 # rubocop:enable Metrics/MethodLength, Metrics/BlockLength, Metrics/AbcSize
