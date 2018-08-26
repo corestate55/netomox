@@ -1,48 +1,45 @@
-YANGDIR := ./yang
-SRCDIR := ./model_checker
-MODELDIR := ./model
-DSLSRCDIR := ./model_dsl
-DEFDIR := ./model_defs
+YANG_DIR := ./yang
+CHECKER_DIR := ./model_checker
+DSL_DIR := ./model_dsl
+DEF_DIR := ./model_defs
+MODEL_DIR := ./model
 
-YANGFILES := $(YANGDIR)/ietf-l2-topology@2018-06-29.yang $(YANGDIR)/ietf-l3-unicast-topology@2018-02-26.yang $(YANGDIR)/ietf-network-topology@2018-02-26.yang $(YANGDIR)/ietf-network@2018-02-26.yang
-YANGFILES_R := $(YANGDIR)/ietf-network@2018-02-26.yang $(YANGDIR)/ietf-network@2018-02-26.yang $(YANGDIR)/ietf-l3-unicast-topology@2018-02-26.yang $(YANGDIR)/ietf-l2-topology@2018-06-29.yang
-TARGETRB := $(wildcard $(DEFDIR)/target*.rb) $(wildcard $(DEFDIR)/target*/*.rb)
-DSLRB := $(wildcard $(DSLSRCDIR)/*.rb)
-TARGETJSON := $(MODELDIR)/target.json $(MODELDIR)/target2.json $(MODELDIR)/target3.json
-TARGETXML := $(TARGETJSON:%.json=%.xml)
-JTOX := $(MODELDIR)/topol23.jtox
-JSONSCHEMA := $(MODELDIR)/topol23.jsonschema
+YANG := $(YANG_DIR)/ietf-l2-topology@2018-06-29.yang $(YANG_DIR)/ietf-l3-unicast-topology@2018-02-26.yang $(YANG_DIR)/ietf-network-topology@2018-02-26.yang $(YANG_DIR)/ietf-network@2018-02-26.yang
+YANG_R := $(YANG_DIR)/ietf-network@2018-02-26.yang $(YANG_DIR)/ietf-network@2018-02-26.yang $(YANG_DIR)/ietf-l3-unicast-topology@2018-02-26.yang $(YANG_DIR)/ietf-l2-topology@2018-06-29.yang
+DSL_RB := $(wildcard $(DSL_DIR)/*.rb)
+TARGET_RB := $(wildcard $(DEF_DIR)/target*.rb) $(wildcard $(DEF_DIR)/target*/*.rb)
+TARGET_JSON := $(MODEL_DIR)/target.json $(MODEL_DIR)/target2.json $(MODEL_DIR)/target3.json
+TARGET_XML := $(TARGET_JSON:%.json=%.xml)
+JTOX := $(MODEL_DIR)/topol23.jtox
+JSON_SCHEMA := $(MODEL_DIR)/topol23.jsonschema
+CHECKER_RB := $(CHECKER) $(wildcard $(CHECKER_DIR)/*.rb)
 CHECKER := model_checker.rb
 RUBY := bundle exec ruby
-CHECKERSRC := $(CHECKER) $(wildcard $(SRCDIR)/*.rb)
 
-all: $(TARGETXML)
+all: $(TARGET_XML)
 
-$(TARGETXML): $(DSLRB) $(TARGETRB) $(TARGETJSON) $(JTOX) $(JSONSCHEMA) $(CHECKERSRC)
+$(TARGET_XML): $(DSL_RB) $(TARGET_RB) $(TARGET_JSON) $(JTOX) $(JSON_SCHEMA) $(CHECKER_RB)
 
-%.json: $(DEFDIR)/%.rb
+%.json: $(DEF_DIR)/%.rb
 	echo "# generate json from ruby" $<
-	$(RUBY) $< > $(MODELDIR)/$@
+	$(RUBY) $< > $(MODEL_DIR)/$@
 
 %.xml: %.json
 	echo "# convert json 2 xml" $<
-	jsonlint-cli -s $(JSONSCHEMA) $<
+	jsonlint-cli -s $(JSON_SCHEMA) $<
 	$(RUBY) $(CHECKER) --check $<
 	json2xml $(JTOX) $< | xmllint --output $@ --format -
 
-$(JTOX): $(YANGFILES)
-	pyang -f jtox -o $(JTOX) $(YANGFILES)
+$(JTOX): $(YANG)
+	pyang -f jtox -o $(JTOX) $(YANG)
 
-$(JSONSCHEMA): $(YANGFILES)
-	pyang -f json_schema -o $(JSONSCHEMA) $(YANGFILES_R)
+$(JSON_SCHEMA): $(YANG)
+	pyang -f json_schema -o $(JSON_SCHEMA) $(YANG_R)
 
 force:
-	$(RUBY) $(DEFDIR)/target.rb > $(MODELDIR)/target.json
-	$(RUBY) $(DEFDIR)/target2.rb > $(MODELDIR)/target2.json
-	$(RUBY) $(DEFDIR)/target3.rb > $(MODELDIR)/target3.json
+	$(RUBY) $(DEF_DIR)/target.rb > $(MODEL_DIR)/target.json
+	$(RUBY) $(DEF_DIR)/target2.rb > $(MODEL_DIR)/target2.json
+	$(RUBY) $(DEF_DIR)/target3.rb > $(MODEL_DIR)/target3.json
 
 testgen:
-	$(RUBY) $(DEFDIR)/test_network.rb
-	$(RUBY) $(DEFDIR)/test_node.rb
-	$(RUBY) $(DEFDIR)/test_link.rb
-	$(RUBY) $(DEFDIR)/test_tp.rb
+	for file in $(DEF_DIR)/test_*.rb; do ${RUBY} $$file; done

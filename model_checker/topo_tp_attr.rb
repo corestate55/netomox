@@ -23,15 +23,18 @@ module TopoChecker
                port_vlan_id vlan_id_names tp_state].freeze
     attr_accessor(*ATTRS)
 
+    # rubocop:disable Metrics/CyclomaticComplexity
     def initialize(data)
-      super(ATTRS, %i[max_frame_size tp_state])
+      super(ATTRS, %i[max_frame_size port_vlan_id tp_state])
       @descr = data['description'] || ''
       @max_frame_size = data['maximum-frame-size'] || 1500
       @mac_addr = data['mac-address'] || ''
       @eth_encap = data['eth-encapsulation'] || ''
-      @port_vlan_id = setup_port_vlan_id(data)
+      @port_vlan_id = data['port-vlan-id'] || 0
+      @vlan_id_names = setup_vlan_id_names(data)
       @tp_state = data['tp-state'] || 'in-use'
     end
+    # rubocop:enable Metrics/CyclomaticComplexity
 
     def to_s
       "attribute: #{@descr}" # TODO
@@ -39,9 +42,10 @@ module TopoChecker
 
     private
 
-    def setup_port_vlan_id(data)
-      if data['port-vlan-id'] && !data['port-vlan-id']
-        data['port-vlan-id'].map { |p| L2VlanIdName.new(p) }
+    def setup_vlan_id_names(data)
+      key = 'vlan-id-name' # alias
+      if data.key?(key) && !data[key].empty?
+        data[key].map { |p| L2VlanIdName.new(p) }
       else
         []
       end

@@ -3,18 +3,20 @@ module TopoChecker
   class DiffState
     attr_accessor :forward, :backward, :pair
 
-    def initialize(forward: nil, backward: nil, pair: nil)
+    def initialize(forward: :kept, backward: nil, pair: nil)
       @forward = forward
       @backward = backward
       @pair = pair
     end
 
-    def detect?
+    def detect
       if %i[added deleted].include?(@forward)
+        # add/delete are used only in forward check
         @forward
       elsif [@forward, @backward].include?(:changed)
         :changed
       else
+        # when [fwd,bwd] => [:kept, nil] or [:kept, :kept]
         :kept
       end
     end

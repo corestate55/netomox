@@ -1,24 +1,15 @@
 require 'json'
 require 'termcolor'
+require_relative 'diff_view_utils'
 
 module TopoChecker
   # Topology diff data viewer
   class DiffView
-    def initialize(data)
-      @data = case data
-              when String then JSON.parse(data)
-              else data
-              end
-      @diff_state = {}
-    end
-
     def to_s
       stringify.gsub!(/:\s+/, ': ').termcolor
     end
 
-    def stringify(indent = '')
-      @indent_a = indent
-      @indent_b = indent + '  ' # 2-space indent
+    def stringify
       output_strs = stringify_data
       output_strs.flatten.join("\n")
     end
@@ -36,7 +27,7 @@ module TopoChecker
       end
     end
 
-    def stringify_value(value)
+    def stringify_single_value(value)
       str = value.nil? || value == '' ? '""' : value
       coloring(str)
     end
@@ -44,11 +35,11 @@ module TopoChecker
     def stringify_array_value(value)
       case value
       when Array, Hash then
-        dv = DiffView.new(value)
+        dv = DiffView.new(value, @indent_b)
         # stringify array element recursively with deep indent
-        dv.stringify(@indent_b)
+        dv.stringify
       else
-        "#{@indent_b}#{stringify_value(value)}"
+        "#{@indent_b}#{stringify_single_value(value)}"
       end
     end
 
@@ -59,14 +50,43 @@ module TopoChecker
       strs.join(",\n")
     end
 
+    def empty_value?(value)
+      # avoid empty list(or hash)
+      # and empty-key hash (that has only diff_state)
+      value.empty? || value.is_a?(Hash) \
+      && value.key?('_diff_state_') && value.keys.length == 1
+    end
+
+    def state_by_stringified_str(str)
+      # return nil means set color with self diff_state
+      # string doesn't have any color tags, use color as :kept state
+      str.match?(%r{<\w+>.*<\/\w+>}) ? nil : :kept
+    end
+
+    def stringify_hash_key_array(key, value)
+      return nil if empty_value?(value)
+      dv = DiffView.new(value, @indent_b)
+      v_str = dv.stringify
+      # set key color belongs to its value(array)
+      v_state = state_by_stringified_str(v_str)
+      "#{@indent_b}#{coloring(key, v_state)}: #{v_str}"
+    end
+
+    def stringify_hash_key_hash(key, value)
+      return nil if empty_value?(value)
+      dv = DiffView.new(value, @indent_b)
+      # set key color belongs to its value(Hash)
+      v_str = dv.stringify # decide dv diff_state before make key str
+      "#{@indent_b}#{dv.coloring(key)}: #{v_str}"
+    end
+
     def stringify_hash_key_value(key, value)
+      # stringify object recursively with deep indent
       case value
-      when Array, Hash
-        dv = DiffView.new(value)
-        # stringify ofject as hash value recursively with deep indent
-        "#{@indent_b}#{coloring(key)}: #{dv.stringify(@indent_b)}"
+      when Array then stringify_hash_key_array(key, value)
+      when Hash then stringify_hash_key_hash(key, value)
       else
-        "#{@indent_b}#{coloring(key)}: #{stringify_value(value)}"
+        "#{@indent_b}#{coloring(key)}: #{stringify_single_value(value)}"
       end
     end
 
@@ -77,49 +97,8 @@ module TopoChecker
       strs = keys.map do |key|
         stringify_hash_key_value(key, @data[key])
       end
+      strs.delete(nil) # delete empty value
       strs.join(",\n")
-    end
-
-    def array_bra(pos = :begin)
-      bra = pos == :begin ? '[' : ']'
-      "#{@indent_a}#{coloring(bra)}"
-    end
-
-    def hash_bra(pos = :begin)
-      bra = pos == :begin ? '{' : '}'
-      "#{@indent_a}#{coloring(bra)}"
-    end
-
-    def coloring(str)
-      (c_begin, c_end) = color_tags
-      "#{c_begin}#{str}#{c_end}"
-    end
-
-    def detect_state
-      if @diff_state['forward'] == 'added'
-        :added
-      elsif @diff_state['forward'] == 'deleted'
-        :deleted
-      elsif [@diff_state['forward'],
-             @diff_state['backward']].include?('changed')
-        :changed
-      else
-        :kept
-      end
-    end
-
-    def color_by_diff_state
-      case detect_state
-      when :added then :green
-      when :deleted then :red
-      when :changed then :yellow
-      else '' # no color
-      end
-    end
-
-    def color_tags
-      color = color_by_diff_state
-      color.empty? ? ['', ''] : %W[<#{color}> </#{color}>]
     end
   end
 end

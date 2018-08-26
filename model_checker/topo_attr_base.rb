@@ -1,3 +1,5 @@
+require_relative 'topo_diff_state'
+
 module TopoChecker
   # Base class for attribute
   class AttributeBase
@@ -29,10 +31,19 @@ module TopoChecker
       '## AttributeBase#to_s MUST BE OVER-RIDE ##'
     end
 
+    def select_child_attr(attr)
+      if attr.is_a?(Array) && attr.all? { |d| d.is_a?(AttributeBase) }
+        attr.map(&:to_data)
+      else
+        attr
+      end
+    end
+
     def to_data
       data = {}
-      @keys.each do |k|
-        data[k] = send(k) # TODO: key mapping
+      @keys.each do |k| # TODO: key mapping
+        attr = select_child_attr(send(k))
+        data[k] = attr
       end
       data['_diff_state_'] = @diff_state.to_data unless @diff_state.empty?
       data
