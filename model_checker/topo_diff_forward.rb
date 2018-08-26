@@ -12,9 +12,12 @@ module TopoChecker
 
     def diff_attribute(other)
       # receiver of this method will be (a), other will be (b)
+      # NOTICE: (a)(b) can use NULL attribute
       result = diff_single_value(@attribute, other.attribute)
       arg = { forward: result, pair: @attribute }
       other.attribute.diff_state = DiffState.new(arg)
+      other.attribute = @attribute.diff(other.attribute) if @attribute.diff?
+      other.attribute.fill(arg) if %i[added deleted].include?(result)
       other.attribute
     end
 
@@ -36,13 +39,19 @@ module TopoChecker
 
     private
 
+    def fillable_attribute?(attr)
+      attr.is_a?(AttributeBase) && attr.fill?
+    end
+
     def fill_diff_state_of(attrs)
       attrs.each do |attr|
         case send(attr)
         when Array then
           fill_array_diff_state(send(attr))
         else
-          set_diff_state(send(attr), forward: @diff_state.forward)
+          state_hash = { forward: @diff_state.forward }
+          send(attr).fill(state_hash) if fillable_attribute?(send(attr))
+          set_diff_state(send(attr), state_hash)
         end
       end
     end

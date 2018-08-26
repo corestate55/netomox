@@ -1,4 +1,5 @@
 require_relative 'topo_attr_base'
+require_relative 'topo_diff_forward'
 
 module TopoChecker
   # Port VLAN ID & Name, for L2 attribute
@@ -22,6 +23,8 @@ module TopoChecker
     ATTRS = %i[descr max_frame_size mac_addr eth_encap
                port_vlan_id vlan_id_names tp_state].freeze
     attr_accessor(*ATTRS)
+    include TopoDiff
+    include SubAttributeOps
 
     # rubocop:disable Metrics/CyclomaticComplexity
     def initialize(data)
@@ -38,6 +41,14 @@ module TopoChecker
 
     def to_s
       "attribute: #{@descr}" # TODO
+    end
+
+    def diff(other)
+      diff_of(:vlan_id_names, other)
+    end
+
+    def fill(state_hash)
+      fill_of(:vlan_id_names, state_hash)
     end
 
     private

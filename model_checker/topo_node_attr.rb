@@ -1,4 +1,5 @@
 require_relative 'topo_attr_base'
+require_relative 'topo_diff_forward'
 
 module TopoChecker
   # attribute for L2 node
@@ -40,6 +41,8 @@ module TopoChecker
   class L3NodeAttribute < AttributeBase
     ATTRS = %i[name flags router_id prefixes].freeze
     attr_accessor(*ATTRS)
+    include TopoDiff
+    include SubAttributeOps
 
     def initialize(data)
       super(ATTRS)
@@ -52,6 +55,14 @@ module TopoChecker
 
     def to_s
       "attribute: #{@name}"
+    end
+
+    def diff(other)
+      diff_of(:prefixes, other)
+    end
+
+    def fill(state_hash)
+      fill_of(:prefixes, state_hash)
     end
   end
 end

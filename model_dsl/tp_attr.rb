@@ -44,7 +44,7 @@ module NWTopoDSL
     # rubocop:enable Metrics/ParameterLists, Metrics/MethodLength
 
     def empty?
-      @descr.empty? && @mac_addr.empty? \
+      @descr.empty? && @mac_addr.empty? && port_vlan_id.zero? \
       && @eth_encap.empty? && @vlan_id_names.empty?
     end
 
