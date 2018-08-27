@@ -20,10 +20,6 @@ all: $(TARGET_XML)
 
 $(TARGET_XML): $(DSL_RB) $(TARGET_RB) $(TARGET_JSON) $(JTOX) $(JSON_SCHEMA) $(CHECKER_RB)
 
-%.json: $(DEF_DIR)/%.rb
-	echo "# generate json from ruby" $<
-	$(RUBY) $< > $(MODEL_DIR)/$@
-
 %.xml: %.json
 	echo "# convert json 2 xml" $<
 	jsonlint-cli -s $(JSON_SCHEMA) $<
