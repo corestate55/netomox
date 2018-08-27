@@ -57,10 +57,10 @@ test_node_attr2 = NWTopoDSL::Networks.new do
   end
 end
 
-File.open("#{model_dir}/test_node_attr1.json", 'w') do |file|
+File.open("#{model_dir}/test_node_l3attr1.json", 'w') do |file|
   file.write(JSON.pretty_generate(test_node_attr1.topo_data))
 end
 
-File.open("#{model_dir}/test_node_attr2.json", 'w') do |file|
+File.open("#{model_dir}/test_node_l3attr2.json", 'w') do |file|
   file.write(JSON.pretty_generate(test_node_attr2.topo_data))
 end

@@ -16,7 +16,7 @@ CHECKER_RB := $(CHECKER) $(wildcard $(CHECKER_DIR)/*.rb)
 CHECKER := model_checker.rb
 RUBY := bundle exec ruby
 
-all: $(TARGET_XML)
+all: json $(TARGET_XML)
 
 $(TARGET_XML): $(DSL_RB) $(TARGET_RB) $(TARGET_JSON) $(JTOX) $(JSON_SCHEMA) $(CHECKER_RB)
 
@@ -32,10 +32,13 @@ $(JTOX): $(YANG)
 $(JSON_SCHEMA): $(YANG)
 	pyang -f json_schema -o $(JSON_SCHEMA) $(YANG_R)
 
-force:
+json:
 	$(RUBY) $(DEF_DIR)/target.rb > $(MODEL_DIR)/target.json
 	$(RUBY) $(DEF_DIR)/target2.rb > $(MODEL_DIR)/target2.json
 	$(RUBY) $(DEF_DIR)/target3.rb > $(MODEL_DIR)/target3.json
 
 testgen:
 	for file in $(DEF_DIR)/test_*.rb; do ${RUBY} $$file; done
+
+clean:
+	rm -f *~ $(TARGET_JSON) $(MODEL_DIR)/test_*.json

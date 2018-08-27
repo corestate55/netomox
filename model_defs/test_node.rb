@@ -5,19 +5,11 @@ model_dir = 'model/'
 
 # test data for node diff
 
-# rubocop:disable Metrics/BlockLength
 test_node1 = NWTopoDSL::Networks.new do
   network 'layerX' do
     type NWTopoDSL::NWTYPE_L2
     node 'node_kept'
     node 'node_deleted'
-
-    node 'node_attr_kept' do
-      attribute(name: 'kept', mgmt_vid: 10)
-    end
-    node 'node_attr_changed' do
-      attribute(name: 'kept', mgmt_vid: 10)
-    end
 
     node 'node_support_kept' do
       support %w[hoge foo]
@@ -43,13 +35,6 @@ test_node2 = NWTopoDSL::Networks.new do
     node 'node_kept'
     node 'node_added'
 
-    node 'node_attr_kept' do
-      attribute(name: 'kept', mgmt_vid: 10)
-    end
-    node 'node_attr_changed' do
-      attribute(name: 'kept')
-    end
-
     node 'node_support_kept' do
       support %w[hoge foo]
       support %w[hoge bar]
@@ -67,7 +52,6 @@ test_node2 = NWTopoDSL::Networks.new do
     end
   end
 end
-# rubocop:enable Metrics/BlockLength
 
 File.open("#{model_dir}/test_node1.json", 'w') do |file|
   file.write(JSON.pretty_generate(test_node1.topo_data))

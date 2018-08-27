@@ -55,7 +55,7 @@ module TopoChecker
         'source' => @source.to_data('source'),
         'destination' => @destination.to_data('dest'),
         'supporting-link' => @supports.map(&:to_data),
-        'link-attributes' => @attribute.to_data # TODO: attribute key
+        @attribute.type => @attribute.to_data
       }
     end
 

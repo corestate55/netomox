@@ -1,20 +1,24 @@
 require_relative 'topo_diff_state'
+require_relative 'topo_attr_table'
 
 module TopoChecker
   # Base class for attribute
   class AttributeBase
-    attr_accessor :diff_state, :path
+    attr_accessor :diff_state, :path, :type
 
-    def initialize(keys, keys_with_default = [])
-      @keys = keys
-      @keys_with_default = keys_with_default # keys to except empty check
+    def initialize(attr_table, data, type)
+      @attr_table = AttributeTable.new(attr_table)
+      @keys = @attr_table.keys
+      @keys_with_empty_check = @attr_table.keys_with_empty_check
       @diff_state = DiffState.new # empty state
-      @path = 'attribute' # TODO: dummy for #to_data
+      @path = 'attribute' # TODO: dummy for #to_data pair
+      @type = type
+      setup_members(data)
     end
 
     def empty?
-      (@keys - @keys_with_default).inject(true) do |m, k|
-        m && send(k).empty?
+      @keys_with_empty_check.inject(true) do |m, k|
+        m && send(k).send(@attr_table.check_of(k))
       end
     end
 
@@ -28,7 +32,7 @@ module TopoChecker
     end
 
     def to_s
-      '## AttributeBase#to_s MUST BE OVER-RIDE ##'
+      '## AttributeBase#to_s MUST override in sub class ##'
     end
 
     def diff?
@@ -51,16 +55,30 @@ module TopoChecker
 
     def to_data
       data = {}
-      @keys.each do |k| # TODO: key mapping
+      @keys.each do |k|
         attr = select_child_attr(send(k))
-        data[k] = attr
+        ext_key = @attr_table.ext_of(k)
+        data[ext_key] = attr
       end
       data['_diff_state_'] = @diff_state.to_data unless @diff_state.empty?
       data
     end
+
+    private
+
+    def setup_members(data)
+      # define member (attribute) of the class
+      # according to @attr_table (ATTR_DEFS in sub-classes of AttributeBase)
+      @keys.each do |int_key|
+        ext_key = @attr_table.ext_of(int_key)
+        default = @attr_table.default_of(int_key)
+        value = data[ext_key] || default
+        send("#{int_key}=", value)
+      end
+    end
   end
 
-  # for attribute that has sub-attribute
+  # Module to mix-in for attribute that has sub-attribute
   module SubAttributeOps
     def diff_of(attr, other)
       return diff_with_empty_attr unless other.diff?

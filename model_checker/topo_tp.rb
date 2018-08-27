@@ -30,7 +30,7 @@ module TopoChecker
         'tp-id' => @name,
         '_diff_state_' => @diff_state.to_data,
         'supporting-termination-point' => @supports.map(&:to_data),
-        'tp-attribute' => @attribute.to_data # TODO: attribute key
+        @attribute.type => @attribute.to_data
       }
     end
 

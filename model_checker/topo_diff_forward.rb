@@ -17,7 +17,9 @@ module TopoChecker
       arg = { forward: result, pair: @attribute }
       other.attribute.diff_state = DiffState.new(arg)
       other.attribute = @attribute.diff(other.attribute) if @attribute.diff?
-      other.attribute.fill(arg) if %i[added deleted].include?(result)
+      if %i[added deleted].include?(result) && @attribute.fill?
+        other.attribute.fill(arg)
+      end
       other.attribute
     end
 

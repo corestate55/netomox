@@ -3,13 +3,14 @@ require_relative 'topo_attr_base'
 module TopoChecker
   # base class for network topology
   class NetworkAttributeBase < AttributeBase
-    ATTRS = %i[name flags].freeze
-    attr_accessor(*ATTRS)
+    ATTR_DEFS = [
+      { int: :name, ext: 'name', default: '' },
+      { int: :flags, ext: 'flag', default: [] }
+    ].freeze
+    attr_accessor :name, :flags
 
-    def initialize(data)
-      super(ATTRS)
-      @name = data['name'] || ''
-      @flags = data['flag'] || []
+    def initialize(data, type)
+      super(ATTR_DEFS, data, type)
     end
 
     def to_s

@@ -48,7 +48,7 @@ module TopoChecker
         'node' => @nodes.map(&:to_data),
         'link' => @links.map(&:to_data),
         'supporting-network' => @supports.map(&:to_data),
-        'network-attributes' => @attribute.to_data # TODO: attribute key
+        @attribute.type => @attribute.to_data
       }
     end
 

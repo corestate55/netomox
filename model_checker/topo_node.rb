@@ -48,7 +48,7 @@ module TopoChecker
         '_diff_state_' => @diff_state.to_data,
         "#{NS_TOPO}:termination-point" => @termination_points.map(&:to_data),
         'supporting-node' => @supports.map(&:to_data),
-        'node-attributes' => @attribute.to_data
+        @attribute.type => @attribute.to_data
       }
     end
 

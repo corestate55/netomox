@@ -3,16 +3,17 @@ require_relative 'topo_attr_base'
 module TopoChecker
   # attribute for L2 link
   class L2LinkAttribute < AttributeBase
-    ATTRS = %i[name flags rate delay srlg].freeze
-    attr_accessor(*ATTRS)
+    ATTR_DEFS = [
+      { int: :name, ext: 'name', default: '' },
+      { int: :flags, ext: 'flag', default: [] },
+      { int: :rate, ext: 'rate', default: 0 },
+      { int: :delay, ext: 'delay', default: 0 },
+      { int: :srlg, ext: 'srlg', default: '' }
+    ].freeze
+    attr_accessor :name, :flags, :rate, :delay, :srlg
 
-    def initialize(data)
-      super(ATTRS, %i[rate delay])
-      @name = data['name'] || ''
-      @flags = data['flag'] || []
-      @rate = data['rate'] || 0
-      @delay = data['delay'] || 1
-      @srlg = data['srlg'] || ''
+    def initialize(data, type)
+      super(ATTR_DEFS, data, type)
     end
 
     def to_s
@@ -22,15 +23,16 @@ module TopoChecker
 
   # attribute for L3 link
   class L3LinkAttribute < AttributeBase
-    ATTRS = %i[name flags metric1 metric2].freeze
-    attr_accessor(*ATTRS)
+    ATTR_DEFS = [
+      { int: :name, ext: 'name', default: '' },
+      { int: :flags, ext: 'flag', default: [] },
+      { int: :metric1, ext: 'metric1', default: 0 },
+      { int: :metric2, ext: 'metric2', default: 0 }
+    ].freeze
+    attr_accessor :name, :flags, :metric1, :metric2
 
-    def initialize(data)
-      super(ATTRS, %i[metric1 metric2])
-      @name = data['name'] || ''
-      @flags = data['flag'] || []
-      @metric1 = data['metric1'] || 0
-      @metric2 = data['metric2'] || 0
+    def initialize(data, type)
+      super(ATTR_DEFS, data, type)
     end
 
     def to_s

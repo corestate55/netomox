@@ -10,13 +10,6 @@ test_network1 = NWTopoDSL::Networks.new do
   network 'nw_kept'
   network 'nw_deleted'
 
-  network 'nw_attr_kept' do
-    attribute(name: 'layerZ', flags: %w[foo bar])
-  end
-  network 'nw_attr_changed' do
-    attribute(name: 'layerZ', flags: %w[foo bar])
-  end
-
   network 'nw_support_kept' do
     support 'layerX'
     support 'layerZ'
@@ -37,13 +30,6 @@ end
 test_network2 = NWTopoDSL::Networks.new do
   network 'nw_kept'
   network 'nw_added'
-
-  network 'nw_attr_kept' do
-    attribute(name: 'layerZ', flags: %w[foo bar])
-  end
-  network 'nw_attr_changed' do
-    attribute(name: 'layerZ', flags: %w[hoge bar])
-  end
 
   network 'nw_support_kept' do
     support 'layerX'
