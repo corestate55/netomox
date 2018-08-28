@@ -6,7 +6,12 @@ module TopoChecker
   # Topology diff data viewer
   class DiffView
     def to_s
-      stringify.gsub!(/:\s+/, ': ').termcolor
+      str = stringify
+      # over-wrapped hash key - hash/array bracket
+      str.gsub!(%r{: <\w+>[\.\-\+]<\/\w+>}, ': ')
+      str.gsub!(/: (<\w+>)\s+/, ': \1') # with tag
+      str.gsub!(/:\s+/, ': ') # without tag
+      str.termcolor
     end
 
     def stringify
@@ -44,13 +49,32 @@ module TopoChecker
       end
     end
 
+    def pack_bra(bra_type, value, state = nil)
+      d_state = state.nil? ? detect_state : state
+      (bra1, bra2) = bra_pair(bra_type)
+      [
+        "#{head_mark(d_state)}#{coloring(bra1, d_state)}",
+        value,
+        "#{head_mark(d_state)}#{coloring(bra2, d_state)}"
+      ]
+    end
+
     def stringify_array
-      strs = @data.map do |value|
-        stringify_array_value(value)
-      end
+      strs = @data.map { |value| stringify_array_value(value) }
       strs.delete(nil) # delete empty value
       strs.delete('') # delete empty value
-      [array_bra, strs.join(",\n"), array_bra(:end)]
+      v_str = strs.join(",\n")
+      v_state = state_by_stringified_str(v_str)
+      pack_bra(:array, v_str, v_state)
+    end
+
+    def stringify_hash
+      keys = @data.keys
+      keys.delete('_diff_state_')
+      return [] if keys.empty? || pass_kept?
+      strs = keys.map { |key| stringify_hash_key_value(key, @data[key]) }
+      strs.delete(nil) # delete empty value
+      pack_bra(:hash, strs.join(",\n"))
     end
 
     def empty_value?(value)
@@ -63,7 +87,7 @@ module TopoChecker
     def state_by_stringified_str(str)
       # return nil means set color with self diff_state
       # string doesn't have any color tags, use color as :kept state
-      str.match?(%r{<\w+>.*<\/\w+>}) ? nil : :kept
+      str.match?(%r{<\w+>.*<\/\w+>}) ? :changed : :kept
     end
 
     def stringify_hash_key_array(key, value)
@@ -72,17 +96,18 @@ module TopoChecker
       v_str = dv.stringify
       # set key color belongs to its value(array)
       v_state = state_by_stringified_str(v_str)
-      "#{@indent_b}#{coloring(key, v_state)}: #{v_str}"
+      "#{head_mark(v_state)}#{@indent_b}#{coloring(key, v_state)}: #{v_str}"
     end
 
     def stringify_hash_key_hash(key, value)
       return nil if empty_value?(value)
       dv = DiffView.new(data: value, indent: @indent_b, print_all: @print_all)
       # set key color belongs to its value(Hash)
-      v_str = dv.stringify # decide dv diff_state before make key str
-      # NOTICE detect_state (diff_state) defined after stringify
-      return nil if !@print_all && dv.detect_state == :kept
-      "#{@indent_b}#{dv.coloring(key)}: #{v_str}"
+      # decide dv diff_state before make key str
+      # NOTICE: detect_state (diff_state) defined AFTER stringify
+      v_str = dv.stringify
+      return nil if dv.pass_kept?
+      "#{dv.head_mark}#{@indent_b}#{dv.coloring(key)}: #{v_str}"
     end
 
     def stringify_hash_key_value(key, value)
@@ -91,19 +116,9 @@ module TopoChecker
       when Array then stringify_hash_key_array(key, value)
       when Hash then stringify_hash_key_hash(key, value)
       else
-        "#{@indent_b}#{coloring(key)}: #{stringify_single_value(value)}"
+        v_str = stringify_single_value(value)
+        "#{head_mark}#{@indent_b}#{coloring(key)}: #{v_str}"
       end
-    end
-
-    def stringify_hash
-      keys = @data.keys
-      keys.delete('_diff_state_')
-      return [] if keys.empty? || !@print_all && detect_state == :kept
-      strs = keys.map do |key|
-        stringify_hash_key_value(key, @data[key])
-      end
-      strs.delete(nil) # delete empty value
-      [hash_bra, strs.join(",\n"), hash_bra(:end)]
     end
   end
 end

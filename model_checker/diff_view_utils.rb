@@ -3,7 +3,7 @@ module TopoChecker
   class DiffView
     attr_accessor :print_all
 
-    def initialize(data:, indent: '', print_all: true)
+    def initialize(data:, indent: ' ', print_all: true)
       @data = case data
               when String then JSON.parse(data)
               else data
@@ -37,16 +37,40 @@ module TopoChecker
     end
     # rubocop:enable Metrics/MethodLength
 
+    def head_mark(state = nil)
+      d_state = state.nil? ? detect_state : state
+      mark = case d_state
+             when :added then '+'
+             when :deleted then '-'
+             when :changed then '.'
+             else ' '
+             end
+      coloring(mark, d_state)
+    end
+
+    def pass_kept?
+      !@print_all && detect_state == :kept
+    end
+
     private
+
+    def bra_pair(bra_type)
+      case bra_type
+      when :array then [array_bra, array_bra(:end)]
+      when :hash then [hash_bra, hash_bra(:end)]
+      else
+        ['', '']
+      end
+    end
 
     def array_bra(pos = :begin)
       bra = pos == :begin ? '[' : ']'
-      "#{@indent_a}#{coloring(bra)}"
+      "#{@indent_a}#{bra}"
     end
 
     def hash_bra(pos = :begin)
       bra = pos == :begin ? '{' : '}'
-      "#{@indent_a}#{coloring(bra)}"
+      "#{@indent_a}#{bra}"
     end
 
     def color_table(state)
