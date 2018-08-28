@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'neography', '~> 1.8.0'
 gem 'termcolor'
+gem 'thor'
 
 group :development do
   gem 'byebug'

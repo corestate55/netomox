@@ -23,7 +23,7 @@ $(TARGET_XML): $(DSL_RB) $(TARGET_RB) $(TARGET_JSON) $(JTOX) $(JSON_SCHEMA) $(CH
 %.xml: %.json
 	echo "# convert json 2 xml" $<
 	jsonlint-cli -s $(JSON_SCHEMA) $<
-	$(RUBY) $(CHECKER) --check $<
+	$(RUBY) $(CHECKER) check $<
 	json2xml $(JTOX) $< | xmllint --output $@ --format -
 
 $(JTOX): $(YANG)

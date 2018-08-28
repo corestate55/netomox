@@ -1,7 +1,9 @@
 module TopoChecker
   # Topology diff data viewer (Utility functions)
   class DiffView
-    def initialize(data, indent = '')
+    attr_accessor :print_all
+
+    def initialize(data:, indent: '', print_all: true)
       @data = case data
               when String then JSON.parse(data)
               else data
@@ -9,6 +11,7 @@ module TopoChecker
       @diff_state = {}
       @indent_a = indent
       @indent_b = indent + '  ' # 2-space indent
+      @print_all = print_all
     end
 
     def coloring(str, state = nil)
@@ -16,6 +19,23 @@ module TopoChecker
       (c_begin, c_end) = color_tags(state)
       "#{c_begin}#{str}#{c_end}"
     end
+
+    # rubocop:disable Metrics/MethodLength
+    def detect_state
+      if @diff_state.empty?
+        :changed # TODO: ok?
+      elsif @diff_state['forward'] == 'added'
+        :added
+      elsif @diff_state['forward'] == 'deleted'
+        :deleted
+      elsif [@diff_state['forward'],
+             @diff_state['backward']].include?('changed')
+        :changed
+      else
+        :kept
+      end
+    end
+    # rubocop:enable Metrics/MethodLength
 
     private
 
@@ -27,19 +47,6 @@ module TopoChecker
     def hash_bra(pos = :begin)
       bra = pos == :begin ? '{' : '}'
       "#{@indent_a}#{coloring(bra)}"
-    end
-
-    def detect_state
-      if @diff_state['forward'] == 'added'
-        :added
-      elsif @diff_state['forward'] == 'deleted'
-        :deleted
-      elsif [@diff_state['forward'],
-             @diff_state['backward']].include?('changed')
-        :changed
-      else
-        :kept
-      end
     end
 
     def color_table(state)
