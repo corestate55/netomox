@@ -7,11 +7,7 @@ module TopoChecker
   class DiffView
     def to_s
       str = stringify
-      # over-wrapped hash key - hash/array bracket
-      str.gsub!(%r{: <\w+>[\.\-\+]<\/\w+>}, ': ')
-      str.gsub!(/: (<\w+>)\s+/, ': \1') # with tag
-      str.gsub!(/:\s+/, ': ') # without tag
-      str.termcolor
+      @color ? convert_color_code(str) : delete_color_code(str)
     end
 
     def stringify

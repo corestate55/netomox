@@ -3,7 +3,7 @@ module TopoChecker
   class DiffView
     attr_accessor :print_all
 
-    def initialize(data:, indent: ' ', print_all: true)
+    def initialize(data:, indent: ' ', print_all: true, color: true)
       @data = case data
               when String then JSON.parse(data)
               else data
@@ -12,6 +12,7 @@ module TopoChecker
       @indent_a = indent
       @indent_b = indent + '  ' # 2-space indent
       @print_all = print_all
+      @color = color
     end
 
     def coloring(str, state = nil)
@@ -53,6 +54,23 @@ module TopoChecker
     end
 
     private
+
+    def delete_color_code(str)
+      # delete all color tags
+      str.gsub!(/<\w+>/, '')
+      str.gsub!(%r{<\/\w+>}, '')
+      # clean over-wrapped hash key - hash/array bracket
+      str.gsub!(/: [\.\-\+]?\s+/, ': ') # without tag
+    end
+
+    def convert_color_code(str)
+      # clean over-wrapped hash key - hash/array bracket
+      str.gsub!(%r{: <\w+>[\.\-\+]<\/\w+>}, ': ')
+      str.gsub!(/: (<\w+>)\s+/, ': \1') # with tag
+      str.gsub!(/:\s+/, ': ') # without tag
+      # convert color tag to shell color code
+      str.termcolor
+    end
 
     def bra_pair(bra_type)
       case bra_type

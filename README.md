@@ -91,10 +91,12 @@ $ yang2dsdl -x -j -t config -v model/target.xml yang/ietf-network-topology@2018-
 
 You can see diff of 2 topology data like that:
 ```
-$ bundle exec ruby checker.rb diff [--all] model/target.orig.json model/target.json
+$ bundle exec ruby checker.rb diff [--all|--color] model/target.orig.json model/target.json
 ```
 In default, checker diff output only changed object and its parent object.
-If you add `-a`/`--all` option, checker diff output whole data include unchanged object.
+
+* `-a`/`--all` option: checker diff output whole data include unchanged object.
+* `-c`/`--color` option: use color for diff.
 
 ## Store topology data with Neo4j
 

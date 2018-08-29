@@ -15,6 +15,7 @@ class Checker < Thor
 
   desc 'diff JSON1 JSON2', 'Diff between topology data'
   option :all, type: :boolean, default: false, aliases: :a
+  option :color, type: :boolean, default: false, aliases: :c
   def diff(file1, file2)
     run_diff(file1, file2)
   end
@@ -82,8 +83,12 @@ class Checker < Thor
 
     # test
     json_str = JSON.pretty_generate(d_nws.to_data)
-    diff_view = TopoChecker::DiffView.new(data: json_str,
-                                          print_all: options[:all])
+    opts = {
+      data: json_str,
+      print_all: options[:all],
+      color: options[:color]
+    }
+    diff_view = TopoChecker::DiffView.new(opts)
     puts diff_view
     return unless options[:verbose]
     puts '-----------------'
