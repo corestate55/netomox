@@ -1,63 +1,69 @@
+require_relative 'topo_attr_base'
+
 module TopoChecker
   # Base class for supporting object reference
-  class SupportingRefBase
-    attr_accessor :diff_state, :path
-
-    def initialize(ref_key, refs = [])
-      @ref_key = ref_key
-      @refs = refs
-      @diff_state = DiffState.new # empty state
-      @path = 'attribute' # TODO: dummy for #to_data
+  class SupportingRefBase < AttributeBase
+    def initialize(attr_table, data)
+      super(attr_table, data, 'supporting-base')
+      @path = 'support' # TODO: dummy for #to_data
     end
 
     def to_s
-      "#{@ref_key}:#{ref_path}"
-    end
-
-    def to_data
-      data = {}
-      @refs.each do |r|
-        data[r] = send(r) # TODO: key mapping
-      end
-      data['_diff_state_'] = @diff_state.to_data unless @diff_state.empty?
-      data
+      "support:#{ref_path}"
     end
 
     def ref_path
-      sent_ref_list.join('/')
+      @attr_table.int_keys.map { |r| send(r) }.join('/')
     end
+  end
 
-    def empty?
-      @ref_key.inject(true) do |m, k|
-        m && send(k).empty?
-      end
+  # Supporting network for network topology data
+  class SupportingNetwork < SupportingRefBase
+    ATTR_DEFS = [{ int: :network_ref, ext: 'network-ref' }].freeze
+    attr_accessor :network_ref
+
+    def initialize(data)
+      super(ATTR_DEFS, data)
     end
+  end
 
-    def ==(other)
-      eql?(other)
+  # Supporting node for topology node
+  class SupportingNode < SupportingRefBase
+    ATTR_DEFS = [
+      { int: :network_ref, ext: 'network-ref' },
+      { int: :node_ref, ext: 'node-ref' }
+    ].freeze
+    attr_accessor :network_ref, :node_ref
+
+    def initialize(data)
+      super(ATTR_DEFS, data)
     end
+  end
 
-    def eql?(other)
-      @refs.inject(true) do |result, r|
-        result && send(r) == other.send(r)
-      end
+  # Supporting link for topology link data
+  class SupportingLink < SupportingRefBase
+    ATTR_DEFS = [
+      { int: :network_ref, ext: 'network-ref' },
+      { int: :link_ref, ext: 'link-ref' }
+    ].freeze
+    attr_accessor :network_ref, :link_ref
+
+    def initialize(data)
+      super(ATTR_DEFS, data)
     end
+  end
 
-    def -(other)
-      # TODO: method implement
-      changed_attrs = []
-      @refs.each do |attr|
-        if send(attr) != other.send(attr)
-          changed_attrs.push(attr: attr, value: other.send(attr))
-        end
-      end
-      changed_attrs
-    end
+  # Supporting termination point for topology termination point
+  class SupportingTerminationPoint < SupportingRefBase
+    ATTR_DEFS = [
+      { int: :network_ref, ext: 'network-ref' },
+      { int: :node_ref, ext: 'node-ref' },
+      { int: :tp_ref, ext: 'tp-ref' }
+    ].freeze
+    attr_accessor :network_ref, :node_ref, :tp_ref
 
-    private
-
-    def sent_ref_list
-      @refs.map { |r| send(r) }
+    def initialize(data)
+      super(ATTR_DEFS, data)
     end
   end
 end

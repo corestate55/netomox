@@ -1,7 +1,7 @@
 require_relative 'topo_const'
 require_relative 'topo_node'
 require_relative 'topo_link'
-require_relative 'topo_support_network'
+require_relative 'topo_support_base'
 require_relative 'topo_network_attr'
 require_relative 'topo_base'
 

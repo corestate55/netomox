@@ -36,12 +36,12 @@ module TopoChecker
       @lines = lines.map { |line| AttributeTableLine.new(line) }
     end
 
-    def keys
+    def int_keys
       # return internal key list (variable names of attribute)
       @lines.map(&:int)
     end
 
-    def keys_with_empty_check
+    def int_keys_with_empty_check
       # return keys to except empty check
       keys = @lines.find_all(&:check)
       keys.map(&:int)

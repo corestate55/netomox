@@ -1,5 +1,5 @@
 require_relative 'topo_const'
-require_relative 'topo_support_link'
+require_relative 'topo_link_tpref'
 require_relative 'topo_link_attr'
 require_relative 'topo_base'
 
@@ -40,7 +40,6 @@ module TopoChecker
 
     def eql?(other)
       # for Links#-()
-      # p "Link#eql? #{name} - #{other.name}"
       @name == other.name
     end
 
@@ -64,18 +63,18 @@ module TopoChecker
     def setup_source(data)
       @source = nil
       return unless data.key?('source')
-      @source = TpRef.new(data['source'], @parent_path)
+      @source = TpRef.new(data['source'])
     end
 
     def setup_destination(data)
       @destination = nil
       return unless data.key?('destination')
-      @destination = TpRef.new(data['destination'], @parent_path)
+      @destination = TpRef.new(data['destination'])
     end
 
     def diff_link_tp(attr, to_data_key, other)
       result = send(attr) == other.send(attr) ? :kept : :changed
-      d_tp = TpRef.new(send(attr).to_data(to_data_key), @parent_path)
+      d_tp = TpRef.new(send(attr).to_data(to_data_key))
       d_tp.diff_state = DiffState.new(forward: result, pair: other)
       d_tp
     end

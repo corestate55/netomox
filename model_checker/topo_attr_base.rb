@@ -8,8 +8,8 @@ module TopoChecker
 
     def initialize(attr_table, data, type)
       @attr_table = AttributeTable.new(attr_table)
-      @keys = @attr_table.keys
-      @keys_with_empty_check = @attr_table.keys_with_empty_check
+      @keys = @attr_table.int_keys
+      @keys_with_empty_check = @attr_table.int_keys_with_empty_check
       @diff_state = DiffState.new # empty state
       @path = 'attribute' # TODO: dummy for #to_data pair
       @type = type
