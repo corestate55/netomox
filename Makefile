@@ -12,11 +12,12 @@ TARGET_JSON := $(MODEL_DIR)/target.json $(MODEL_DIR)/target2.json $(MODEL_DIR)/t
 TARGET_XML := $(TARGET_JSON:%.json=%.xml)
 JTOX := $(MODEL_DIR)/topol23.jtox
 JSON_SCHEMA := $(MODEL_DIR)/topol23.jsonschema
+CHECKER := checker.rb
 CHECKER_RB := $(CHECKER) $(wildcard $(CHECKER_DIR)/*.rb)
-CHECKER := model_checker.rb
 RUBY := bundle exec ruby
+YANG2DSDL := yang2dsdl -x -j -t config -d $(MODEL_DIR)
 
-all: json $(TARGET_XML)
+all: json testgen $(TARGET_XML)
 
 $(TARGET_XML): $(DSL_RB) $(TARGET_RB) $(TARGET_JSON) $(JTOX) $(JSON_SCHEMA) $(CHECKER_RB)
 
@@ -25,6 +26,7 @@ $(TARGET_XML): $(DSL_RB) $(TARGET_RB) $(TARGET_JSON) $(JTOX) $(JSON_SCHEMA) $(CH
 	jsonlint-cli -s $(JSON_SCHEMA) $<
 	$(RUBY) $(CHECKER) check $<
 	json2xml $(JTOX) $< | xmllint --output $@ --format -
+#	$(YANG2DSDL) -v $@ $(YANG)
 
 $(JTOX): $(YANG)
 	pyang -f jtox -o $(JTOX) $(YANG)
@@ -40,5 +42,6 @@ json:
 testgen:
 	for file in $(DEF_DIR)/test_*.rb; do ${RUBY} $$file; done
 
+DSDL := $(MODEL_DIR)/*.dsrl $(MODEL_DIR)/*.rng $(MODEL_DIR)/*.sch
 clean:
-	rm -f *~ $(TARGET_JSON) $(MODEL_DIR)/test_*.json
+	rm -f *~ $(TARGET_JSON) $(MODEL_DIR)/test_*.json $(DSDL)
