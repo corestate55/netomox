@@ -32,7 +32,8 @@ module TopoChecker
     def setup_attribute(data, key_klass_list)
       # key_klass_list = [ { key: 'NAMESPACE:attr_key', klass: class_name },...]
       # NOTICE: WITHOUT network type checking
-      @attribute = AttributeBase.new([], {}, '') # empty attribute (default)
+      # empty attribute (default) to calculate diff
+      @attribute = AttributeBase.new([], {}, '_empty_attr_')
       key_klass_list.each do |list|
         next unless data.key?(list[:key])
         @attribute = list[:klass].new(data[list[:key]], list[:key])

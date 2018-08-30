@@ -43,13 +43,14 @@ module TopoChecker
     end
 
     def to_data
-      {
+      data = {
         'node-id' => @name,
         '_diff_state_' => @diff_state.to_data,
         "#{NS_TOPO}:termination-point" => @termination_points.map(&:to_data),
-        'supporting-node' => @supports.map(&:to_data),
-        @attribute.type => @attribute.to_data
+        'supporting-node' => @supports.map(&:to_data)
       }
+      data[@attribute.type] = @attribute.to_data unless @attribute.empty?
+      data
     end
 
     private

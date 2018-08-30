@@ -17,7 +17,8 @@ module TopoChecker
     end
 
     def empty?
-      @keys_with_empty_check.inject(true) do |m, k|
+      mark = @type == '_empty_attr_'
+      mark || @keys_with_empty_check.inject(true) do |m, k|
         m && send(k).send(@attr_table.check_of(k))
       end
     end
