@@ -97,6 +97,8 @@ In default, checker diff output only changed object and its parent object.
 
 * `-a`/`--all` option: checker diff output whole data include unchanged object.
 * `-c`/`--color` option: use color for diff.
+* `-o FILE`/`--output FILE` option: save diff data to FILE (json data includes diff info for diff viewer).
+If specified `-o` and other options, ignored them.
 
 ## Store topology data with Neo4j
 

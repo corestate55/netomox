@@ -13,9 +13,13 @@ class Checker < Thor
     run_check(file)
   end
 
-  desc 'diff JSON1 JSON2', 'Diff between topology data'
-  option :all, type: :boolean, default: false, aliases: :a
-  option :color, type: :boolean, default: false, aliases: :c
+  desc 'diff [opts] JSON1 JSON2', 'Diff between topology data'
+  option :all, type: :boolean, default: false, aliases: :a,
+               desc: 'Print all includes unchanged object.'
+  option :color, type: :boolean, default: false, aliases: :c,
+                 desc: 'Print diff with color.'
+  option :output, type: :string, default: nil, aliases: :o,
+                  desc: 'Output diff json data to file'
   def diff(file1, file2)
     run_diff(file1, file2)
   end
@@ -33,8 +37,7 @@ class Checker < Thor
 
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def run_check(file)
-    data = open_data(file)
-    networks = TopoChecker::Networks.new(data)
+    networks = TopoChecker::Networks.new(open_data(file))
     puts '# check all supporting networks'
     networks.check_all_supporting_networks
     puts '# check all supporting nodes'
@@ -54,9 +57,8 @@ class Checker < Thor
 
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def run_graphdb(file)
-    data = open_data(file)
     db_info = open_data('./db_info.json', symbolize_names: true)
-    networks = TopoChecker::GraphNetworks.new(data, db_info)
+    networks = TopoChecker::GraphNetworks.new(open_data(file), db_info)
     if options[:verbose]
       puts '# node objects'
       puts JSON.pretty_generate(networks.node_objects)
@@ -73,16 +75,13 @@ class Checker < Thor
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-  def run_diff(file1, file2)
-    data1 = open_data(file1)
-    data2 = open_data(file2)
-    nws1 = TopoChecker::Networks.new(data1)
-    nws2 = TopoChecker::Networks.new(data2)
-    d_nws = nws1.diff(nws2)
+  def write_diff_file(json_str)
+    File.open(options[:output], 'w') do |file|
+      file.write(json_str)
+    end
+  end
 
-    # test
-    json_str = JSON.pretty_generate(d_nws.to_data)
+  def write_diff_stdout(json_str)
     opts = {
       data: json_str,
       print_all: options[:all],
@@ -94,7 +93,18 @@ class Checker < Thor
     puts '-----------------'
     puts json_str
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+  def run_diff(file1, file2)
+    nws1 = TopoChecker::Networks.new(open_data(file1))
+    nws2 = TopoChecker::Networks.new(open_data(file2))
+    d_nws = nws1.diff(nws2)
+    json_str = JSON.pretty_generate(d_nws.to_data)
+    if options[:output]
+      write_diff_file(json_str)
+    else
+      write_diff_stdout(json_str)
+    end
+  end
 end
 
 Checker.start(ARGV)
