@@ -13,14 +13,17 @@ module TopoChecker
     def diff_attribute(other)
       # receiver of this method will be (a), other will be (b)
       # NOTICE: (a)(b) can use NULL attribute
-      result = diff_single_value(@attribute, other.attribute)
+      (result, d_attr) = compare_attribute(@attribute, other.attribute)
       arg = { forward: result, pair: @attribute }
-      other.attribute.diff_state = DiffState.new(arg)
-      other.attribute = @attribute.diff(other.attribute) if @attribute.diff?
-      if %i[added deleted].include?(result) && @attribute.fill?
-        other.attribute.fill(arg)
+      d_attr.diff_state = DiffState.new(arg)
+      # update diff_state in sub-class of attribute
+      case result
+      when :changed
+        d_attr = @attribute.diff(other.attribute) if @attribute.diff?
+      when :added, :deleted
+        d_attr.fill(arg) if d_attr.fill?
       end
-      other.attribute
+      d_attr
     end
 
     def diff_forward_check_of(attr, other)
@@ -95,15 +98,16 @@ module TopoChecker
       rlhs # set diff state and return itself
     end
 
-    def diff_single_value(lhs, rhs)
+    def compare_attribute(lhs, rhs)
+      # NOTICE: attribute (lhs and/or rhs) allowed be empty.
       if lhs == rhs
-        :kept
-      elsif lhs.empty?
-        :added
-      elsif rhs.empty?
-        :deleted
+        [:kept, rhs]
+      elsif lhs.empty? && !rhs.empty?
+        [:added, rhs]
+      elsif !lhs.empty? && rhs.empty?
+        [:deleted, lhs]
       else
-        :changed
+        [:changed, rhs]
       end
     end
   end
