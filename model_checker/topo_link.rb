@@ -52,11 +52,9 @@ module TopoChecker
         'link-id' => @name,
         '_diff_state_' => @diff_state.to_data,
         'source' => @source.to_data('source'),
-        'destination' => @destination.to_data('dest'),
-        'supporting-link' => @supports.map(&:to_data)
+        'destination' => @destination.to_data('dest')
       }
-      data[@attribute.type] = @attribute.to_data unless @attribute.empty?
-      data
+      add_supports_and_attr(data, 'supporting-link')
     end
 
     private

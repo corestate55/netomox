@@ -46,11 +46,9 @@ module TopoChecker
         'network-id' => @name,
         '_diff_state_' => @diff_state.to_data,
         'node' => @nodes.map(&:to_data),
-        'link' => @links.map(&:to_data),
-        'supporting-network' => @supports.map(&:to_data)
+        'link' => @links.map(&:to_data)
       }
-      data[@attribute.type] = @attribute.to_data unless @attribute.empty?
-      data
+      add_supports_and_attr(data, 'supporting-network')
     end
 
     private

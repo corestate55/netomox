@@ -29,6 +29,16 @@ module TopoChecker
 
     protected
 
+    def add_supports_and_attr(data, supports_key)
+      # "support-" key is same each network/node/link/tp,
+      # but attribute key is different not only object type
+      # but also network type.
+      # so that, @attribute has type when the instance initialized.
+      data[supports_key] = @supports.map(&:to_data) unless @supports.empty?
+      data[@attribute.type] = @attribute.to_data unless @attribute.empty?
+      data
+    end
+
     def setup_attribute(data, key_klass_list)
       # key_klass_list = [ { key: 'NAMESPACE:attr_key', klass: class_name },...]
       # NOTICE: WITHOUT network type checking

@@ -28,11 +28,9 @@ module TopoChecker
     def to_data
       data = {
         'tp-id' => @name,
-        '_diff_state_' => @diff_state.to_data,
-        'supporting-termination-point' => @supports.map(&:to_data)
+        '_diff_state_' => @diff_state.to_data
       }
-      data[@attribute.type] = @attribute.to_data unless @attribute.empty?
-      data
+      add_supports_and_attr(data, 'supporting-termination-point')
     end
 
     def diff(other)
