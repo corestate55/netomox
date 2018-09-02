@@ -6,6 +6,9 @@ module TopoChecker
     def diff(other)
       # forward check
       d_network = Network.new('network-id' => @name)
+      # TODO: diff of network-types is not implemented yet
+      # now it assumes network-types is same and use self types.
+      d_network.network_types = @network_types
       d_network.nodes = diff_forward_check_of(:nodes, other)
       d_network.links = diff_forward_check_of(:links, other)
       d_network.supports = diff_supports(other)

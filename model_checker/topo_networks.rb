@@ -69,7 +69,7 @@ module TopoChecker
       {
         "#{NS_NW}:networks" => {
           '_diff_state_' => @diff_state.to_data,
-          'networks' => @networks.map(&:to_data)
+          'network' => @networks.map(&:to_data)
         }
       }
     end
