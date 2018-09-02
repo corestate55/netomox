@@ -42,6 +42,12 @@ json:
 testgen:
 	for file in $(DEF_DIR)/test_*.rb; do ${RUBY} $$file; done
 
+FIG_DIR := ./fig
+figs:
+	$(RUBY) rb2puml.rb -d $(CHECKER_DIR) > $(FIG_DIR)/model_checker.puml
+	$(RUBY) rb2puml.rb -d $(DSL_DIR) > $(FIG_DIR)/model_dsl.puml
+	for file in $(FIG_DIR)/*.puml; do plantuml $$file; done
+
 DSDL := $(MODEL_DIR)/*.dsrl $(MODEL_DIR)/*.rng $(MODEL_DIR)/*.sch
 clean:
 	rm -f *~ $(TARGET_JSON) $(MODEL_DIR)/test_*.json $(DSDL)
