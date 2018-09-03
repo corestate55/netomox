@@ -4,7 +4,8 @@ require 'optparse'
 class KlassRecords
   attr_accessor :pub_methods, :priv_methods, :prot_methods,
                 :vars, :uses, :parents
-  def initialize
+  def initialize(kls_name)
+    @kls_name = kls_name
     @pub_methods = []
     @priv_methods = []
     @prot_methods = []
@@ -12,25 +13,56 @@ class KlassRecords
     @vars = []
     @uses = []
   end
+
+  def to_puml_methods
+    list = %i[pub_methods prot_methods priv_methods].map do |mode|
+      send(mode).map do |method|
+        head = method_head(mode)
+        "  #{head}#{method}()"
+      end
+    end
+    list.flatten
+  end
+
+  def to_puml_vars
+    @vars.sort.uniq.map { |var| "  #{var}" }
+  end
+
+  def to_puml_parents
+    @parents.sort.uniq.map { |parent| "#{@kls_name} --|> #{parent}" }
+  end
+
+  def to_puml_uses
+    @uses.sort.uniq.map { |use| "#{@kls_name} --- #{use}" }
+  end
+
+  private
+
+  def method_head(mode)
+    case mode
+    when :pub_methods then '+'
+    when :priv_methods then '-'
+    when :prot_methods then '#'
+    end
+  end
 end
 
-# rubocop:disable Metrics/ClassLength
 # ruby to PlantUML
 class RB2Puml
   attr_reader :kls_table
-  def initialize(dir)
-    target_dir = dir
-    target_pattern = '*.rb'
-    @target_files = Dir.glob("#{target_dir}/#{target_pattern}")
+  def initialize(dir, simple = false)
+    @target_files = Dir.glob("#{dir}/*.rb")
+    @simple = simple
     @kls_table = {}
   end
 
   def to_puml
-    ['@startuml', to_puml_class, '@enduml']
+    ['@startuml', 'left to right direction', to_puml_class, '@enduml']
   end
 
   def parse_line
     all_lines do |line|
+      next if line =~ /^\s*#.*/ # comment line
       parse_single_def(line)
       push_use(line)
       push_var(line)
@@ -39,18 +71,11 @@ class RB2Puml
 
   private
 
-  def push(key, value)
-    # puts "# check#push #{@kls_name}, #{key}, #{value}"
-    @kls_table[@kls_name] = KlassRecords.new unless @kls_table.key?(@kls_name)
-    @kls_table[@kls_name].send(key).push(value)
-  end
-
   def all_lines
     @target_files.each do |file_name|
+      @file_name = File.basename(file_name)
+      @method_mode = :pub_methods
       File.open(file_name, 'r') do |file|
-        @file_name = File.basename(file_name)
-        @method_mode = :pub_methods
-        # puts "# File: #{@file_name}, change mode to public"
         file.each_line do |line|
           yield line
         end
@@ -60,48 +85,11 @@ class RB2Puml
 
   def to_puml_class
     list = @kls_table.keys.map do |kls|
-      [
-        "class #{kls} {", to_puml_methods(kls), to_puml_vars(kls), '}',
-        to_puml_parents(kls), to_puml_uses(kls)
-      ]
+      rec = @kls_table[kls]
+      body = @simple ? [] : [rec.to_puml_methods, rec.to_puml_vars]
+      ["class #{kls} {", body, '}', rec.to_puml_parents, rec.to_puml_uses]
     end
     list.flatten
-  end
-
-  def method_head(mode)
-    case mode
-    when :pub_methods then '+'
-    when :priv_methods then '-'
-    when :prot_methods then '#'
-    end
-  end
-
-  def to_puml_methods(kls)
-    list = %i[pub_methods prot_methods priv_methods].map do |mode|
-      @kls_table[kls].send(mode).map do |method|
-        head = method_head(mode)
-        "  #{head}#{method}()"
-      end
-    end
-    list.flatten
-  end
-
-  def to_puml_vars(kls)
-    @kls_table[kls].vars.sort.uniq.map do |var|
-      "  #{var}"
-    end
-  end
-
-  def to_puml_parents(kls)
-    @kls_table[kls].parents.sort.uniq.map do |parent|
-      "#{kls} --|> #{parent}"
-    end
-  end
-
-  def to_puml_uses(kls)
-    @kls_table[kls].uses.sort.uniq.map do |use|
-      "#{kls} --- #{use}"
-    end
   end
 
   def parse_class_name(kls, parent_kls = '')
@@ -109,11 +97,8 @@ class RB2Puml
     push_parent(parent_kls) if parent_kls
   end
 
-  # rubocop:disable Metrics/MethodLength
   def parse_single_def(line)
     case line
-    when /^\s*#.*/
-      nil # comment line
     when /^\s*class ([\w:]+) < ([\w:]+)/, /^\s*class ([\w:]+)/
       parse_class_name(Regexp.last_match(1), Regexp.last_match(2))
     when /^\s*def ([\w\?]+)/
@@ -124,7 +109,13 @@ class RB2Puml
       @method_mode = :priv_methods
     end
   end
-  # rubocop:enable Metrics/MethodLength
+
+  def push(key, value)
+    unless @kls_table.key?(@kls_name)
+      @kls_table[@kls_name] = KlassRecords.new(@kls_name)
+    end
+    @kls_table[@kls_name].send(key).push(value)
+  end
 
   def push_parent(parent_name)
     push(:parents, parent_name)
@@ -154,16 +145,19 @@ class RB2Puml
     push(:uses, use_kls_name) if use_kls_name
   end
 end
-# rubocop:enable Metrics/ClassLength
 
 opt = OptionParser.new
 option = {}
 opt.on('-d', '--dir=DIR', 'ruby source directory') do |v|
   option[:dir] = v
 end
+opt.on('-s', '--simple', 'simple(ignore member methods/vars') do |v|
+  option[:simple] = v
+end
 opt.parse!(ARGV)
+
 if option[:dir]
-  rb2puml = RB2Puml.new(option[:dir])
+  rb2puml = RB2Puml.new(option[:dir], option[:simple])
   rb2puml.parse_line
   puts rb2puml.to_puml
 else

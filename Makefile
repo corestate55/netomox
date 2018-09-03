@@ -17,7 +17,7 @@ CHECKER_RB := $(CHECKER) $(wildcard $(CHECKER_DIR)/*.rb)
 RUBY := bundle exec ruby
 YANG2DSDL := yang2dsdl -x -j -t config -d $(MODEL_DIR)
 
-all: json testgen $(TARGET_XML)
+all: json testgen $(TARGET_XML) figs
 
 $(TARGET_XML): $(DSL_RB) $(TARGET_RB) $(TARGET_JSON) $(JTOX) $(JSON_SCHEMA) $(CHECKER_RB)
 
@@ -44,6 +44,8 @@ testgen:
 
 FIG_DIR := ./fig
 figs:
+	$(RUBY) rb2puml.rb -s -d $(CHECKER_DIR) > $(FIG_DIR)/model_checker_s.puml
+	$(RUBY) rb2puml.rb -s -d $(DSL_DIR) > $(FIG_DIR)/model_dsl_s.puml
 	$(RUBY) rb2puml.rb -d $(CHECKER_DIR) > $(FIG_DIR)/model_checker.puml
 	$(RUBY) rb2puml.rb -d $(DSL_DIR) > $(FIG_DIR)/model_dsl.puml
 	for file in $(FIG_DIR)/*.puml; do plantuml $$file; done

@@ -3,6 +3,7 @@ model/*.xml
 model/target.json
 model/target[23].json
 db_info.json
+*.puml
 *.dsrl
 *.rng
 *.sch
