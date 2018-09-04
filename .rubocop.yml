@@ -1,0 +1,11 @@
+Metrics/LineLength:
+  Exclude:
+  - 'spec/**/*_spec.rb'
+
+Metrics/BlockLength:
+  Exclude:
+  - 'spec/**/*_spec.rb'
+
+Style/BlockComments:
+  Exclude:
+  - 'spec/spec_helper.rb'

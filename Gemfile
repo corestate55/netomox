@@ -4,6 +4,10 @@ gem 'neography', '~> 1.8.0'
 gem 'termcolor'
 gem 'thor'
 
+group :test do
+  gem 'rspec'
+end
+
 group :development do
   gem 'byebug'
   gem 'pry'
