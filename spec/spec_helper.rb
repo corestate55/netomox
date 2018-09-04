@@ -15,7 +15,7 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   # require test target
-  require_relative '../model_checker/topo_networks_diff'
+  require_relative '../model_checker/topo_networks_ops'
   require_relative '../model_dsl/dsl'
 
   # rspec-expectations config goes here. You can use an alternate

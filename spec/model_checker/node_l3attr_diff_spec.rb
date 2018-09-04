@@ -1,0 +1,89 @@
+require_relative '../spec_helper'
+
+describe 'node diff with L3 attribute', :diff, :node, :attr, :l3attr do
+  before do
+    l3nw_type = { NWTopoDSL::NWTYPE_L3 => {} }
+
+    seg_a_prefix = { prefix: '192.168,10.0/24', metric: 100 }
+    seg_a2_prefix = { prefix: '192.168,10.0/24', metric: 50 }
+    seg_b_prefix = { prefix: '192.168.20.0/24', metric: 100 }
+    seg_c_prefix = { prefix: '192.168.30.0/24', metric: 100 }
+
+    pref = { prefixes: [seg_a_prefix, seg_b_prefix] }
+    pref_added = { prefixes: [seg_a_prefix, seg_b_prefix, seg_c_prefix] }
+    pref_deleted = { prefixes: [seg_b_prefix] }
+    pref_changed = { prefixes: [seg_a2_prefix, seg_b_prefix] }
+
+    node_l3attr0_def = NWTopoDSL::Node.new('nodeX', l3nw_type)
+    node_l3attr_def = NWTopoDSL::Node.new('nodeX', l3nw_type) do
+      attribute(pref)
+    end
+    node_l3attr_added_def = NWTopoDSL::Node.new('nodeX', l3nw_type) do
+      attribute(pref_added)
+    end
+    node_l3attr_deleted_def = NWTopoDSL::Node.new('nodeX', l3nw_type) do
+      attribute(pref_deleted)
+    end
+    node_l3attr_changed_def = NWTopoDSL::Node.new('nodeX', l3nw_type) do
+      attribute(pref_changed)
+    end
+
+    @node_l3attr0 = TopoChecker::Node.new(node_l3attr0_def.topo_data, '')
+    @node_l3attr = TopoChecker::Node.new(node_l3attr_def.topo_data, '')
+    @node_l3attr_added = TopoChecker::Node.new(node_l3attr_added_def.topo_data, '')
+    @node_l3attr_deleted = TopoChecker::Node.new(node_l3attr_deleted_def.topo_data, '')
+    @node_l3attr_changed = TopoChecker::Node.new(node_l3attr_changed_def.topo_data, '')
+  end
+
+  it 'kept L3 attribute' do
+    d_node = @node_l3attr.diff(@node_l3attr.dup)
+    expect(d_node.diff_state.detect).to eq :kept
+    expect(d_node.attribute.diff_state.detect).to eq :kept
+    list = d_node.attribute.prefixes.map { |d| d.diff_state.detect }
+    expect(list.sort).to eq %i[kept kept]
+  end
+
+  context 'diff with no-attribute node' do
+    it 'added whole L3 attribute' do
+      d_node = @node_l3attr0.diff(@node_l3attr)
+      expect(d_node.diff_state.detect).to eq :changed
+      expect(d_node.attribute.diff_state.detect).to eq :added
+      list = d_node.attribute.prefixes.map { |d| d.diff_state.detect }
+      expect(list.sort).to eq %i[added added]
+    end
+
+    it 'deleted whole L3 attribute' do
+      d_node = @node_l3attr.diff(@node_l3attr0)
+      expect(d_node.diff_state.detect).to eq :changed
+      expect(d_node.attribute.diff_state.detect).to eq :deleted
+      list = d_node.attribute.prefixes.map { |d| d.diff_state.detect }
+      expect(list.sort).to eq %i[deleted deleted]
+    end
+  end
+
+  context 'diff with sub-attribute of node attribute' do
+    it 'added prefixes' do
+      d_node = @node_l3attr.diff(@node_l3attr_added)
+      expect(d_node.diff_state.detect).to eq :changed
+      expect(d_node.attribute.diff_state.detect).to eq :changed
+      list = d_node.attribute.prefixes.map { |d| d.diff_state.detect }
+      expect(list.sort).to eq %i[added kept kept]
+    end
+
+    it 'deleted prefixes' do
+      d_node = @node_l3attr.diff(@node_l3attr_deleted)
+      expect(d_node.diff_state.detect).to eq :changed
+      expect(d_node.attribute.diff_state.detect).to eq :changed
+      list = d_node.attribute.prefixes.map { |d| d.diff_state.detect }
+      expect(list.sort).to eq %i[deleted kept]
+    end
+
+    it 'changed prefixes' do
+      d_node = @node_l3attr.diff(@node_l3attr_changed)
+      expect(d_node.diff_state.detect).to eq :changed
+      expect(d_node.attribute.diff_state.detect).to eq :changed
+      list = d_node.attribute.prefixes.map { |d| d.diff_state.detect }
+      expect(list.sort).to eq %i[added deleted kept]
+    end
+  end
+end

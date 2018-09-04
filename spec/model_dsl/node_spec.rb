@@ -1,6 +1,6 @@
 require_relative '../spec_helper'
 
-describe 'node dsl' do
+describe 'node dsl', :dsl, :node do
   before do
     @tp_key = "#{NWTopoDSL::NS_TOPO}:termination-point"
     @l2nw_type = { NWTopoDSL::NWTYPE_L2 => {} }
@@ -19,7 +19,7 @@ describe 'node dsl' do
     expect(node.topo_data).to eq node_data
   end
 
-  it 'generate node that has supporting-node' do
+  it 'generate node that has supporting-node', :support do
     node = NWTopoDSL::Node.new('nodeX', '') do
       support %w[nw1 node1]
     end
@@ -36,7 +36,7 @@ describe 'node dsl' do
     expect(node.topo_data).to eq node_data
   end
 
-  it 'generate node that has term point' do
+  it 'generate node that has term point', :tp do
     node = NWTopoDSL::Node.new('nodeX', '') do
       term_point 'tpX'
     end
@@ -47,7 +47,7 @@ describe 'node dsl' do
     expect(node.topo_data).to eq node_data
   end
 
-  it 'generate node that has L2 attribute' do
+  it 'generate node that has L2 attribute', :attr, :l2attr do
     addrs = %w[192.168.0.1 192.168.1.1]
     node_attr = { name: 'tpX', mgmt_vid: 10, mgmt_addrs: addrs }
     node = NWTopoDSL::Node.new('nodeX', @l2nw_type) do
@@ -69,7 +69,7 @@ describe 'node dsl' do
     expect(node.topo_data).to eq node_data
   end
 
-  it 'generate node that has L3 attribute' do
+  it 'generate node that has L3 attribute', :attr, :l3attr do
     seg_a_prefix = { prefix: '192.168,10.0/24', metric: 100 }
     seg_b_prefix = { prefix: '192.168.20.0/24', metric: 100 }
     pref = { prefixes: [seg_a_prefix, seg_b_prefix] }

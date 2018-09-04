@@ -1,6 +1,6 @@
 require_relative '../spec_helper'
 
-describe 'termination point dsl' do
+describe 'termination point dsl', :dsl, :tp do
   before do
     @l2nw_type = { NWTopoDSL::NWTYPE_L2 => {} }
     @l3nw_type = { NWTopoDSL::NWTYPE_L3 => {} }
@@ -15,7 +15,7 @@ describe 'termination point dsl' do
     expect(tp.topo_data).to eq tp_data
   end
 
-  it 'generate term point that has supporting-tp' do
+  it 'generate term point that has supporting-tp', :support do
     tp = NWTopoDSL::TermPoint.new('tpX', '') do
       support %w[nw1 node1 tp1]
     end
@@ -32,7 +32,7 @@ describe 'termination point dsl' do
     expect(tp.topo_data).to eq tp_data
   end
 
-  it 'generate term point that has L2 attribute' do
+  it 'generate term point that has L2 attribute', :attr, :l2attr do
     vlan_a = { id: 10, name: 'Seg.A' }
     vlan_b = { id: 20, name: 'Seg.B' }
     access_vlan_a = {
@@ -68,7 +68,7 @@ describe 'termination point dsl' do
     expect(tp.topo_data).to eq tp_data
   end
 
-  it 'generate term point that has L3 attribute' do
+  it 'generate term point that has L3 attribute', :attr, :l3attr do
     tp_attr = { ip_addrs: %w[192.168.0.1 192.168.1.1] }
     tp = NWTopoDSL::TermPoint.new('tpX', @l3nw_type) do
       attribute(tp_attr)

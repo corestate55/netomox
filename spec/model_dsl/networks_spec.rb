@@ -1,6 +1,6 @@
 require_relative '../spec_helper'
 
-describe 'networks dsl' do
+describe 'networks dsl', :dsl, :networks, :network do
   before do
     @nws_key = "#{NWTopoDSL::NS_NW}:networks"
     @link_key = "#{NWTopoDSL::NS_TOPO}:link"

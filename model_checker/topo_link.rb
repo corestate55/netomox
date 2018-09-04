@@ -27,7 +27,7 @@ module TopoChecker
       d_link.destination = diff_link_tp(:destination, 'dest', other)
       d_link.supports = diff_supports(other)
       d_link.attribute = diff_attribute(other)
-      d_link.diff_state = @diff_state
+      d_link.diff_state = select_diff_state(other)
       # backward check
       d_link.diff_backward_check(%i[source destination supports attribute])
       # return
@@ -36,11 +36,6 @@ module TopoChecker
 
     def fill_diff_state
       fill_diff_state_of(%i[source destination supports attribute])
-    end
-
-    def eql?(other)
-      # for Links#-()
-      @name == other.name
     end
 
     def to_s

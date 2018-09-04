@@ -20,7 +20,7 @@ module TopoChecker
     end
 
     def eql?(other)
-      @name == other.name
+      @path == other.path
     end
 
     def empty?

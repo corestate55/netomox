@@ -1,6 +1,6 @@
 require 'json'
 require 'thor'
-require_relative 'model_checker/topo_networks_diff'
+require_relative 'model_checker/topo_networks_ops'
 require_relative 'model_checker/graph_networks_ops'
 require_relative 'model_checker/diff_view'
 

@@ -35,5 +35,13 @@ module TopoChecker
         :changed
       end
     end
+
+    def select_diff_state(other)
+      if eql?(other)
+        @diff_state
+      else
+        DiffState.new(forward: :changed)
+      end
+    end
   end
 end

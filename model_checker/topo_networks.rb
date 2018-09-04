@@ -1,5 +1,5 @@
 require_relative 'topo_const'
-require_relative 'topo_network_diff'
+require_relative 'topo_network'
 require_relative 'topo_base'
 
 module TopoChecker
@@ -63,6 +63,21 @@ module TopoChecker
           yield tp, node, nw
         end
       end
+    end
+
+    def diff(other)
+      # forward check
+      d_networks = Networks.new({})
+      d_networks.networks = diff_forward_check_of(:networks, other)
+      d_networks.diff_state = @diff_state
+      # backward check
+      d_networks.diff_backward_check(%i[networks])
+      # return
+      d_networks
+    end
+
+    def fill_diff_state
+      fill_diff_state_of(%i[networks])
     end
 
     def to_data

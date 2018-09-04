@@ -27,7 +27,7 @@ module TopoChecker
       d_node.termination_points = diff_forward_check_of(attr, other)
       d_node.supports = diff_supports(other)
       d_node.attribute = diff_attribute(other)
-      d_node.diff_state = @diff_state
+      d_node.diff_state = select_diff_state(other)
       # backward check
       d_node.diff_backward_check(%i[termination_points supports attribute])
       # return

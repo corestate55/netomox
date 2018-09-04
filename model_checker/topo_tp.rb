@@ -38,7 +38,7 @@ module TopoChecker
       d_tp = TerminationPoint.new({ 'tp-id' => @name }, @parent_path)
       d_tp.supports = diff_supports(other)
       d_tp.attribute = diff_attribute(other)
-      d_tp.diff_state = @diff_state
+      d_tp.diff_state = select_diff_state(other)
       # backward check
       d_tp.diff_backward_check(%i[supports attribute])
       # return

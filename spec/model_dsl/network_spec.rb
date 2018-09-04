@@ -1,6 +1,6 @@
 require_relative '../spec_helper'
 
-describe 'network dsl' do
+describe 'network dsl', :dsl, :network do
   before do
     @link_key = "#{NWTopoDSL::NS_TOPO}:link"
     @tp_key = "#{NWTopoDSL::NS_TOPO}:termination-point"
@@ -21,7 +21,7 @@ describe 'network dsl' do
     expect(nw.topo_data).to eq @nw_data
   end
 
-  it 'generate network that has node' do
+  it 'generate network that has node', :node do
     nw = NWTopoDSL::Network.new('nwX') do
       node 'nodeX'
     end
@@ -30,7 +30,7 @@ describe 'network dsl' do
     expect(nw.topo_data).to eq nw_data
   end
 
-  it 'generate network that has bi-directional link' do
+  it 'generate network that has bi-directional link', :link do
     link = %w[nodeX tp1 nodeY tp1]
     nw = NWTopoDSL::Network.new('nwX') do
       bdlink link
@@ -63,7 +63,7 @@ describe 'network dsl' do
     expect(nw.topo_data).to eq nw_data
   end
 
-  it 'generate network that has supporting-network' do
+  it 'generate network that has supporting-network', :support do
     nw = NWTopoDSL::Network.new('nwX') do
       support 'nw1'
     end
@@ -72,7 +72,7 @@ describe 'network dsl' do
     expect(nw.topo_data).to eq nw_data
   end
 
-  it 'generate network that has L2 attribute' do
+  it 'generate network that has L2 attribute', :attr, :l2attr do
     nw = NWTopoDSL::Network.new('nwX') do
       type NWTopoDSL::NWTYPE_L2
       attribute(name: 'layer2', flags: %w[foo bar])
@@ -86,7 +86,7 @@ describe 'network dsl' do
     expect(nw.topo_data).to eq nw_data
   end
 
-  it 'generate network that has L3 attribute' do
+  it 'generate network that has L3 attribute', :attr, :l3attr do
     nw = NWTopoDSL::Network.new('nwX') do
       type NWTopoDSL::NWTYPE_L3
       attribute(name: 'layer3', flags: %w[foo bar])

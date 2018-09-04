@@ -1,6 +1,6 @@
 require_relative '../spec_helper'
 
-describe 'link dsl' do
+describe 'link dsl', :dsl, :link do
   before do
     @l2nw_type = { NWTopoDSL::NWTYPE_L2 => {} }
     @l3nw_type = { NWTopoDSL::NWTYPE_L3 => {} }
@@ -26,7 +26,7 @@ describe 'link dsl' do
     expect(link.topo_data).to eq @link_data
   end
 
-  it 'generate link that has supporting-link' do
+  it 'generate link that has supporting-link', :support do
     link = NWTopoDSL::Link.new(*@link_spec, '') do
       support %w[foo a,b,c,d]
     end
@@ -40,7 +40,7 @@ describe 'link dsl' do
     expect(link.topo_data).to eq link_data
   end
 
-  it 'generate link that has L2 attribute' do
+  it 'generate link that has L2 attribute', :attr, :l2attr do
     link_attr = { name: 'linkX', flags: ['l2_link_flag'] }
     link = NWTopoDSL::Link.new(*@link_spec, @l2nw_type) do
       attribute(link_attr)
@@ -57,7 +57,7 @@ describe 'link dsl' do
     expect(link.topo_data).to eq link_data
   end
 
-  it 'generate link that has L3 attribute' do
+  it 'generate link that has L3 attribute', :attr, :l3attr do
     link_attr = { name: 'linkX', flags: [], metric1: 100, metric2: 100 }
     link = NWTopoDSL::Link.new(*@link_spec, @l3nw_type) do
       attribute(link_attr)
