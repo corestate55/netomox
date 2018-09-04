@@ -12,8 +12,8 @@ module NWTopoDSL
 
     def topo_data
       {
-        'network-ref': @nw_ref,
-        'link-ref': @link_ref
+        'network-ref' => @nw_ref,
+        'link-ref' => @link_ref
       }
     end
   end
@@ -29,8 +29,8 @@ module NWTopoDSL
 
     def topo_data
       {
-        "#{@direction}-node": node_ref,
-        "#{@direction}-tp": tp_ref
+        "#{@direction}-node" => node_ref,
+        "#{@direction}-tp" => tp_ref
       }
     end
   end
@@ -85,9 +85,9 @@ module NWTopoDSL
 
     def topo_data
       data = {
-        'link-id': @name,
-        'source': @source.topo_data,
-        'destination': @destination.topo_data
+        'link-id' => @name,
+        'source' => @source.topo_data,
+        'destination' => @destination.topo_data
       }
       unless @supports.empty?
         data['supporting-link'] = @supports.map(&:topo_data)

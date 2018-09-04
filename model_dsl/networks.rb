@@ -17,7 +17,7 @@ module NWTopoDSL
 
     def topo_data
       networks = @networks.map(&:topo_data)
-      { "#{NS_NW}:networks": { 'network': networks } }
+      { "#{NS_NW}:networks" => { 'network' => networks } }
     end
   end
 end

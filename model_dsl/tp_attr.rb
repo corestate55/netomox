@@ -12,8 +12,8 @@ module NWTopoDSL
 
     def topo_data
       {
-        'vlan-id': @id,
-        'vlan-name': @name
+        'vlan-id' => @id,
+        'vlan-name' => @name
       }
     end
   end
@@ -50,13 +50,13 @@ module NWTopoDSL
 
     def topo_data
       {
-        'description': @descr,
-        'maximum-frame-size': @max_frame_size,
-        'mac-address': @mac_addr,
-        'eth-encapsulation': @eth_encap,
-        'port-vlan-id': @port_vlan_id,
-        'vlan-id-name': @vlan_id_names.map(&:topo_data),
-        'tp-state': @tp_state
+        'description' => @descr,
+        'maximum-frame-size' => @max_frame_size,
+        'mac-address' => @mac_addr,
+        'eth-encapsulation' => @eth_encap,
+        'port-vlan-id' => @port_vlan_id,
+        'vlan-id-name' => @vlan_id_names.map(&:topo_data),
+        'tp-state' => @tp_state
       }
     end
   end
@@ -76,7 +76,7 @@ module NWTopoDSL
     end
 
     def topo_data
-      { 'ip-address': @ip_addrs }
+      { 'ip-address' => @ip_addrs }
     end
   end
 end

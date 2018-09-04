@@ -16,10 +16,10 @@ module NWTopoDSL
 
     def topo_data
       {
-        'name': @name,
-        'flag': @flags,
-        'metric1': @metric1,
-        'metric2': @metric2
+        'name' => @name,
+        'flag' => @flags,
+        'metric1' => @metric1,
+        'metric2' => @metric2
       }
     end
 
@@ -44,11 +44,11 @@ module NWTopoDSL
 
     def topo_data
       {
-        'name': @name,
-        'flag': @flags,
-        'rate': @rate,
-        'delay': @delay,
-        'srlg': @srlg
+        'name' => @name,
+        'flag' => @flags,
+        'rate' => @rate,
+        'delay' => @delay,
+        'srlg' => @srlg
       }
     end
 

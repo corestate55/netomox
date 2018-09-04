@@ -13,9 +13,9 @@ module NWTopoDSL
 
     def topo_data
       {
-        'network-ref': @nw_ref,
-        'node-ref': @node_ref,
-        'tp-ref': @tp_ref
+        'network-ref' => @nw_ref,
+        'node-ref' => @node_ref,
+        'tp-ref' => @tp_ref
       }
     end
   end
@@ -51,7 +51,7 @@ module NWTopoDSL
     end
 
     def topo_data
-      data = { 'tp-id': @name }
+      data = { 'tp-id' => @name }
       unless @supports.empty?
         data['supporting-termination-point'] = @supports.map(&:topo_data)
       end

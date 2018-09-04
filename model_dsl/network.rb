@@ -12,7 +12,7 @@ module NWTopoDSL
     end
 
     def topo_data
-      { 'network-ref': @nw_ref }
+      { 'network-ref' => @nw_ref }
     end
   end
 
@@ -69,10 +69,10 @@ module NWTopoDSL
     # rubocop:disable Metrics/MethodLength
     def topo_data
       data = {
-        'network-id': @name,
-        'network-types': @type,
-        'node': @nodes.map(&:topo_data),
-        "#{NS_TOPO}:link": @links.map(&:topo_data)
+        'network-id' => @name,
+        'network-types' => @type,
+        'node' => @nodes.map(&:topo_data),
+        "#{NS_TOPO}:link" => @links.map(&:topo_data)
       }
       unless @supports.empty?
         data['supporting-network'] = @supports.map(&:topo_data)

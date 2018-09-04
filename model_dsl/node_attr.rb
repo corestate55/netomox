@@ -11,9 +11,9 @@ module NWTopoDSL
 
     def topo_data
       {
-        'prefix': @prefix,
-        'metric': @metric,
-        'flag': @flag
+        'prefix' => @prefix,
+        'metric' => @metric,
+        'flag' => @flag
       }
     end
   end
@@ -34,10 +34,10 @@ module NWTopoDSL
     def topo_data
       # TODO: router-id is now single value, but it must be leaf-list
       {
-        'name': @name,
-        'flag': @flags,
-        'router-id': [@router_id],
-        'prefix': @prefixes.map(&:topo_data)
+        'name' => @name,
+        'flag' => @flags,
+        'router-id' => [@router_id],
+        'prefix' => @prefixes.map(&:topo_data)
       }
     end
 
@@ -66,12 +66,12 @@ module NWTopoDSL
 
     def topo_data
       {
-        'name': @name,
-        'description': @descr,
-        'management-address': @mgmt_addrs,
-        'sys-mac-address': @sys_mac_addr,
-        'management-vid': @mgmt_vid,
-        'flag': @flags
+        'name' => @name,
+        'description' => @descr,
+        'management-address' => @mgmt_addrs,
+        'sys-mac-address' => @sys_mac_addr,
+        'management-vid' => @mgmt_vid,
+        'flag' => @flags
       }
     end
 

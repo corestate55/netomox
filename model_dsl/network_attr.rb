@@ -14,8 +14,8 @@ module NWTopoDSL
 
     def topo_data
       {
-        'name': @name,
-        'flag': @flags
+        'name' => @name,
+        'flag' => @flags
       }
     end
 
