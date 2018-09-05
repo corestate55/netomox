@@ -1,7 +1,8 @@
-model/test*.json
-model/*.xml
-model/target.json
-model/target[23].json
+vendor/model/test*.json
+vendor/model/*.xml
+vendor/model/target.json
+vendor/model/target[23].json
+fig/*.png
 db_info.json
 *.puml
 *.dsrl
@@ -10,6 +11,7 @@ db_info.json
 *.gem
 *.rbc
 *~
+.rspec_status
 /.config
 /coverage/
 /InstalledFiles
@@ -53,7 +55,7 @@ build-iPhoneSimulator/
 
 # for a library or gem, you might want to ignore these files since the code is
 # intended to run in multiple environments; otherwise, check them in:
-# Gemfile.lock
+Gemfile.lock
 # .ruby-version
 # .ruby-gemset
 

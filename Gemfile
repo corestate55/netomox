@@ -1,16 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'neography', '~> 1.8.0'
-gem 'termcolor'
-gem 'thor'
+git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
-group :test do
-  gem 'rspec'
-end
-
-group :development do
-  gem 'byebug'
-  gem 'pry'
-  gem 'rake'
-  gem 'rubocop', '~> 0.58.2', require: false
-end
+# Specify your gem's dependencies in netomox.gemspec
+gemspec
