@@ -63,6 +63,7 @@ DEPENDENCIES
   byebug
   neography (~> 1.8.0)
   pry
+  rake
   rspec
   rubocop (~> 0.58.2)
   termcolor

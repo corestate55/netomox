@@ -11,5 +11,6 @@ end
 group :development do
   gem 'byebug'
   gem 'pry'
+  gem 'rake'
   gem 'rubocop', '~> 0.58.2', require: false
 end

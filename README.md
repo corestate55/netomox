@@ -34,7 +34,7 @@ bundle exec ruby checker.rb check model/target.json
 ```
 or exec
 ```
-make
+bundle exec rake
 ```
 to check (and convert to xml) all json data in `model` directory.
 
