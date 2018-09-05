@@ -6,7 +6,7 @@ require 'netomox/topology/base'
 module Netomox
   module Topology
     # Termination point for topology data
-    class TerminationPoint < TopoObjectBase
+    class TermPoint < TopoObjectBase
       attr_reader :ref_count
 
       def initialize(data, parent_path)
@@ -36,7 +36,7 @@ module Netomox
 
       def diff(other)
         # forward check
-        d_tp = TerminationPoint.new({ 'tp-id' => @name }, @parent_path)
+        d_tp = TermPoint.new({'tp-id' => @name }, @parent_path)
         d_tp.supports = diff_supports(other)
         d_tp.attribute = diff_attribute(other)
         d_tp.diff_state = select_diff_state(other)

@@ -2,9 +2,9 @@ RSpec.describe 'termination point diff (supporting-tp list)', :diff, :tp do
   context 'when tp literal attribute changed' do
     before do
       tp_def = Netomox::DSL::TermPoint.new('tpX', '')
-      @tp = Netomox::Topology::TerminationPoint.new(tp_def.topo_data, 'nodeX')
-      @tp_kept = Netomox::Topology::TerminationPoint.new(tp_def.topo_data, 'nodeX')
-      @tp_changed = Netomox::Topology::TerminationPoint.new(tp_def.topo_data, 'nodeY')
+      @tp = Netomox::Topology::TermPoint.new(tp_def.topo_data, 'nodeX')
+      @tp_kept = Netomox::Topology::TermPoint.new(tp_def.topo_data, 'nodeX')
+      @tp_changed = Netomox::Topology::TermPoint.new(tp_def.topo_data, 'nodeY')
     end
 
     it 'kept tp info' do
@@ -30,10 +30,10 @@ RSpec.describe 'termination point diff (supporting-tp list)', :diff, :tp do
         support %w[foo bar baz]
         support %w[foo bar changed]
       end
-      @tp_sup0 = Netomox::Topology::TerminationPoint.new(tp_sup0_def.topo_data, '')
-      @tp_sup1 = Netomox::Topology::TerminationPoint.new(tp_sup1_def.topo_data, '')
-      @tp_sup2 = Netomox::Topology::TerminationPoint.new(tp_sup2_def.topo_data, '')
-      @tp_sup2_changed = Netomox::Topology::TerminationPoint.new(tp_sup2_changed_def.topo_data, '')
+      @tp_sup0 = Netomox::Topology::TermPoint.new(tp_sup0_def.topo_data, '')
+      @tp_sup1 = Netomox::Topology::TermPoint.new(tp_sup1_def.topo_data, '')
+      @tp_sup2 = Netomox::Topology::TermPoint.new(tp_sup2_def.topo_data, '')
+      @tp_sup2_changed = Netomox::Topology::TermPoint.new(tp_sup2_changed_def.topo_data, '')
     end
 
     it 'kept tp supports' do

@@ -36,11 +36,11 @@ RSpec.describe 'termination point diff with L2 attribute', :diff, :tp, :attr, :l
       attribute(access_vlan_a_changed)
     end
 
-    @tp_l2attr0 = Netomox::Topology::TerminationPoint.new(tp_l2attr0_def.topo_data, '')
-    @tp_l2attr = Netomox::Topology::TerminationPoint.new(tp_l2attr_def.topo_data, '')
-    @tp_l2attr_added = Netomox::Topology::TerminationPoint.new(tp_l2attr_added_def.topo_data, '')
-    @tp_l2attr_deleted = Netomox::Topology::TerminationPoint.new(tp_l2attr_deleted_def.topo_data, '')
-    @tp_l2attr_changed = Netomox::Topology::TerminationPoint.new(tp_l2attr_changed_def.topo_data, '')
+    @tp_l2attr0 = Netomox::Topology::TermPoint.new(tp_l2attr0_def.topo_data, '')
+    @tp_l2attr = Netomox::Topology::TermPoint.new(tp_l2attr_def.topo_data, '')
+    @tp_l2attr_added = Netomox::Topology::TermPoint.new(tp_l2attr_added_def.topo_data, '')
+    @tp_l2attr_deleted = Netomox::Topology::TermPoint.new(tp_l2attr_deleted_def.topo_data, '')
+    @tp_l2attr_changed = Netomox::Topology::TermPoint.new(tp_l2attr_changed_def.topo_data, '')
   end
 
   it 'kept tp L2 attribute' do

@@ -64,7 +64,7 @@ module Netomox
       end
 
       def create_termination_point(data)
-        TerminationPoint.new(data, @path)
+        TermPoint.new(data, @path)
       end
     end
   end

@@ -21,11 +21,11 @@ RSpec.describe 'termination point diff with L3 attribute', :diff, :tp, :attr, :l
       attribute(tp_attr_changed)
     end
 
-    @tp_l3attr0 = Netomox::Topology::TerminationPoint.new(tp_l3attr0_def.topo_data, '')
-    @tp_l3attr = Netomox::Topology::TerminationPoint.new(tp_l3attr_def.topo_data, '')
-    @tp_l3attr_added = Netomox::Topology::TerminationPoint.new(tp_l3attr_added_def.topo_data, '')
-    @tp_l3attr_deleted = Netomox::Topology::TerminationPoint.new(tp_l3attr_deleted_def.topo_data, '')
-    @tp_l3attr_changed = Netomox::Topology::TerminationPoint.new(tp_l3attr_changed_def.topo_data, '')
+    @tp_l3attr0 = Netomox::Topology::TermPoint.new(tp_l3attr0_def.topo_data, '')
+    @tp_l3attr = Netomox::Topology::TermPoint.new(tp_l3attr_def.topo_data, '')
+    @tp_l3attr_added = Netomox::Topology::TermPoint.new(tp_l3attr_added_def.topo_data, '')
+    @tp_l3attr_deleted = Netomox::Topology::TermPoint.new(tp_l3attr_deleted_def.topo_data, '')
+    @tp_l3attr_changed = Netomox::Topology::TermPoint.new(tp_l3attr_changed_def.topo_data, '')
   end
 
   it 'kept tp L3 attribute' do
