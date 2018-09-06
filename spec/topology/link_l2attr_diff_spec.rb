@@ -1,6 +1,6 @@
 RSpec.describe 'link diff with L2 attribute', :diff, :link, :attr, :l2attr do
   before do
-    l2nw_type = {Netomox::DSL::NWTYPE_L2 => {} }
+    l2nw_type = { Netomox::DSL::NWTYPE_L2 => {} }
     link_attr = { name: 'linkX', flags: [], rate: 1000, delay: 10, srlg: '' }
     link_attr_changed = { name: 'linkX', flags: [], rate: 1000, delay: 20, srlg: '' }
 

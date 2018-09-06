@@ -54,7 +54,8 @@ module Netomox
       end
 
       def empty?
-        @name.empty? && @flags.empty? && @rate.nil? && @delay.nil? && @srlg.empty?
+        @name.empty? && @flags.empty? && \
+          @rate.nil? && @delay.nil? && @srlg.empty?
       end
     end
   end

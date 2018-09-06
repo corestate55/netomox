@@ -41,7 +41,8 @@ module Netomox
       end
 
       def setup_attribute(data, key_klass_list)
-        # key_klass_list = [ { key: 'NAMESPACE:attr_key', klass: class_name },...]
+        # key_klass_list =
+        #   [ { key: 'NAMESPACE:attr_key', klass: class_name },...]
         # NOTICE: WITHOUT network type checking
         # empty attribute (default) to calculate diff
         @attribute = AttributeBase.new([], {}, '_empty_attr_')

@@ -1,6 +1,6 @@
 RSpec.describe 'termination point diff with L3 attribute', :diff, :tp, :attr, :l3attr do
   before do
-    l3nw_type = {Netomox::DSL::NWTYPE_L3 => {} }
+    l3nw_type = { Netomox::DSL::NWTYPE_L3 => {} }
 
     tp_attr = { ip_addrs: %w[192.168.0.1 192.168.1.1] }
     tp_attr_added = { ip_addrs: %w[192.168.0.1 192.168.1.1 192.168.2.1] }

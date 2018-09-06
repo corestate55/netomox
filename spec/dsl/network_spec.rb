@@ -2,8 +2,8 @@ RSpec.describe 'network dsl', :dsl, :network do
   before do
     @link_key = "#{Netomox::DSL::NS_TOPO}:link"
     @tp_key = "#{Netomox::DSL::NS_TOPO}:termination-point"
-    @l2nw_type = {Netomox::DSL::NWTYPE_L2 => {} }
-    @l3nw_type = {Netomox::DSL::NWTYPE_L3 => {} }
+    @l2nw_type = { Netomox::DSL::NWTYPE_L2 => {} }
+    @l3nw_type = { Netomox::DSL::NWTYPE_L3 => {} }
     @l2attr_key = "#{Netomox::DSL::NS_L2NW}:l2-network-attributes"
     @l3attr_key = "#{Netomox::DSL::NS_L3NW}:l3-topology-attributes"
     @nw_data = {

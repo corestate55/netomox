@@ -99,7 +99,8 @@ module Netomox
         all_nodes do |node, nw|
           tp_ids = node.termination_points.map(&:name)
           next if node.termination_points.size == tp_ids.uniq.size
-          warn "WARNING: There are duplicate 'tp_id's in #{nw.name}/#{node.name}"
+          path = "#{nw.name}/#{node.name}"
+          warn "WARNING: There are duplicate 'tp_id's in #{path}"
           warn "#=> #{ununique_element tp_ids}"
         end
       end

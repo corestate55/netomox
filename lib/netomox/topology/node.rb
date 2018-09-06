@@ -10,15 +10,16 @@ module Netomox
     class Node < TopoObjectBase
       attr_accessor :termination_points
 
+      ATTR_KEY_KLASS_LIST = [
+        { key: "#{NS_L2NW}:l2-node-attributes", klass: L2NodeAttribute },
+        { key: "#{NS_L3NW}:l3-node-attributes", klass: L3NodeAttribute }
+      ].freeze
+
       def initialize(data, parent_path)
         super(data['node-id'], parent_path)
         setup_termination_points(data)
         setup_supports(data, 'supporting-node', SupportingNode)
-        key_klass_list = [
-          { key: "#{NS_L2NW}:l2-node-attributes", klass: L2NodeAttribute },
-          { key: "#{NS_L3NW}:l3-node-attributes", klass: L3NodeAttribute }
-        ]
-        setup_attribute(data, key_klass_list)
+        setup_attribute(data, ATTR_KEY_KLASS_LIST)
       end
 
       def diff(other)

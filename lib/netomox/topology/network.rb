@@ -11,17 +11,24 @@ module Netomox
     class Network < TopoObjectBase
       attr_accessor :network_types, :nodes, :links
 
+      ATTR_KEY_KLASS_LIST = [
+        {
+          key: "#{NS_L2NW}:l2-network-attributes",
+          klass: L2NetworkAttribute
+        },
+        {
+          key: "#{NS_L3NW}:l3-topology-attributes",
+          klass: L3NetworkAttribute
+        }
+      ].freeze
+
       def initialize(data)
         super(data['network-id'])
         setup_network_types(data)
         setup_nodes(data)
         setup_links(data)
         setup_supports(data, 'supporting-network', SupportingNetwork)
-        key_klass_list = [
-          { key: "#{NS_L2NW}:l2-network-attributes", klass: L2NetworkAttribute },
-          { key: "#{NS_L3NW}:l3-topology-attributes", klass: L3NetworkAttribute }
-        ]
-        setup_attribute(data, key_klass_list)
+        setup_attribute(data, ATTR_KEY_KLASS_LIST)
       end
 
       def find_link(source, destination)

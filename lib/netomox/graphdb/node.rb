@@ -10,10 +10,8 @@ module Netomox
       end
 
       def n4j_create
-        # p "create node, Label:Node, id:#{@path}"
         node = node_object
         snodes = @supports.map do |snode|
-          # p "create relationship, Label:support, id:#{@path},#{snode.ref_path}"
           supporting_node_object(snode)
         end
         snodes.unshift(node)

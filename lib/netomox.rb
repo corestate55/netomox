@@ -4,6 +4,7 @@ require 'netomox/dsl/dsl'
 require 'netomox/graphdb/networks_ops'
 require 'netomox/topology/networks_ops'
 
+# Network Topology Modeling Toolbox
 module Netomox
   # Your code goes here...
 end

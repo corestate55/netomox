@@ -42,7 +42,7 @@ task :rb2json do
   puts '# check rb2json'
   TARGET_RB.each do |rb|
     json = "#{MODEL_DIR}/#{File.basename(rb.ext('json'))}"
-    puts "### make json:#{json}"
+    puts "## make json:#{json}"
     sh "bundle exec ruby #{rb} > #{json}"
   end
 end

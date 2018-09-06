@@ -1,7 +1,7 @@
 require 'netomox/dsl/const'
 require 'netomox/dsl/networks'
 
-# DSL to Make Network Topology Data
 module Netomox
+  # DSL to Make Network Topology Data
   module DSL; end
 end

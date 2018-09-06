@@ -1,5 +1,5 @@
 require 'json'
-require 'netoox'
+require 'netomox'
 
 model_dir = 'model/'
 

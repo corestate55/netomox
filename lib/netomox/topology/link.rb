@@ -9,16 +9,17 @@ module Netomox
     class Link < TopoObjectBase
       attr_accessor :source, :destination
 
+      ATTR_KEY_KLASS_LIST = [
+        { key: "#{NS_L2NW}:l2-link-attributes", klass: L2LinkAttribute },
+        { key: "#{NS_L3NW}:l3-link-attributes", klass: L3LinkAttribute }
+      ].freeze
+
       def initialize(data, parent_path)
         super(data['link-id'], parent_path)
         setup_source(data)
         setup_destination(data)
         setup_supports(data, 'supporting-link', SupportingLink)
-        key_klass_list = [
-          { key: "#{NS_L2NW}:l2-link-attributes", klass: L2LinkAttribute },
-          { key: "#{NS_L3NW}:l3-link-attributes", klass: L3LinkAttribute }
-        ]
-        setup_attribute(data, key_klass_list)
+        setup_attribute(data, ATTR_KEY_KLASS_LIST)
       end
 
       def diff(other)

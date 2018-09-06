@@ -9,17 +9,23 @@ module Netomox
     class TermPoint < TopoObjectBase
       attr_reader :ref_count
 
+      ATTR_KEY_KLASS_LIST = [
+        {
+          key: "#{NS_L2NW}:l2-termination-point-attributes",
+          klass: L2TPAttribute
+        },
+        {
+          key: "#{NS_L3NW}:l3-termination-point-attributes",
+          klass: L3TPAttribute
+        }
+      ].freeze
+
       def initialize(data, parent_path)
         super(data['tp-id'], parent_path)
         @ref_count = 0
         key = 'supporting-termination-point' # alias
         setup_supports(data, key, SupportingTerminationPoint)
-        key = 'termination-point-attributes' # alias
-        key_klass_list = [
-          { key: "#{NS_L2NW}:l2-#{key}", klass: L2TPAttribute },
-          { key: "#{NS_L3NW}:l3-#{key}", klass: L3TPAttribute }
-        ]
-        setup_attribute(data, key_klass_list)
+        setup_attribute(data, ATTR_KEY_KLASS_LIST)
       end
 
       def to_s
@@ -36,7 +42,7 @@ module Netomox
 
       def diff(other)
         # forward check
-        d_tp = TermPoint.new({'tp-id' => @name }, @parent_path)
+        d_tp = TermPoint.new({ 'tp-id' => @name }, @parent_path)
         d_tp.supports = diff_supports(other)
         d_tp.attribute = diff_attribute(other)
         d_tp.diff_state = select_diff_state(other)

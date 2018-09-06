@@ -1,6 +1,6 @@
 RSpec.describe 'termination point diff with L2 attribute', :diff, :tp, :attr, :l2attr do
   before do
-    l2nw_type = {Netomox::DSL::NWTYPE_L2 => {} }
+    l2nw_type = { Netomox::DSL::NWTYPE_L2 => {} }
 
     vlan_a = { id: 10, name: 'Seg.A' }
     vlan_b = { id: 20, name: 'Seg.B' }
