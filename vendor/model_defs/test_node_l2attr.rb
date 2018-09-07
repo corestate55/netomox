@@ -14,7 +14,7 @@ node_attr_changed = { name: 'tpX', mgmt_vid: 11, mgmt_addrs: addrs }
 
 test_node_attr1 = Netomox::DSL::Networks.new do
   network 'layerX' do
-    type Netomox::DSL::NWTYPE_L2
+    type Netomox::NWTYPE_L2
     node 'attr_kept' do
       attribute(node_attr)
     end
@@ -36,7 +36,7 @@ end
 
 test_node_attr2 = Netomox::DSL::Networks.new do
   network 'layerX' do
-    type Netomox::DSL::NWTYPE_L2
+    type Netomox::NWTYPE_L2
     node 'attr_kept' do
       attribute(node_attr)
     end

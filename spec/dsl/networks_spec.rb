@@ -1,7 +1,7 @@
 RSpec.describe 'networks dsl', :dsl, :networks, :network do
   before do
-    @nws_key = "#{Netomox::DSL::NS_NW}:networks"
-    @link_key = "#{Netomox::DSL::NS_TOPO}:link"
+    @nws_key = "#{Netomox::NS_NW}:networks"
+    @link_key = "#{Netomox::NS_TOPO}:link"
   end
 
   it 'generate single network list (networks)' do

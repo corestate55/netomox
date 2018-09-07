@@ -1,4 +1,4 @@
-require 'netomox/topology/const'
+require 'netomox/const'
 require 'netomox/topology/link_tpref'
 require 'netomox/topology/link_attr'
 require 'netomox/topology/base'

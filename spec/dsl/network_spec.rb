@@ -1,11 +1,11 @@
 RSpec.describe 'network dsl', :dsl, :network do
   before do
-    @link_key = "#{Netomox::DSL::NS_TOPO}:link"
-    @tp_key = "#{Netomox::DSL::NS_TOPO}:termination-point"
-    @l2nw_type = { Netomox::DSL::NWTYPE_L2 => {} }
-    @l3nw_type = { Netomox::DSL::NWTYPE_L3 => {} }
-    @l2attr_key = "#{Netomox::DSL::NS_L2NW}:l2-network-attributes"
-    @l3attr_key = "#{Netomox::DSL::NS_L3NW}:l3-topology-attributes"
+    @link_key = "#{Netomox::NS_TOPO}:link"
+    @tp_key = "#{Netomox::NS_TOPO}:termination-point"
+    @l2nw_type = { Netomox::NWTYPE_L2 => {} }
+    @l3nw_type = { Netomox::NWTYPE_L3 => {} }
+    @l2attr_key = "#{Netomox::NS_L2NW}:l2-network-attributes"
+    @l3attr_key = "#{Netomox::NS_L3NW}:l3-topology-attributes"
     @nw_data = {
       'network-id' => 'nwX',
       'network-types' => {},
@@ -72,7 +72,7 @@ RSpec.describe 'network dsl', :dsl, :network do
 
   it 'generate network that has L2 attribute', :attr, :l2attr do
     nw = Netomox::DSL::Network.new('nwX') do
-      type Netomox::DSL::NWTYPE_L2
+      type Netomox::NWTYPE_L2
       attribute(name: 'layer2', flags: %w[foo bar])
     end
     nw_data = @nw_data.dup
@@ -86,7 +86,7 @@ RSpec.describe 'network dsl', :dsl, :network do
 
   it 'generate network that has L3 attribute', :attr, :l3attr do
     nw = Netomox::DSL::Network.new('nwX') do
-      type Netomox::DSL::NWTYPE_L3
+      type Netomox::NWTYPE_L3
       attribute(name: 'layer3', flags: %w[foo bar])
     end
     nw_data = @nw_data.dup

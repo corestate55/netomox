@@ -15,7 +15,7 @@ pref_changed = { prefixes: [seg_a2_prefix, seg_b_prefix] }
 
 test_node_attr1 = Netomox::DSL::Networks.new do
   network 'layerX' do
-    type Netomox::DSL::NWTYPE_L3
+    type Netomox::NWTYPE_L3
     node 'attr_kept' do
       attribute(pref)
     end
@@ -37,7 +37,7 @@ end
 
 test_node_attr2 = Netomox::DSL::Networks.new do
   network 'layerX' do
-    type Netomox::DSL::NWTYPE_L3
+    type Netomox::NWTYPE_L3
     node 'attr_kept' do
       attribute(pref)
     end

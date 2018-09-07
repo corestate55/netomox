@@ -8,7 +8,7 @@ model_dir = 'model/'
 
 test_link1 = Netomox::DSL::Networks.new do
   network 'layerX' do
-    type Netomox::DSL::NWTYPE_L2
+    type Netomox::NWTYPE_L2
 
     bdlink %w[kept1 p1 kept2 p1]
     bdlink %w[deleted1 p1 deleted2 p1]
@@ -33,7 +33,7 @@ end
 
 test_link2 = Netomox::DSL::Networks.new do
   network 'layerX' do
-    type Netomox::DSL::NWTYPE_L2
+    type Netomox::NWTYPE_L2
 
     bdlink %w[kept1 p1 kept2 p1]
     bdlink %w[added1 p1 added p1]

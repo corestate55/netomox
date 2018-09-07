@@ -1,5 +1,5 @@
+require 'netomox/const'
 require 'netomox/dsl/base'
-require 'netomox/dsl/const'
 require 'netomox/dsl/link_attr'
 
 module Netomox

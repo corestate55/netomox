@@ -1,4 +1,4 @@
-require 'netomox/dsl/const'
+require 'netomox/const'
 require 'netomox/dsl/base'
 require 'netomox/dsl/network_attr'
 require 'netomox/dsl/node'

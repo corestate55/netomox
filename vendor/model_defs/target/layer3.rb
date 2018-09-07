@@ -3,7 +3,7 @@ require 'netomox'
 # rubocop:disable Metrics/MethodLength, Metrics/BlockLength, Metrics/AbcSize
 def make_target_layer3
   Netomox::DSL::Network.new 'target-L3' do
-    type Netomox::DSL::NWTYPE_L3
+    type Netomox::NWTYPE_L3
     support 'target-L1.5'
     support 'target-L2'
     support 'target-L1'

@@ -1,4 +1,4 @@
-require 'netomox/dsl/const'
+require 'netomox/const'
 require 'netomox/dsl/networks'
 
 module Netomox

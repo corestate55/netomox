@@ -28,7 +28,7 @@ access_vlan_a_changed = {
 
 test_tp_attr1 = Netomox::DSL::Networks.new do
   network 'layerX' do
-    type Netomox::DSL::NWTYPE_L2
+    type Netomox::NWTYPE_L2
     node 'nodeX' do
       term_point 'attr_kept' do
         attribute(access_vlan_a)
@@ -52,7 +52,7 @@ end
 
 test_tp_attr2 = Netomox::DSL::Networks.new do
   network 'layerX' do
-    type Netomox::DSL::NWTYPE_L2
+    type Netomox::NWTYPE_L2
     node 'nodeX' do
       term_point 'attr_kept' do
         attribute(access_vlan_a)

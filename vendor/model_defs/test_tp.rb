@@ -8,7 +8,7 @@ model_dir = 'model/'
 
 test_tp1 = Netomox::DSL::Networks.new do
   network 'layerX' do
-    type Netomox::DSL::NWTYPE_L2
+    type Netomox::NWTYPE_L2
     node 'nodeX' do
       term_point 'tp_kept'
       term_point 'tp_deleted'
@@ -34,7 +34,7 @@ end
 
 test_tp2 = Netomox::DSL::Networks.new do
   network 'layerX' do
-    type Netomox::DSL::NWTYPE_L2
+    type Netomox::NWTYPE_L2
     node 'nodeX' do
       term_point 'tp_kept'
       term_point 'tp_added'

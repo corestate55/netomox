@@ -1,4 +1,4 @@
-require 'netomox/dsl/const'
+require 'netomox/const'
 
 module Netomox
   module DSL

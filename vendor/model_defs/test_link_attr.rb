@@ -7,7 +7,7 @@ link_attr_b = { name: 'linkX', flags: [], metric1: 200, metric2: 200 }
 model_dir = 'model/'
 test_link_attr1 = Netomox::DSL::Networks.new do
   network 'layerX' do
-    type Netomox::DSL::NWTYPE_L3
+    type Netomox::NWTYPE_L3
     bdlink %w[attr_kept1 p1 attr_kept2 p1] do
       attribute(link_attr_a)
     end
@@ -23,7 +23,7 @@ end
 
 test_link_attr2 = Netomox::DSL::Networks.new do
   network 'layerX' do
-    type Netomox::DSL::NWTYPE_L3
+    type Netomox::NWTYPE_L3
     bdlink %w[attr_kept1 p1 attr_kept2 p1] do
       attribute(link_attr_a)
     end

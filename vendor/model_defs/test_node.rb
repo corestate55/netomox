@@ -7,7 +7,7 @@ model_dir = 'model/'
 
 test_node1 = Netomox::DSL::Networks.new do
   network 'layerX' do
-    type Netomox::DSL::NWTYPE_L2
+    type Netomox::NWTYPE_L2
     node 'node_kept'
     node 'node_deleted'
 
@@ -31,7 +31,7 @@ end
 
 test_node2 = Netomox::DSL::Networks.new do
   network 'layerX' do
-    type Netomox::DSL::NWTYPE_L2
+    type Netomox::NWTYPE_L2
     node 'node_kept'
     node 'node_added'
 

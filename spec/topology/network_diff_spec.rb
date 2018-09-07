@@ -2,10 +2,10 @@ RSpec.describe 'network diff (supporting-node list)', :diff, :network do
   context 'when network literal attribute changed' do
     before do
       l2nw_def = Netomox::DSL::Network.new('nwX') do
-        type Netomox::DSL::NWTYPE_L2
+        type Netomox::NWTYPE_L2
       end
       l3nw_def = Netomox::DSL::Network.new('nwX') do
-        type Netomox::DSL::NWTYPE_L3
+        type Netomox::NWTYPE_L3
       end
       @l2nw = Netomox::Topology::Network.new(l2nw_def.topo_data)
       @l3nw = Netomox::Topology::Network.new(l3nw_def.topo_data)

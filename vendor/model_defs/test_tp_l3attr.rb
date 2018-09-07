@@ -12,7 +12,7 @@ tp_attr_changed = { ip_addrs: %w[192.168.0.1 192.168.1.2] }
 
 test_tp_attr1 = Netomox::DSL::Networks.new do
   network 'layerX' do
-    type Netomox::DSL::NWTYPE_L3
+    type Netomox::NWTYPE_L3
     node 'nodeX' do
       term_point 'attr_kept' do
         attribute(tp_attr)
@@ -36,7 +36,7 @@ end
 
 test_tp_attr2 = Netomox::DSL::Networks.new do
   network 'layerX' do
-    type Netomox::DSL::NWTYPE_L3
+    type Netomox::NWTYPE_L3
     node 'nodeX' do
       term_point 'attr_kept' do
         attribute(tp_attr)

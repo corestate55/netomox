@@ -1,5 +1,5 @@
+require 'netomox/const'
 require 'netomox/dsl/base'
-require 'netomox/dsl/const'
 require 'netomox/dsl/node_attr'
 require 'netomox/dsl/tp'
 

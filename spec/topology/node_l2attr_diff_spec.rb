@@ -1,6 +1,6 @@
 RSpec.describe 'node diff with L2 attribute', :diff, :node, :attr, :l2attr do
   before do
-    l3nw_type = { Netomox::DSL::NWTYPE_L2 => {} }
+    l3nw_type = { Netomox::NWTYPE_L2 => {} }
     addrs = %w[192.168.0.1 192.168.1.1]
     addrs_added = %w[192.168.0.1 192.168.1.1 192.168.2.1]
     addrs_deleted = %w[192.168.0.1]

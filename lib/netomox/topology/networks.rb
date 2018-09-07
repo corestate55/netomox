@@ -1,4 +1,4 @@
-require 'netomox/topology/const'
+require 'netomox/const'
 require 'netomox/topology/network'
 require 'netomox/topology/base'
 

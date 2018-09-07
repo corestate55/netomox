@@ -1,10 +1,10 @@
 RSpec.describe 'termination point dsl', :dsl, :tp do
   before do
-    @l2nw_type = { Netomox::DSL::NWTYPE_L2 => {} }
-    @l3nw_type = { Netomox::DSL::NWTYPE_L3 => {} }
+    @l2nw_type = { Netomox::NWTYPE_L2 => {} }
+    @l3nw_type = { Netomox::NWTYPE_L3 => {} }
     attr_key = 'termination-point-attributes'.freeze
-    @l2attr_key = "#{Netomox::DSL::NS_L2NW}:l2-#{attr_key}"
-    @l3attr_key = "#{Netomox::DSL::NS_L3NW}:l3-#{attr_key}"
+    @l2attr_key = "#{Netomox::NS_L2NW}:l2-#{attr_key}"
+    @l3attr_key = "#{Netomox::NS_L3NW}:l3-#{attr_key}"
   end
 
   it 'generate single term point' do
