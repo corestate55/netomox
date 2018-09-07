@@ -59,18 +59,18 @@ module Netomox
       def setup_source(data)
         @source = nil
         return unless data.key?('source')
-        @source = TpRef.new(data['source'])
+        @source = TpRef.new(data['source'], @parent_path)
       end
 
       def setup_destination(data)
         @destination = nil
         return unless data.key?('destination')
-        @destination = TpRef.new(data['destination'])
+        @destination = TpRef.new(data['destination'], @parent_path)
       end
 
       def diff_link_tp(attr, to_data_key, other)
         result = send(attr) == other.send(attr) ? :kept : :changed
-        d_tp = TpRef.new(send(attr).to_data(to_data_key))
+        d_tp = TpRef.new(send(attr).to_data(to_data_key), @parent_path)
         d_tp.diff_state = DiffState.new(forward: result, pair: other)
         d_tp
       end

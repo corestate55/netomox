@@ -8,12 +8,20 @@ module Netomox
         { int: :node_ref, ext: 'node-ref' },
         { int: :tp_ref, ext: 'tp-ref' }
       ].freeze
-      attr_accessor :node_ref, :tp_ref
+      # NOTICE: Link source/destination (TpRef) has only node_ref and tp_ref
+      # according to yang model. but in netomox, it need network_ref
+      # to handle TpRef as same manner as other objects.
+      attr_accessor :node_ref, :tp_ref, :network_ref
 
-      def initialize(data)
+      def initialize(data, parent_path)
         super(ATTR_DEFS, data)
+        @network_ref = parent_path
         @node_ref = data['source-node'] || data['dest-node']
         @tp_ref = data['source-tp'] || data['dest-tp']
+      end
+
+      def ref_path
+        [@network_ref, @node_ref, @tp_ref].join('/')
       end
 
       def to_data(direction)
