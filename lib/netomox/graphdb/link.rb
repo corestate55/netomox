@@ -3,7 +3,7 @@ require 'netomox/topology/link'
 module Netomox
   module GraphDB
     # Link for graph data
-    class GraphLink < Topology::Link
+    class Link < Topology::Link
       def initialize(data, parent_path)
         super(data, parent_path)
       end

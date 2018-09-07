@@ -4,7 +4,7 @@ require 'netomox/graphdb/tp'
 module Netomox
   module GraphDB
     # Node for graph data
-    class GraphNode < Topology::Node
+    class Node < Topology::Node
       def initialize(data, parent_path)
         super(data, parent_path)
       end
@@ -42,7 +42,7 @@ module Netomox
       end
 
       def create_termination_point(data)
-        GraphTerminationPoint.new(data, @path)
+        TermPoint.new(data, @path)
       end
     end
   end

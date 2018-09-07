@@ -4,7 +4,7 @@ require 'netomox/graphdb/networks'
 module Netomox
   module GraphDB
     # Networks for graph data (neo4j operation)
-    class GraphNetworks < Topology::Networks
+    class Networks < Topology::Networks
       def exec_create_objects
         @n4j_node_table = {}
         exec_create_nodes

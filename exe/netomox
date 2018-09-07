@@ -25,7 +25,11 @@ module Netomox
       run_diff(file1, file2)
     end
 
-    desc 'graphdb JSON', 'Send topology data to graphdb (neo4j)'
+    desc 'graphdb [opts] JSON', 'Send topology data to graphdb (neo4j)'
+    option :info, type: :string, default: nil, aliases: :i,
+                  desc: 'Graph DB connection info file'
+    option :clear, type: :boolean, default: false, aliases: :c,
+                   desc: 'Clear all objects in Graph DB'
     def graphdb(file)
       run_graphdb(file)
     end
@@ -56,23 +60,27 @@ module Netomox
     end
     # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
+    def open_graphdb(file)
+      db_info_file = options[:info] || './db_info.json'
+      db_info = open_data(db_info_file, symbolize_names: true)
+      GraphDB::Networks.new(open_data(file), db_info)
+    end
+
     # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     def run_graphdb(file)
-      db_info = open_data('./db_info.json', symbolize_names: true)
-      networks = GraphDB::Networks.new(open_data(file), db_info)
+      g_nws = open_graphdb(file)
       if options[:verbose]
         puts '# node objects'
-        puts JSON.pretty_generate(networks.node_objects)
+        puts JSON.pretty_generate(g_nws.node_objects)
         puts '# relationship objects'
-        puts JSON.pretty_generate(networks.relationship_objects)
-        puts '# DB info'
-        puts db_info
+        puts JSON.pretty_generate(g_nws.relationship_objects)
         exit(0)
       end
       puts '# clear all nodes'
-      networks.exec_clear_all_objects
+      g_nws.exec_clear_all_objects
+      return if options[:clear]
       puts '# create nodes/relationships'
-      networks.exec_create_objects
+      g_nws.exec_create_objects
     end
     # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 

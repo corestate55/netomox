@@ -4,7 +4,7 @@ require 'netomox/topology/networks'
 module Netomox
   module GraphDB
     # Networks for graph data
-    class GraphNetworks < Topology::Networks
+    class Networks < Topology::Networks
       attr_reader :objects
 
       def initialize(data, db_info)
@@ -93,7 +93,7 @@ module Netomox
       end
 
       def create_network(data)
-        GraphNetwork.new(data)
+        Network.new(data)
       end
     end
   end

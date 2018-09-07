@@ -3,7 +3,7 @@ require 'netomox/topology/tp'
 module Netomox
   module GraphDB
     # Termination point for graph data
-    class GraphTerminationPoint < Topology::TermPoint
+    class TermPoint < Topology::TermPoint
       def initialize(data, parent_path)
         super(data, parent_path)
       end

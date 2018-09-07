@@ -5,7 +5,7 @@ require 'netomox/topology/network'
 module Netomox
   module GraphDB
     # Network for graph data
-    class GraphNetwork < Topology::Network
+    class Network < Topology::Network
       def initialize(data)
         super(data)
       end
@@ -45,11 +45,11 @@ module Netomox
       end
 
       def create_node(data)
-        GraphNode.new(data, @path)
+        Node.new(data, @path)
       end
 
       def create_link(data)
-        GraphLink.new(data, @path)
+        Link.new(data, @path)
       end
     end
   end
