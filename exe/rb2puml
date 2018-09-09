@@ -6,9 +6,10 @@ require 'optparse'
 class KlassRecords
   attr_accessor :pub_methods, :priv_methods, :prot_methods,
                 :vars, :uses, :parents, :mix_in_modules
-  def initialize(modules, kls_name)
+  def initialize(modules, kls_name, stereotype = '')
     @modules = modules
     @kls_name = kls_name
+    @stereotype = stereotype
     @mix_in_modules = []
     @pub_methods = []
     @priv_methods = []
@@ -29,7 +30,8 @@ class KlassRecords
   end
 
   def to_puml_kls
-     kls_str(@kls_name)
+    st = @stereotype.empty? ? @stereotype : " <<#{@stereotype}>>"
+    kls_str(@kls_name) + st
   end
 
   def to_puml_vars
@@ -37,15 +39,19 @@ class KlassRecords
   end
 
   def to_puml_parents
-    @parents.sort.uniq.map { |parent| "#{to_puml_kls} --|> #{kls_str(parent)}" }
+    @parents.sort.uniq.map do |parent|
+      "#{kls_str(@kls_name)} --|> #{kls_str(parent)}"
+    end
   end
 
   def to_puml_uses
-    @uses.sort.uniq.map { |use| "#{to_puml_kls} --- #{kls_str(use)}" }
+    @uses.sort.uniq.map { |use| "#{kls_str(@kls_name)} --- #{kls_str(use)}" }
   end
 
   def to_puml_mix_in
-    @mix_in_modules.sort.uniq.map { |m_in| "#{to_puml_kls} ..> #{kls_str(m_in)}"}
+    @mix_in_modules.sort.uniq.map do |m_in|
+      "#{kls_str(@kls_name)} ..> #{kls_str(m_in)} : <<include>>"
+    end
   end
 
   private
@@ -63,6 +69,7 @@ class KlassRecords
   end
 end
 
+# rubocop:disable Metrics/ClassLength
 # ruby to PlantUML
 class RB2Puml
   attr_reader :kls_table
@@ -94,12 +101,17 @@ class RB2Puml
 
   private
 
+  def init_states(file_name)
+    @file_name = File.basename(file_name)
+    @modules = []
+    @kls_name = ''
+    @stereotype = ''
+    @method_mode = :pub_methods
+  end
+
   def all_lines
     @target_files.each do |file_name|
-      @file_name = File.basename(file_name)
-      @modules = []
-      @kls_name = ''
-      @method_mode = :pub_methods
+      init_states(file_name)
       File.open(file_name, 'r') do |file|
         file.each_line do |line|
           yield line
@@ -112,7 +124,10 @@ class RB2Puml
     list = @kls_table.keys.map do |kls|
       rec = @kls_table[kls]
       body = @simple ? [] : [rec.to_puml_methods, rec.to_puml_vars]
-      ["class #{rec.to_puml_kls} {", body, '}', rec.to_puml_parents, rec.to_puml_uses, rec.to_puml_mix_in]
+      [
+        "class #{rec.to_puml_kls} {", body, '}',
+        rec.to_puml_parents, rec.to_puml_uses, rec.to_puml_mix_in
+      ]
     end
     list.flatten
   end
@@ -122,12 +137,13 @@ class RB2Puml
     push_parent(parent_kls) if parent_kls
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
   def parse_single_def(line)
     case line
     when /^\s*class ([\w:]+) < ([\w:]+)/, /^\s*class ([\w:]+)/
       parse_class_name(Regexp.last_match(1), Regexp.last_match(2))
     when /^\s*module (\w+)/
-      @modules.push(Regexp.last_match(1))
+      push_module(Regexp.last_match(1))
     when /\s*include (\w+)/
       push_mix_in(Regexp.last_match(1))
     when /^\s*def ([\w\?]+)/
@@ -138,10 +154,11 @@ class RB2Puml
       @method_mode = :priv_methods
     end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength
 
   def push(key, value)
     unless @kls_table.key?(@kls_name)
-      @kls_table[@kls_name] = KlassRecords.new(@modules, @kls_name)
+      @kls_table[@kls_name] = KlassRecords.new(@modules, @kls_name, @stereotype)
     end
     @kls_table[@kls_name].send(key).push(value)
   end
@@ -151,8 +168,16 @@ class RB2Puml
   end
 
   def push_method(method_name)
-    @kls_name = @modules.pop if @kls_name.empty? && !@modules.empty?
+    if @kls_name.empty? && !@modules.empty?
+      @stereotype = 'module'
+      @kls_name = @modules.pop
+    end
     push(@method_mode, method_name)
+  end
+
+  def push_module(module_name)
+    @kls_name = '' # now not used module in class
+    @modules.push(module_name)
   end
 
   def push_var(line)
@@ -179,6 +204,7 @@ class RB2Puml
     push(:uses, use_kls_name) if use_kls_name
   end
 end
+# rubocop:enable Metrics/ClassLength
 
 opt = OptionParser.new
 option = {}

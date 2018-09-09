@@ -31,7 +31,7 @@ task :fig do
     end
   end
   FileList["#{FIG_DIR}/*.puml"].each do |puml|
-    sh "plantuml #{puml}"
+    sh "PLANTUML_LIMIT_SIZE=8192 plantuml #{puml}"
   end
 end
 
