@@ -5,9 +5,11 @@ require 'optparse'
 # info record of klass
 class KlassRecords
   attr_accessor :pub_methods, :priv_methods, :prot_methods,
-                :vars, :uses, :parents
-  def initialize(kls_name)
+                :vars, :uses, :parents, :mix_in_modules
+  def initialize(modules, kls_name)
+    @modules = modules
     @kls_name = kls_name
+    @mix_in_modules = []
     @pub_methods = []
     @priv_methods = []
     @prot_methods = []
@@ -26,19 +28,31 @@ class KlassRecords
     list.flatten
   end
 
+  def to_puml_kls
+     kls_str(@kls_name)
+  end
+
   def to_puml_vars
     @vars.sort.uniq.map { |var| "  #{var}" }
   end
 
   def to_puml_parents
-    @parents.sort.uniq.map { |parent| "#{@kls_name} --|> #{parent}" }
+    @parents.sort.uniq.map { |parent| "#{to_puml_kls} --|> #{kls_str(parent)}" }
   end
 
   def to_puml_uses
-    @uses.sort.uniq.map { |use| "#{@kls_name} --- #{use}" }
+    @uses.sort.uniq.map { |use| "#{to_puml_kls} --- #{kls_str(use)}" }
+  end
+
+  def to_puml_mix_in
+    @mix_in_modules.sort.uniq.map { |m_in| "#{to_puml_kls} ..> #{kls_str(m_in)}"}
   end
 
   private
+
+  def kls_str(parent)
+    parent =~ /::/ ? parent : [@modules, parent].flatten.join('::')
+  end
 
   def method_head(mode)
     case mode
@@ -56,10 +70,17 @@ class RB2Puml
     @target_files = Dir.glob("#{dir}/*.rb")
     @simple = simple
     @kls_table = {}
+    @modules = []
   end
 
   def to_puml
-    ['@startuml', 'left to right direction', to_puml_class, '@enduml']
+    [
+      '@startuml',
+      'left to right direction',
+      'set namespaceSeparator ::',
+      to_puml_class,
+      '@enduml'
+    ]
   end
 
   def parse_line
@@ -76,6 +97,8 @@ class RB2Puml
   def all_lines
     @target_files.each do |file_name|
       @file_name = File.basename(file_name)
+      @modules = []
+      @kls_name = ''
       @method_mode = :pub_methods
       File.open(file_name, 'r') do |file|
         file.each_line do |line|
@@ -89,7 +112,7 @@ class RB2Puml
     list = @kls_table.keys.map do |kls|
       rec = @kls_table[kls]
       body = @simple ? [] : [rec.to_puml_methods, rec.to_puml_vars]
-      ["class #{kls} {", body, '}', rec.to_puml_parents, rec.to_puml_uses]
+      ["class #{rec.to_puml_kls} {", body, '}', rec.to_puml_parents, rec.to_puml_uses, rec.to_puml_mix_in]
     end
     list.flatten
   end
@@ -103,6 +126,10 @@ class RB2Puml
     case line
     when /^\s*class ([\w:]+) < ([\w:]+)/, /^\s*class ([\w:]+)/
       parse_class_name(Regexp.last_match(1), Regexp.last_match(2))
+    when /^\s*module (\w+)/
+      @modules.push(Regexp.last_match(1))
+    when /\s*include (\w+)/
+      push_mix_in(Regexp.last_match(1))
     when /^\s*def ([\w\?]+)/
       push_method(Regexp.last_match(1))
     when /^\s*protected\s*$/
@@ -114,7 +141,7 @@ class RB2Puml
 
   def push(key, value)
     unless @kls_table.key?(@kls_name)
-      @kls_table[@kls_name] = KlassRecords.new(@kls_name)
+      @kls_table[@kls_name] = KlassRecords.new(@modules, @kls_name)
     end
     @kls_table[@kls_name].send(key).push(value)
   end
@@ -124,12 +151,17 @@ class RB2Puml
   end
 
   def push_method(method_name)
+    @kls_name = @modules.pop if @kls_name.empty? && !@modules.empty?
     push(@method_mode, method_name)
   end
 
   def push_var(line)
     return unless line =~ /@(\w+)/
     push(:vars, Regexp.last_match(1))
+  end
+
+  def push_mix_in(module_name)
+    push(:mix_in_modules, module_name)
   end
 
   def use_match(line)

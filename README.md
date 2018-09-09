@@ -114,12 +114,21 @@ In default, checker diff output only changed object and its parent object.
 * `-o FILE`/`--output FILE` option: save diff data to FILE (json data includes diff info for diff viewer).
 If specified `-o` and other options, ignored them.
 
-### Store topology data with Neo4j
+### Store topology data with Graph DB (Neo4j)
 
 Ready `db_info.json` file to store information to connect your Neo4j database.
 
 This application is using [neography](https://github.com/maxdemarzi/neography) to post the data into neo4j graph database.
 Execute like below
 ```
-bundle exec netomox graphdb target.json
+bundle exec netomox graphdb [--info|--clear] target.json
 ```
+* `-i FILE`/`--info FILE` option: graph db connection info file (if not specified, use `db_info.json`)
+* `-c`/`--clear` option: only deleting all data in graph (clear database and do not import graph data)
+
+## Development
+
+### Netomox UML Class diagrams
+
+Install PlantUML and exec `bundle exec rake fig`. Then, class diagrams will be created in `figs/` directory.
+
