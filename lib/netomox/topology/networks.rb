@@ -7,7 +7,6 @@ module Netomox
     # Networks for Topology data
     class Networks < TopoObjectBase
       attr_accessor :networks
-      include Diffable
 
       def initialize(data)
         super('networks')

@@ -38,6 +38,10 @@ In `vendor` dir, there are some data instances defined/handled with Netomok.
 * `vendor/model`: topology data instance (json) of fictional network.
 * `vendor/model\defs`: topology data definition using `Netomox::DSL` to generate json data instance.
 
+### Demo
+Asciinema demo: generate topology data and diff old data.
+[![asciicast](https://asciinema.org/a/eundWjBE89J5FwEc57YPldEcG.png)](https://asciinema.org/a/eundWjBE89J5FwEc57YPldEcG)
+
 ### YANG Files
 
 You can find latest yang files defined in [RFC8345](https://www.rfc-editor.org/info/rfc8345

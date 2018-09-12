@@ -9,7 +9,7 @@ RSpec.describe 'diff_state filling' do
           support 'hoge_nw'
           support 'fuga_nw'
           node 'node1' do
-            attribute({ name: 'node1', mgmt_vid: 10, mgmt_addrs: %w[192.168.1.10] })
+            attribute(name: 'node1', mgmt_vid: 10, mgmt_addrs: %w[192.168.1.10])
             support %w[hoge_nw nodeX]
             support %w[hoge_nw nodeY]
             term_point 'tp1' do
@@ -26,7 +26,7 @@ RSpec.describe 'diff_state filling' do
             end
           end
           bdlink %w[node1 tp1 node2 tp2] do
-            attribute({ name: 'linkX', flags: [], rate: 1000, delay: 10, srlg: '' })
+            attribute(name: 'linkX', flags: [], rate: 1000, delay: 10, srlg: '')
             support %w[hoge_nw nodeX,tp1,nodeY,tp2]
             support %w[hoge_nw nodeP,tp1,nodeQ,tp1]
           end
