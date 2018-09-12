@@ -35,13 +35,13 @@ RSpec.describe 'termination point diff with L3 attribute', :diff, :tp, :attr, :l
   end
 
   context 'diff with no-attribute tp' do
-    it 'added whole L2 attribute' do
+    it 'added whole L3 attribute' do
       d_tp = @tp_l3attr0.diff(@tp_l3attr)
       expect(d_tp.diff_state.detect).to eq :changed
       expect(d_tp.attribute.diff_state.detect).to eq :added
     end
 
-    it 'deleted whole L2 attribute' do
+    it 'deleted whole L3 attribute' do
       d_tp = @tp_l3attr.diff(@tp_l3attr0)
       expect(d_tp.diff_state.detect).to eq :changed
       expect(d_tp.attribute.diff_state.detect).to eq :deleted

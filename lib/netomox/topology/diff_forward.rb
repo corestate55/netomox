@@ -65,7 +65,8 @@ module Netomox
       def fill_array_diff_state(child_array)
         child_array.each do |child|
           set_diff_state(child, forward: @diff_state.forward)
-          child.fill_diff_state # recursive state marking
+          # recursive state marking
+          child.fill_diff_state if child.is_a?(TopoObjectBase)
         end
       end
 

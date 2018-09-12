@@ -31,7 +31,11 @@ module Netomox
       end
 
       def stringify_single_value(value)
-        str = value.nil? || value == '' ? '""' : value
+        str = if value.nil? || value == ''
+                '""' # empty string (json)
+              else
+                value
+              end
         coloring(str)
       end
 
@@ -66,10 +70,14 @@ module Netomox
       end
 
       def stringify_hash
+        return [] if pass_kept?
         keys = @data.keys
         keys.delete('_diff_state_')
-        return [] if keys.empty? || pass_kept?
-        strs = keys.map { |key| stringify_hash_key_value(key, @data[key]) }
+        strs = if keys.empty?
+                 [''] # empty string
+               else
+                 keys.map { |key| stringify_hash_key_value(key, @data[key]) }
+               end
         strs.delete(nil) # delete empty value
         pack_bra(:hash, strs.join(",\n"))
       end
@@ -81,6 +89,10 @@ module Netomox
       && value.key?('_diff_state_') && value.keys.length == 1
       end
 
+      def allowed_empty?(key)
+        key =~ /^supporting-/ || key =~ /-attributes$/
+      end
+
       def state_by_stringified_str(str)
         # return nil means set color with self diff_state
         # string doesn't have any color tags, use color as :kept state
@@ -88,7 +100,7 @@ module Netomox
       end
 
       def stringify_hash_key_array(key, value)
-        return nil if empty_value?(value)
+        return nil if allowed_empty?(key) && empty_value?(value)
         dv = Viewer.new(data: value, indent: @indent_b, print_all: @print_all)
         v_str = dv.stringify
         # set key color belongs to its value(array)
@@ -97,7 +109,7 @@ module Netomox
       end
 
       def stringify_hash_key_hash(key, value)
-        return nil if empty_value?(value)
+        return nil if allowed_empty?(key) && empty_value?(value)
         dv = Viewer.new(data: value, indent: @indent_b, print_all: @print_all)
         # set key color belongs to its value(Hash)
         # decide dv diff_state before make key str
