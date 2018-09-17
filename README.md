@@ -36,7 +36,9 @@ Or install it yourself as:
 In `vendor` dir, there are some data instances defined/handled with Netomok.
 
 * `vendor/model`: topology data instance (json) of fictional network.
-* `vendor/model\defs`: topology data definition using `Netomox::DSL` to generate json data instance.
+* `vendor/model_defs`: topology data definition using `Netomox::DSL` to generate json data instance.
+
+**[NOTICE]** Topology data handled by this tool has implicit rule about link name. It assumes that a link has a name like "src-node,src-tp,dst-node,dst-tp". If you define link in topology data using netomox DSL (`Netomox::DSL::Network#bdlink`, bi-directional link), a link name will be settled automatically.
 
 ### Demo
 Asciinema demo: generate topology data and diff old data.

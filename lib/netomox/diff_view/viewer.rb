@@ -4,6 +4,7 @@ require 'netomox/diff_view/viewer_utils'
 
 module Netomox
   module DiffView
+    # rubocop:disable Metrics/ClassLength
     # Topology diff data viewer
     class Viewer
       def to_s
@@ -99,12 +100,22 @@ module Netomox
         str.match?(%r{<\w+>.*<\/\w+>}) ? :changed : :kept
       end
 
+      def hash_key_array_color(array_str)
+        case @diff_state['forward']
+        when 'added', 'deleted' then
+          # if determined when forward check (filled)
+          @diff_state['forward'].intern
+        else
+          # set key color belongs to its value(array)
+          state_by_stringified_str(array_str)
+        end
+      end
+
       def stringify_hash_key_array(key, value)
         return nil if allowed_empty?(key) && empty_value?(value)
         dv = Viewer.new(data: value, indent: @indent_b, print_all: @print_all)
         v_str = dv.stringify
-        # set key color belongs to its value(array)
-        v_state = state_by_stringified_str(v_str)
+        v_state = hash_key_array_color(v_str)
         "#{head_mark(v_state)}#{@indent_b}#{coloring(key, v_state)}: #{v_str}"
       end
 
@@ -130,5 +141,6 @@ module Netomox
         end
       end
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end
