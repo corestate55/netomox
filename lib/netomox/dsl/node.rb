@@ -23,6 +23,7 @@ module Netomox
     # node, tp container
     class Node < DSLObjectBase
       attr_reader :type
+      attr_accessor :tp_prefix, :tp_number
 
       def initialize(parent, name, &block)
         super(parent, name)
@@ -30,6 +31,8 @@ module Netomox
         @type = @parent.type
         @supports = [] # supporting node
         @attribute = {} # for augments
+        @tp_prefix = 'p'
+        @tp_number = 0
         register(&block) if block_given?
       end
 
@@ -43,6 +46,7 @@ module Netomox
         end
         tp
       end
+      alias tp term_point
 
       def support(nw_ref, node_ref = false)
         if node_ref
@@ -76,10 +80,55 @@ module Netomox
         data
       end
 
-      private
+      def links_between(dst)
+        find_opts = normalize_links_between(dst)
+        @parent.find_links_between(find_opts)
+      end
+
+      def auto_term_point
+        tp_name = "#{@tp_prefix}#{@tp_number}"
+        @tp_number += 1
+        term_point(tp_name)
+      end
+
+      def link_to(dst)
+        link_spec = normalize_link_to(dst).map(&:name)
+        @parent.link link_spec
+      end
+
+      def bdlink_to(dst)
+        link_spec = normalize_link_to(dst).map(&:name)
+        @parent.bdlink link_spec
+      end
 
       def find_term_point(name)
         @term_points.find { |tp| tp.name == name }
+      end
+      alias find_tp find_term_point
+
+      private
+
+      def normalize_link_to(dst)
+        case dst
+        when TermPoint
+          [self, auto_term_point, dst.parent, dst]
+        when Node
+          [self, auto_term_point, dst, dst.auto_term_point]
+        else
+          warn "Cannot connect from #{@path} to #{dst}"
+        end
+      end
+
+      def normalize_links_between(dst)
+        case dst
+        when TermPoint
+          { src_node_name: @name,
+            dst_node_name: dst.parent.name, dst_tp_name: dst.name }
+        when Node
+          { src_node_name: @name, dst_node_name: dst.name }
+        else
+          warn "Cannot exec find from #{@path} to #{dst}"
+        end
       end
     end
   end

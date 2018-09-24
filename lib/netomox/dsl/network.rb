@@ -101,6 +101,28 @@ module Netomox
       end
       # rubocop:enable Metrics/MethodLength
 
+      def find_links_between(src_node_name:, src_tp_name: false,
+                             dst_node_name:, dst_tp_name: false)
+        conds = []
+        conds.push(['source', 'node_ref', src_node_name])
+        conds.push(['source', 'tp_ref', src_tp_name]) if src_tp_name
+        conds.push(['destination', 'node_ref', dst_node_name])
+        conds.push(['destination', 'tp_ref', dst_tp_name]) if dst_tp_name
+        @links.find_all do |link|
+          conds.inject(true) do |res, cond|
+            res && link.send(cond[0]).send(cond[1]) == cond[2]
+          end
+        end
+      end
+
+      def find_node(name)
+        @nodes.find { |node| node.name == name }
+      end
+
+      def find_link(name)
+        @links.find { |link| link.name == name }
+      end
+
       private
 
       def normalize_link_args(src_node, src_tp = false,
@@ -113,14 +135,6 @@ module Netomox
           # with 4 args
           [src_node, src_tp, dst_node, dst_tp]
         end
-      end
-
-      def find_node(name)
-        @nodes.find { |node| node.name == name }
-      end
-
-      def find_link(name)
-        @links.find { |link| link.name == name }
       end
     end
   end

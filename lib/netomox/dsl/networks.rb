@@ -31,8 +31,6 @@ module Netomox
         { "#{NS_NW}:networks" => { 'network' => networks } }
       end
 
-      private
-
       def find_network(name)
         @networks.find { |nw| nw.name == name }
       end

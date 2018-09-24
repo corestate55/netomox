@@ -5,19 +5,14 @@ model_dir = 'model/'
 
 test_nws1 = Netomox::DSL::Networks.new do
   network 'layer1' do
-    node 'sw1' do
-      term_point 'gi0'
-      term_point 'gi1'
-    end
-    node 'sv1' do
-      term_point 'eth0'
-    end
-    node 'sv2' do
-      term_point 'eth0'
-    end
-
-    bdlink %w[sw1 gi0 sv1 eth0]
-    bdlink %w[sw1 gi1 sv2 eth0]
+    sw1 = node 'sw1'
+    sv1 = node 'sv1'
+    sv2 = node 'sv2'
+    sw1.tp_prefix = 'gi'
+    sv1.tp_prefix = 'eth'
+    sv2.tp_prefix = 'eth'
+    sw1.bdlink_to(sv1)
+    sw1.bdlink_to(sv2)
   end
 
   network 'layer3' do
@@ -33,68 +28,54 @@ test_nws1 = Netomox::DSL::Networks.new do
     type Netomox::NWTYPE_L3
     support 'layer1'
 
-    node 'seg_a' do
+    seg_a = node 'seg_a' do
       attribute(pref_a)
       support %w[layer1 sw1]
       support %w[layer1 sv1]
       support %w[layer1 sv2]
-      term_point 'p1'
-      term_point 'p2'
     end
-    node 'seg_b' do
+    seg_b = node 'seg_b' do
       support %w[layer1 sw1]
       support %w[layer1 sv1]
       support %w[layer1 sv2]
       attribute(pref_b)
-      term_point 'p1'
-      term_point 'p2'
     end
-    node 'seg_c' do
+    seg_c = node 'seg_c' do
       support %w[layer1 sv2]
       attribute(pref_c)
-      term_point 'p1'
     end
-    node 'vm1' do
+    vm1 = node 'vm1' do
       attribute(pref_a)
       support %w[layer1 sv1]
-      term_point 'eth0'
     end
-    node 'vm2' do
+    vm2 = node 'vm2' do
       attribute(pref_ab)
-      support %w[layer1 sv2]
-      term_point 'eth0'
-      term_point 'eth1'
+      support %w[layer1 sv1]
     end
-    node 'vm3' do
+    vm3 = node 'vm3' do
       attribute(pref_bc)
       support %w[layer1 sv2]
-      term_point 'eth0'
-      term_point 'eth1'
     end
+    [vm1, vm2, vm3].each { |vm| vm.tp_prefix = 'eth' }
 
-    bdlink %w[seg_a p1 vm1 eth0]
-    bdlink %w[seg_a p2 vm2 eth0]
-    bdlink %w[seg_b p1 vm2 eth1]
-    bdlink %w[seg_b p2 vm3 eth0]
-    bdlink %w[seg_c p1 vm3 eth1]
+    seg_a.bdlink_to(vm1)
+    seg_a.bdlink_to(vm2)
+    seg_b.bdlink_to(vm2)
+    seg_b.bdlink_to(vm3)
+    seg_c.bdlink_to(vm3)
   end
 end
 
 test_nws2 = Netomox::DSL::Networks.new do
   network 'layer1' do
-    node 'sw1' do
-      term_point 'gi0'
-      term_point 'gi1'
-    end
-    node 'sv1' do
-      term_point 'eth0'
-    end
-    node 'sv2' do
-      term_point 'eth0'
-    end
-
-    bdlink %w[sw1 gi0 sv1 eth0]
-    bdlink %w[sw1 gi1 sv2 eth0]
+    sw1 = node 'sw1'
+    sv1 = node 'sv1'
+    sv2 = node 'sv2'
+    sw1.tp_prefix = 'gi'
+    sv1.tp_prefix = 'eth'
+    sv2.tp_prefix = 'eth'
+    sw1.bdlink_to(sv1)
+    sw1.bdlink_to(sv2)
   end
 
   network 'layer3' do
@@ -110,50 +91,41 @@ test_nws2 = Netomox::DSL::Networks.new do
     type Netomox::NWTYPE_L3
     support 'layer1'
 
-    node 'seg_a' do
+    seg_a = node 'seg_a' do
       attribute(pref_a)
       support %w[layer1 sw1]
       support %w[layer1 sv1]
       support %w[layer1 sv2]
-      term_point 'p1'
     end
-    node 'seg_b' do
+    seg_b = node 'seg_b' do
       support %w[layer1 sw1]
       support %w[layer1 sv1]
       support %w[layer1 sv2]
       attribute(pref_b)
-      term_point 'p1'
-      term_point 'p2'
     end
-    node 'seg_c' do
+    seg_c = node 'seg_c' do
       support %w[layer1 sv2]
       attribute(pref_c)
-      term_point 'p1'
-      term_point 'p2'
     end
-    node 'vm1' do
+    vm1 = node 'vm1' do
       attribute(pref_ab)
       support %w[layer1 sv1]
-      term_point 'eth0'
-      term_point 'eth1'
     end
-    node 'vm3' do
+    vm3 = node 'vm3' do
       attribute(pref_bc)
       support %w[layer1 sv2]
-      term_point 'eth0'
-      term_point 'eth1'
     end
-    node 'vm4' do
+    vm4 = node 'vm4' do
       attribute(pref_c)
       support %w[layer1 sv2]
-      term_point 'eth0'
     end
+    [vm1, vm3, vm4].each { |vm| vm.tp_prefix = 'eth' }
 
-    bdlink %w[seg_a p1 vm1 eth0]
-    bdlink %w[seg_b p1 vm1 eth1]
-    bdlink %w[seg_b p2 vm3 eth0]
-    bdlink %w[seg_c p1 vm3 eth1]
-    bdlink %w[seg_c p2 vm4 eth0]
+    seg_a.bdlink_to(vm1)
+    seg_b.bdlink_to(vm1)
+    seg_b.bdlink_to(vm3)
+    seg_c.bdlink_to(vm3)
+    seg_c.bdlink_to(vm4)
   end
 end
 
