@@ -1,10 +1,14 @@
 RSpec.describe 'network diff (supporting-node list)', :diff, :network do
+  before do
+    @parent = -> { Netomox::DSL::Networks.new }
+  end
+
   context 'when network literal attribute changed' do
     before do
-      l2nw_def = Netomox::DSL::Network.new('nwX') do
+      l2nw_def = Netomox::DSL::Network.new(@parent.call, 'nwX') do
         type Netomox::NWTYPE_L2
       end
-      l3nw_def = Netomox::DSL::Network.new('nwX') do
+      l3nw_def = Netomox::DSL::Network.new(@parent.call, 'nwX') do
         type Netomox::NWTYPE_L3
       end
       @l2nw = Netomox::Topology::Network.new(l2nw_def.topo_data)
@@ -24,15 +28,15 @@ RSpec.describe 'network diff (supporting-node list)', :diff, :network do
 
   context 'when support network list changed', :support do
     before do
-      nw_sup0_def = Netomox::DSL::Network.new('nwX')
-      nw_sup1_def = Netomox::DSL::Network.new('nwX') do
+      nw_sup0_def = Netomox::DSL::Network.new(@parent.call, 'nwX')
+      nw_sup1_def = Netomox::DSL::Network.new(@parent.call, 'nwX') do
         support 'nw1'
       end
-      nw_sup2_def = Netomox::DSL::Network.new('nwX') do
+      nw_sup2_def = Netomox::DSL::Network.new(@parent.call, 'nwX') do
         support 'nw1'
         support 'nw2'
       end
-      nw_sup2_changed_def = Netomox::DSL::Network.new('nwX') do
+      nw_sup2_changed_def = Netomox::DSL::Network.new(@parent.call, 'nwX') do
         support 'nw1'
         support 'nw2aa'
       end

@@ -23,10 +23,12 @@ module Netomox
 
     # termination point
     class TermPoint < DSLObjectBase
-      def initialize(name, nw_type, &block)
-        @name = name
+      attr_accessor :type
+
+      def initialize(parent, name, &block)
+        super(parent, name)
         @supports = [] # supporting termination point
-        @type = nw_type
+        @type = @parent.type
         @attribute = {} # for augments
         register(&block) if block_given?
       end

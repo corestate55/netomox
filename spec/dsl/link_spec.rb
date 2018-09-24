@@ -1,7 +1,18 @@
 RSpec.describe 'link dsl', :dsl, :link do
   before do
-    @l2nw_type = { Netomox::NWTYPE_L2 => {} }
-    @l3nw_type = { Netomox::NWTYPE_L3 => {} }
+    nws = Netomox::DSL::Networks.new do
+      network 'test-L1'
+      network 'test-L2' do
+        type Netomox::NWTYPE_L2
+      end
+      network 'test-L3' do
+        type Netomox::NWTYPE_L3
+      end
+    end
+    @l1nw = nws.network('test-L1')
+    @l2nw = nws.network('test-L2')
+    @l3nw = nws.network('test-L3')
+
     attr_key = 'link-attributes'.freeze
     @l2attr_key = "#{Netomox::NS_L2NW}:l2-#{attr_key}"
     @l3attr_key = "#{Netomox::NS_L3NW}:l3-#{attr_key}"
@@ -20,12 +31,12 @@ RSpec.describe 'link dsl', :dsl, :link do
   end
 
   it 'generate single link' do
-    link = Netomox::DSL::Link.new(*@link_spec, '')
+    link = Netomox::DSL::Link.new(@l1nw, *@link_spec)
     expect(link.topo_data).to eq @link_data
   end
 
   it 'generate link that has supporting-link', :support do
-    link = Netomox::DSL::Link.new(*@link_spec, '') do
+    link = Netomox::DSL::Link.new(@l1nw, *@link_spec) do
       support %w[foo a,b,c,d]
     end
     link_data = @link_data.dup
@@ -40,7 +51,7 @@ RSpec.describe 'link dsl', :dsl, :link do
 
   it 'generate link that has L2 attribute', :attr, :l2attr do
     link_attr = { name: 'linkX', flags: ['l2_link_flag'] }
-    link = Netomox::DSL::Link.new(*@link_spec, @l2nw_type) do
+    link = Netomox::DSL::Link.new(@l2nw, *@link_spec) do
       attribute(link_attr)
     end
     link_data = @link_data.dup
@@ -57,7 +68,7 @@ RSpec.describe 'link dsl', :dsl, :link do
 
   it 'generate link that has L3 attribute', :attr, :l3attr do
     link_attr = { name: 'linkX', flags: [], metric1: 100, metric2: 100 }
-    link = Netomox::DSL::Link.new(*@link_spec, @l3nw_type) do
+    link = Netomox::DSL::Link.new(@l3nw, *@link_spec) do
       attribute(link_attr)
     end
     link_data = @link_data.dup

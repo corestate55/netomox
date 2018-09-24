@@ -1,7 +1,13 @@
 RSpec.describe 'termination point diff (supporting-tp list)', :diff, :tp do
   context 'when tp literal attribute changed' do
     before do
-      tp_def = Netomox::DSL::TermPoint.new('tpX', '')
+      nws = Netomox::DSL::Networks.new do
+        network 'nwX' do
+          node 'nodeX'
+        end
+      end
+      parent = nws.network('nwX').node('nodeX')
+      tp_def = Netomox::DSL::TermPoint.new(parent, 'tpX')
       @tp = Netomox::Topology::TermPoint.new(tp_def.topo_data, 'nodeX')
       @tp_kept = Netomox::Topology::TermPoint.new(tp_def.topo_data, 'nodeX')
       @tp_changed = Netomox::Topology::TermPoint.new(tp_def.topo_data, 'nodeY')
@@ -18,15 +24,23 @@ RSpec.describe 'termination point diff (supporting-tp list)', :diff, :tp do
 
   context 'when support tp list changed', :support do
     before do
-      tp_sup0_def = Netomox::DSL::TermPoint.new('tpX', '')
-      tp_sup1_def = Netomox::DSL::TermPoint.new('tpX', '') do
+      parent = lambda do |name|
+        nws = Netomox::DSL::Networks.new do
+          network 'nwX' do
+            node name
+          end
+        end
+        nws.network('nwX').node(name)
+      end
+      tp_sup0_def = Netomox::DSL::TermPoint.new(parent.call('nd0'), 'tpX')
+      tp_sup1_def = Netomox::DSL::TermPoint.new(parent.call('nd1'), 'tpX') do
         support %w[foo bar hoge]
       end
-      tp_sup2_def = Netomox::DSL::TermPoint.new('tpX', '') do
+      tp_sup2_def = Netomox::DSL::TermPoint.new(parent.call('nd2'), 'tpX') do
         support %w[foo bar baz]
         support %w[foo bar hoge]
       end
-      tp_sup2_changed_def = Netomox::DSL::TermPoint.new('tpX', '') do
+      tp_sup2_changed_def = Netomox::DSL::TermPoint.new(parent.call('nd2c'), 'tpX') do
         support %w[foo bar baz]
         support %w[foo bar changed]
       end

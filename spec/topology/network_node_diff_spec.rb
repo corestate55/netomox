@@ -1,15 +1,16 @@
 RSpec.describe 'network diff (nw list)', :diff, :network, :nw do
   context 'when nw list changed' do
     before do
-      nw_node0_def = Netomox::DSL::Network.new('nwX')
-      nw_node1_def = Netomox::DSL::Network.new('nwX') do
+      parent = -> { Netomox::DSL::Networks.new }
+      nw_node0_def = Netomox::DSL::Network.new(parent.call, 'nwX')
+      nw_node1_def = Netomox::DSL::Network.new(parent.call, 'nwX') do
         node 'node1'
       end
-      nw_node2_def = Netomox::DSL::Network.new('nwX') do
+      nw_node2_def = Netomox::DSL::Network.new(parent.call, 'nwX') do
         node 'node1'
         node 'node2'
       end
-      nw_node2_changed_def = Netomox::DSL::Network.new('nwX') do
+      nw_node2_changed_def = Netomox::DSL::Network.new(parent.call, 'nwX') do
         node 'node1'
         node 'node2xx'
       end

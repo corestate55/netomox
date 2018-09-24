@@ -1,7 +1,11 @@
 RSpec.describe 'node diff (supporting-node list)', :diff, :node do
   context 'when node literal attribute changed' do
     before do
-      node_def = Netomox::DSL::Node.new('nodeX', '')
+      nws = Netomox::DSL::Networks.new do
+        network 'nwX'
+      end
+      parent = nws.network('nwX')
+      node_def = Netomox::DSL::Node.new(parent, 'nodeX')
       @node = Netomox::Topology::Node.new(node_def.topo_data, 'nwX')
       @node_kept = Netomox::Topology::Node.new(node_def.topo_data, 'nwX')
       @node_changed = Netomox::Topology::Node.new(node_def.topo_data, 'nwY')
@@ -20,15 +24,19 @@ RSpec.describe 'node diff (supporting-node list)', :diff, :node do
 
   context 'when support node list changed', :support do
     before do
-      node_sup0_def = Netomox::DSL::Node.new('nodeX', '')
-      node_sup1_def = Netomox::DSL::Node.new('nodeX', '') do
+      parent = lambda do |name|
+        nws = Netomox::DSL::Networks.new
+        Netomox::DSL::Network.new(nws, name)
+      end
+      node_sup0_def = Netomox::DSL::Node.new(parent.call('nw0'), 'nodeX')
+      node_sup1_def = Netomox::DSL::Node.new(parent.call('nw1'), 'nodeX') do
         support %w[nw1 node1]
       end
-      node_sup2_def = Netomox::DSL::Node.new('nodeX', '') do
+      node_sup2_def = Netomox::DSL::Node.new(parent.call('nw2'), 'nodeX') do
         support %w[nw1 node1]
         support %w[nw1 node2]
       end
-      node_sup2_changed_def = Netomox::DSL::Node.new('nodeX', '') do
+      node_sup2_changed_def = Netomox::DSL::Node.new(parent.call('nw2c'), 'nodeX') do
         support %w[nw1 node1]
         support %w[nw1 node2aa]
       end

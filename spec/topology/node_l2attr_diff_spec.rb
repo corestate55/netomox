@@ -1,6 +1,5 @@
 RSpec.describe 'node diff with L2 attribute', :diff, :node, :attr, :l2attr do
   before do
-    l2nw_type = { Netomox::NWTYPE_L2 => {} }
     addrs = %w[192.168.0.1 192.168.1.1]
     addrs_added = %w[192.168.0.1 192.168.1.1 192.168.2.1]
     addrs_deleted = %w[192.168.0.1]
@@ -10,17 +9,23 @@ RSpec.describe 'node diff with L2 attribute', :diff, :node, :attr, :l2attr do
     node_attr_deleted = { name: 'nodeX', mgmt_vid: 10, mgmt_addrs: addrs_deleted }
     node_attr_changed = { name: 'nodeX', mgmt_vid: 11, mgmt_addrs: addrs }
 
-    node_l2attr0_def = Netomox::DSL::Node.new('nodeX', l2nw_type)
-    node_l2attr_def = Netomox::DSL::Node.new('nodeX', l2nw_type) do
+    parent = lambda do |name|
+      nws = Netomox::DSL::Networks.new
+      Netomox::DSL::Network.new(nws, name) do
+        type Netomox::NWTYPE_L2
+      end
+    end
+    node_l2attr0_def = Netomox::DSL::Node.new(parent.call('nw0'), 'nodeX')
+    node_l2attr_def = Netomox::DSL::Node.new(parent.call('nw1'), 'nodeX') do
       attribute(node_attr)
     end
-    node_l2attr_added_def = Netomox::DSL::Node.new('nodeX', l2nw_type) do
+    node_l2attr_added_def = Netomox::DSL::Node.new(parent.call('nw2'), 'nodeX') do
       attribute(node_attr_added)
     end
-    node_l2attr_deleted_def = Netomox::DSL::Node.new('nodeX', l2nw_type) do
+    node_l2attr_deleted_def = Netomox::DSL::Node.new(parent.call('nw3'), 'nodeX') do
       attribute(node_attr_deleted)
     end
-    node_l2attr_changed_def = Netomox::DSL::Node.new('nodeX', l2nw_type) do
+    node_l2attr_changed_def = Netomox::DSL::Node.new(parent.call('nw4'), 'nodeX') do
       attribute(node_attr_changed)
     end
 

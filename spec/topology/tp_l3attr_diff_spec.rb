@@ -1,23 +1,30 @@
 RSpec.describe 'termination point diff with L3 attribute', :diff, :tp, :attr, :l3attr do
   before do
-    l3nw_type = { Netomox::NWTYPE_L3 => {} }
-
     tp_attr = { ip_addrs: %w[192.168.0.1 192.168.1.1] }
     tp_attr_added = { ip_addrs: %w[192.168.0.1 192.168.1.1 192.168.2.1] }
     tp_attr_deleted = { ip_addrs: %w[192.168.0.1] }
     tp_attr_changed = { ip_addrs: %w[192.168.0.1 192.168.1.2] }
 
-    tp_l3attr0_def = Netomox::DSL::TermPoint.new('tpX', l3nw_type)
-    tp_l3attr_def = Netomox::DSL::TermPoint.new('tpX', l3nw_type) do
+    parent = lambda do |name|
+      nws = Netomox::DSL::Networks.new do
+        network 'nwX' do
+          type Netomox::NWTYPE_L3
+          node name
+        end
+      end
+      nws.network('nwX').node(name)
+    end
+    tp_l3attr0_def = Netomox::DSL::TermPoint.new(parent.call('nd0'), 'tpX')
+    tp_l3attr_def = Netomox::DSL::TermPoint.new(parent.call('nd1'), 'tpX') do
       attribute(tp_attr)
     end
-    tp_l3attr_added_def = Netomox::DSL::TermPoint.new('tpX', l3nw_type) do
+    tp_l3attr_added_def = Netomox::DSL::TermPoint.new(parent.call('nd2'), 'tpX') do
       attribute(tp_attr_added)
     end
-    tp_l3attr_deleted_def = Netomox::DSL::TermPoint.new('tpX', l3nw_type) do
+    tp_l3attr_deleted_def = Netomox::DSL::TermPoint.new(parent.call('nd3'), 'tpX') do
       attribute(tp_attr_deleted)
     end
-    tp_l3attr_changed_def = Netomox::DSL::TermPoint.new('tpX', l3nw_type) do
+    tp_l3attr_changed_def = Netomox::DSL::TermPoint.new(parent.call('nd4'), 'tpX') do
       attribute(tp_attr_changed)
     end
 

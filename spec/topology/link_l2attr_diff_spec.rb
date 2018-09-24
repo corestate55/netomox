@@ -1,15 +1,20 @@
 RSpec.describe 'link diff with L2 attribute', :diff, :link, :attr, :l2attr do
   before do
-    l2nw_type = { Netomox::NWTYPE_L2 => {} }
     link_attr = { name: 'linkX', flags: [], rate: 1000, delay: 10, srlg: '' }
     link_attr_changed = { name: 'linkX', flags: [], rate: 1000, delay: 20, srlg: '' }
 
+    parent = lambda do |name|
+      nws = Netomox::DSL::Networks.new
+      Netomox::DSL::Network.new(nws, name) do
+        type Netomox::NWTYPE_L2
+      end
+    end
     link_spec = %w[link1 tp1 link2 tp2]
-    link_l2attr0_def = Netomox::DSL::Link.new(*link_spec, l2nw_type)
-    link_l2attr_def = Netomox::DSL::Link.new(*link_spec, l2nw_type) do
+    link_l2attr0_def = Netomox::DSL::Link.new(parent.call('nw0'), *link_spec)
+    link_l2attr_def = Netomox::DSL::Link.new(parent.call('nw1'), *link_spec) do
       attribute(link_attr)
     end
-    link_l2attr_changed_def = Netomox::DSL::Link.new(*link_spec, l2nw_type) do
+    link_l2attr_changed_def = Netomox::DSL::Link.new(parent.call('nw2'), *link_spec) do
       attribute(link_attr_changed)
     end
 

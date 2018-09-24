@@ -1,20 +1,35 @@
 RSpec.describe 'termination point dsl', :dsl, :tp do
   before do
-    @l2nw_type = { Netomox::NWTYPE_L2 => {} }
-    @l3nw_type = { Netomox::NWTYPE_L3 => {} }
+    nws = Netomox::DSL::Networks.new do
+      network 'test-L1' do
+        node 'l1node'
+      end
+      network 'test-L2' do
+        type Netomox::NWTYPE_L2
+        node 'l2node'
+      end
+      network 'test-L3' do
+        type Netomox::NWTYPE_L3
+        node 'l3node'
+      end
+    end
+    @l1node = nws.network('test-L1').node('l1node')
+    @l2node = nws.network('test-L2').node('l2node')
+    @l3node = nws.network('test-L3').node('l3node')
+
     attr_key = 'termination-point-attributes'.freeze
     @l2attr_key = "#{Netomox::NS_L2NW}:l2-#{attr_key}"
     @l3attr_key = "#{Netomox::NS_L3NW}:l3-#{attr_key}"
   end
 
   it 'generate single term point' do
-    tp = Netomox::DSL::TermPoint.new('tpX', '')
+    tp = Netomox::DSL::TermPoint.new(@l1node, 'tpX')
     tp_data = { 'tp-id' => 'tpX' }
     expect(tp.topo_data).to eq tp_data
   end
 
   it 'generate term point that has supporting-tp', :support do
-    tp = Netomox::DSL::TermPoint.new('tpX', '') do
+    tp = Netomox::DSL::TermPoint.new(@l1node, 'tpX') do
       support %w[nw1 node1 tp1]
     end
     tp_data = {
@@ -38,7 +53,7 @@ RSpec.describe 'termination point dsl', :dsl, :tp do
       vlan_id_names: [vlan_a, vlan_b]
     }
 
-    tp = Netomox::DSL::TermPoint.new('tpX', @l2nw_type) do
+    tp = Netomox::DSL::TermPoint.new(@l2node, 'tpX') do
       attribute(access_vlan_a)
     end
     # TODO: default values are OK?
@@ -68,7 +83,7 @@ RSpec.describe 'termination point dsl', :dsl, :tp do
 
   it 'generate term point that has L3 attribute', :attr, :l3attr do
     tp_attr = { ip_addrs: %w[192.168.0.1 192.168.1.1] }
-    tp = Netomox::DSL::TermPoint.new('tpX', @l3nw_type) do
+    tp = Netomox::DSL::TermPoint.new(@l3node, 'tpX') do
       attribute(tp_attr)
     end
     tp_data = {

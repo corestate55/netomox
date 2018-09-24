@@ -6,11 +6,9 @@ require_relative 'target3/layer2'
 require_relative 'target3/layer3'
 
 nws = Netomox::DSL::Networks.new
-nws.networks.push(
-  make_target_layer1,
-  make_target_layer15,
-  make_target_layer2,
-  make_target_layer3
-)
+register_target_layer1(nws)
+register_target_layer15(nws)
+register_target_layer2(nws)
+register_target_layer3(nws)
 
 puts JSON.pretty_generate(nws.topo_data)

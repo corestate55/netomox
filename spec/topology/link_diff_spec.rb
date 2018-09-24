@@ -1,8 +1,12 @@
 RSpec.describe 'link diff (supporting-node list)', :diff, :link do
   context 'when link literal attribute changed' do
     before do
+      nws = Netomox::DSL::Networks.new do
+        network 'nwX'
+      end
+      parent = nws.network('nwX')
       link_spec = %w[node1 tp1 node2 tp2]
-      link_def = Netomox::DSL::Link.new(*link_spec, '')
+      link_def = Netomox::DSL::Link.new(parent, *link_spec)
       @link = Netomox::Topology::Link.new(link_def.topo_data, 'nwX')
       @link_kept = Netomox::Topology::Link.new(link_def.topo_data, 'nwX')
       @link_changed = Netomox::Topology::Link.new(link_def.topo_data, 'nwY')
@@ -21,16 +25,20 @@ RSpec.describe 'link diff (supporting-node list)', :diff, :link do
 
   context 'when support link list changed', :support do
     before do
+      parent = lambda do |name|
+        nws = Netomox::DSL::Networks.new
+        Netomox::DSL::Network.new(nws, name)
+      end
       link_spec = %w[node1 tp1 node2 tp2]
-      link_sup0_def = Netomox::DSL::Link.new(*link_spec, '')
-      link_sup1_def = Netomox::DSL::Link.new(*link_spec, '') do
+      link_sup0_def = Netomox::DSL::Link.new(parent.call('nw0'), *link_spec)
+      link_sup1_def = Netomox::DSL::Link.new(parent.call('nw1'), *link_spec) do
         support %w[nw1 link1]
       end
-      link_sup2_def = Netomox::DSL::Link.new(*link_spec, '') do
+      link_sup2_def = Netomox::DSL::Link.new(parent.call('nw2'), *link_spec) do
         support %w[nw1 link1]
         support %w[nw1 link2]
       end
-      link_sup2_changed_def = Netomox::DSL::Link.new(*link_spec, '') do
+      link_sup2_changed_def = Netomox::DSL::Link.new(parent.call('nw2c'), *link_spec) do
         support %w[nw1 link1]
         support %w[nw1 link2aa]
       end

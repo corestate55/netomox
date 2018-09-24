@@ -1,7 +1,5 @@
 RSpec.describe 'node diff with L3 attribute', :diff, :node, :attr, :l3attr do
   before do
-    l3nw_type = { Netomox::NWTYPE_L3 => {} }
-
     seg_a_prefix = { prefix: '192.168,10.0/24', metric: 100 }
     seg_a2_prefix = { prefix: '192.168,10.0/24', metric: 50 }
     seg_b_prefix = { prefix: '192.168.20.0/24', metric: 100 }
@@ -12,17 +10,23 @@ RSpec.describe 'node diff with L3 attribute', :diff, :node, :attr, :l3attr do
     pref_deleted = { prefixes: [seg_b_prefix] }
     pref_changed = { prefixes: [seg_a2_prefix, seg_b_prefix] }
 
-    node_l3attr0_def = Netomox::DSL::Node.new('nodeX', l3nw_type)
-    node_l3attr_def = Netomox::DSL::Node.new('nodeX', l3nw_type) do
+    parent = lambda do |name|
+      nws = Netomox::DSL::Networks.new
+      Netomox::DSL::Network.new(nws, name) do
+        type Netomox::NWTYPE_L3
+      end
+    end
+    node_l3attr0_def = Netomox::DSL::Node.new(parent.call('nw0'), 'nodeX')
+    node_l3attr_def = Netomox::DSL::Node.new(parent.call('nw1'), 'nodeX') do
       attribute(pref)
     end
-    node_l3attr_added_def = Netomox::DSL::Node.new('nodeX', l3nw_type) do
+    node_l3attr_added_def = Netomox::DSL::Node.new(parent.call('nw2'), 'nodeX') do
       attribute(pref_added)
     end
-    node_l3attr_deleted_def = Netomox::DSL::Node.new('nodeX', l3nw_type) do
+    node_l3attr_deleted_def = Netomox::DSL::Node.new(parent.call('nw3'), 'nodeX') do
       attribute(pref_deleted)
     end
-    node_l3attr_changed_def = Netomox::DSL::Node.new('nodeX', l3nw_type) do
+    node_l3attr_changed_def = Netomox::DSL::Node.new(parent.call('nw4'), 'nodeX') do
       attribute(pref_changed)
     end
 

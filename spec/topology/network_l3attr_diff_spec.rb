@@ -1,13 +1,14 @@
 RSpec.describe 'network diff with L3 attribute', :diff, :network, :attr, :l3attr do
   before do
-    nw_l3attr0_def = Netomox::DSL::Network.new('nwX') do
+    parent = -> { Netomox::DSL::Networks.new }
+    nw_l3attr0_def = Netomox::DSL::Network.new(parent.call, 'nwX') do
       type Netomox::NWTYPE_L3
     end
-    nw_l3attr_def = Netomox::DSL::Network.new('nwX') do
+    nw_l3attr_def = Netomox::DSL::Network.new(parent.call, 'nwX') do
       type Netomox::NWTYPE_L3
       attribute(name: 'nwX', flags: %w[foo bar baz])
     end
-    nw_l3attr_changed_def = Netomox::DSL::Network.new('nwX') do
+    nw_l3attr_changed_def = Netomox::DSL::Network.new(parent.call, 'nwX') do
       type Netomox::NWTYPE_L3
       attribute(name: 'nwX', flags: %w[foo bar hoge])
     end

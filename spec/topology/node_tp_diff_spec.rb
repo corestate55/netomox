@@ -1,15 +1,19 @@
 RSpec.describe 'node diff (termination point list)', :diff, :node, :tp do
   context 'when term point list changed' do
     before do
-      node_tp0_def = Netomox::DSL::Node.new('nodeX', '')
-      node_tp1_def = Netomox::DSL::Node.new('nodeX', '') do
+      parent = lambda do |name|
+        nws = Netomox::DSL::Networks.new
+        Netomox::DSL::Network.new(nws, name)
+      end
+      node_tp0_def = Netomox::DSL::Node.new(parent.call('nw0'), 'nodeX')
+      node_tp1_def = Netomox::DSL::Node.new(parent.call('nw1'), 'nodeX') do
         term_point 'tp1'
       end
-      node_tp2_def = Netomox::DSL::Node.new('nodeX', '') do
+      node_tp2_def = Netomox::DSL::Node.new(parent.call('nw2'), 'nodeX') do
         term_point 'tp1'
         term_point 'tp2'
       end
-      node_tp2_changed_def = Netomox::DSL::Node.new('nodeX', '') do
+      node_tp2_changed_def = Netomox::DSL::Node.new(parent.call('nw2c'), 'nodeX') do
         term_point 'tp1'
         term_point 'tp2xx'
       end

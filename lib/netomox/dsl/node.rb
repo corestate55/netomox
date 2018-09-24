@@ -22,17 +22,26 @@ module Netomox
 
     # node, tp container
     class Node < DSLObjectBase
-      def initialize(name, nw_type, &block)
-        @name = name
+      attr_reader :type
+
+      def initialize(parent, name, &block)
+        super(parent, name)
         @term_points = []
-        @type = nw_type
+        @type = @parent.type
         @supports = [] # supporting node
         @attribute = {} # for augments
         register(&block) if block_given?
       end
 
       def term_point(name, &block)
-        @term_points.push(TermPoint.new(name, @type, &block))
+        tp = find_term_point(name)
+        if tp
+          tp.register(&block) if block_given?
+        else
+          tp = TermPoint.new(self, name, &block)
+          @term_points.push(tp)
+        end
+        tp
       end
 
       def support(nw_ref, node_ref = false)
@@ -65,6 +74,12 @@ module Netomox
         end
         data[@attribute.type] = @attribute.topo_data unless @attribute.empty?
         data
+      end
+
+      private
+
+      def find_term_point(name)
+        @term_points.find { |tp| tp.name == name }
       end
     end
   end

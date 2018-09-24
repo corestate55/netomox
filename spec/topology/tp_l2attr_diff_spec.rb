@@ -1,7 +1,5 @@
 RSpec.describe 'termination point diff with L2 attribute', :diff, :tp, :attr, :l2attr do
   before do
-    l2nw_type = { Netomox::NWTYPE_L2 => {} }
-
     vlan_a = { id: 10, name: 'Seg.A' }
     vlan_b = { id: 20, name: 'Seg.B' }
     vlan_a_changed = { id: 11, name: 'Seg.A' }
@@ -22,17 +20,26 @@ RSpec.describe 'termination point diff with L2 attribute', :diff, :tp, :attr, :l
       vlan_id_names: [vlan_a_changed, vlan_b]
     }
 
-    tp_l2attr0_def = Netomox::DSL::TermPoint.new('tpX', l2nw_type)
-    tp_l2attr_def = Netomox::DSL::TermPoint.new('tpX', l2nw_type) do
+    parent = lambda do |name|
+      nws = Netomox::DSL::Networks.new do
+        network 'nwX' do
+          type Netomox::NWTYPE_L2
+          node name
+        end
+      end
+      nws.network('nwX').node(name)
+    end
+    tp_l2attr0_def = Netomox::DSL::TermPoint.new(parent.call('nd0'), 'tpX')
+    tp_l2attr_def = Netomox::DSL::TermPoint.new(parent.call('nd1'), 'tpX') do
       attribute(access_vlan_a)
     end
-    tp_l2attr_added_def = Netomox::DSL::TermPoint.new('tpX', l2nw_type) do
+    tp_l2attr_added_def = Netomox::DSL::TermPoint.new(parent.call('nd2'), 'tpX') do
       attribute(access_vlan_a_added)
     end
-    tp_l2attr_deleted_def = Netomox::DSL::TermPoint.new('tpX', l2nw_type) do
+    tp_l2attr_deleted_def = Netomox::DSL::TermPoint.new(parent.call('nd3'), 'tpX') do
       attribute(access_vlan_a_deleted)
     end
-    tp_l2attr_changed_def = Netomox::DSL::TermPoint.new('tpX', l2nw_type) do
+    tp_l2attr_changed_def = Netomox::DSL::TermPoint.new(parent.call('nd4'), 'tpX') do
       attribute(access_vlan_a_changed)
     end
 

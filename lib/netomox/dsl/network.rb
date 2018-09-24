@@ -19,8 +19,8 @@ module Netomox
 
     # network, node and link container
     class Network < DSLObjectBase
-      def initialize(name, &block)
-        @name = name
+      def initialize(parent, name, &block)
+        super(parent, name)
         @type = {}
         @nodes = []
         @links = []
@@ -29,8 +29,12 @@ module Netomox
         register(&block) if block_given?
       end
 
-      def type(type)
-        @type[type] = {} ## TODO recursive type definition
+      def type(type = nil)
+        if type
+          @type[type] = {} ## TODO recursive type definition
+        else
+          @type # called as attr_reader
+        end
       end
 
       def support(nw_ref)
@@ -48,23 +52,37 @@ module Netomox
       end
 
       def node(name, &block)
-        @nodes.push(Node.new(name, @type, &block))
+        node = find_node(name)
+        if node
+          node.register(&block) if block_given?
+        else
+          node = Node.new(self, name, &block)
+          @nodes.push(node)
+        end
+        node
       end
 
+      # make uni-directional link
+      def link(src_node, src_tp = false,
+               dst_node = false, dst_tp = false, &block)
+        args = normalize_link_args(src_node, src_tp, dst_node, dst_tp)
+        link = find_link(args.join(','))
+        if link
+          link.register(&block) if block_given?
+        else
+          link = Link.new(self, args[0], args[1], args[2], args[3], &block)
+          @links.push(link)
+        end
+        link
+      end
+
+      # make bi-directional link
+      # TODO: supporting-link implementation
       def bdlink(src_node, src_tp = false,
                  dst_node = false, dst_tp = false, &block)
-        # make bidirectional link
-        args = if src_tp && dst_node && dst_tp
-                 # with 4 args
-                 [src_node, src_tp, dst_node, dst_tp]
-               else
-                 # with 1 arg (with array)
-                 src_node
-               end
-        @links.push(
-          Link.new(args[0], args[1], args[2], args[3], @type, &block),
-          Link.new(args[2], args[3], args[0], args[1], @type, &block)
-        )
+        args = normalize_link_args(src_node, src_tp, dst_node, dst_tp)
+        link(args[0], args[1], args[2], args[3], &block)
+        link(args[2], args[3], args[0], args[1], &block)
       end
 
       # rubocop:disable Metrics/MethodLength
@@ -82,6 +100,28 @@ module Netomox
         data
       end
       # rubocop:enable Metrics/MethodLength
+
+      private
+
+      def normalize_link_args(src_node, src_tp = false,
+                              dst_node = false, dst_tp = false)
+        case src_node
+        when Array
+          # with 1 arg (with an array)
+          src_node
+        else
+          # with 4 args
+          [src_node, src_tp, dst_node, dst_tp]
+        end
+      end
+
+      def find_node(name)
+        @nodes.find { |node| node.name == name }
+      end
+
+      def find_link(name)
+        @links.find { |link| link.name == name }
+      end
     end
   end
 end

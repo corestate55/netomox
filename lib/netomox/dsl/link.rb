@@ -52,12 +52,14 @@ module Netomox
 
     # link (unidirectional)
     class Link < DSLObjectBase
+      attr_reader :type
+
       # rubocop:disable Metrics/ParameterLists
-      def initialize(src_node, src_tp, dst_node, dst_tp, nw_type, &block)
-        @name = [src_node, src_tp, dst_node, dst_tp].join(',')
+      def initialize(parent, src_node, src_tp, dst_node, dst_tp, &block)
+        super(parent, [src_node, src_tp, dst_node, dst_tp].join(','))
         @source = SrcTPRef.new(src_node, src_tp)
         @destination = DstTPRef.new(dst_node, dst_tp)
-        @type = nw_type
+        @type = @parent.type
         @supports = [] # supporting link
         @attribute = {} # for augments
         register(&block) if block_given?
