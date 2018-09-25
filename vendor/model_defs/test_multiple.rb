@@ -113,7 +113,7 @@ test_nws2 = Netomox::DSL::Networks.new do
     end
     vm3 = node 'vm3' do
       attribute(pref_bc)
-      support %w[layer1 sv2]
+      support %w[layer1 sv1]
     end
     vm4 = node 'vm4' do
       attribute(pref_c)
