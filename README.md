@@ -1,10 +1,10 @@
 # Netomox
 
-Netomox (**Ne**twork **To**pology **Mo**deling Toolbo**x**) is a tool to make/validate network topology data based on RFC8345.
+Netomox (**Ne**twork **To**pology **Mo**deling Toolbo**x**) is a tool to make/validate network topology data that based on RFC8345.
 
 See also:
 * [RFC 8345 \- A YANG Data Model for Network Topologies](https://datatracker.ietf.org/doc/rfc8345/)
-* [the topology data visualizer](https://github.com/corestate55/nwmodel-exercise).
+* [Network topology visualizer](https://github.com/corestate55/netoviz)
 
 ## Installation
 
@@ -33,13 +33,15 @@ Or install it yourself as:
 
 ## How to handle topology data instance
 
-In `vendor` dir, there are some data instances defined/handled with Netomok.
+In `vendor` dir, there are some data instances defined/handled with Netomox.
 
 * `vendor/model`: topology data instance (json) of fictional network.
-* `vendor/model_defs`: topology data definition using `Netomox::DSL` to generate json data instance. See. [DSL Document](dsl.md)
+* `vendor/model_defs`: topology data definition using `Netomox::DSL` to generate json data instance. 
+  * See. [DSL Document](dsl.md)
 
 ### Demo
-Asciinema demo: generate topology data and diff old data.
+
+Demo Asciinema : generate topology data and diff old data.
 [![asciicast](https://asciinema.org/a/eundWjBE89J5FwEc57YPldEcG.png)](https://asciinema.org/a/eundWjBE89J5FwEc57YPldEcG)
 
 ### YANG Files
@@ -65,7 +67,7 @@ e.g.
 ```
 $ bundle exec ruby model_defs/target.rb
 ```
-It generate model data (json) and print to standard-output.
+It generate topology data and print it to standard-output as JSON.
 
 ### Check data consistency
 ```
@@ -88,7 +90,8 @@ jsonlint-cli -s topo.jsonschema target.json
 ### Convert JSON to XML
 
 Create jtox file at first.
-Notice: only use base topology model (NOT augmented model such as L2/L3).
+
+**[Notice]** use base topology model (NOT augmented model such as L2/L3).
 ```
 pyang -f jtox -o topo.jtox ietf-network-topology@2018-02-26.yang ietf-network@2018-02-26.yang
 ```

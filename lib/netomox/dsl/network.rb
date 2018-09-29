@@ -17,6 +17,7 @@ module Netomox
       end
     end
 
+    # rubocop:disable Metrics/ClassLength
     # network, node and link container
     class Network < DSLObjectBase
       def initialize(parent, name, &block)
@@ -101,18 +102,18 @@ module Netomox
       end
       # rubocop:enable Metrics/MethodLength
 
-      def find_links_between(src_node_name:, src_tp_name: false,
-                             dst_node_name:, dst_tp_name: false)
-        conds = []
-        conds.push(['source', 'node_ref', src_node_name])
-        conds.push(['source', 'tp_ref', src_tp_name]) if src_tp_name
-        conds.push(['destination', 'node_ref', dst_node_name])
-        conds.push(['destination', 'tp_ref', dst_tp_name]) if dst_tp_name
-        @links.find_all do |link|
-          conds.inject(true) do |res, cond|
-            res && link.send(cond[0]).send(cond[1]) == cond[2]
-          end
-        end
+      def links_between(src_node_name:, src_tp_name: false,
+                        dst_node_name:, dst_tp_name: false)
+        conds = normalize_find_link_args(
+          src_node_name: src_node_name, src_tp_name: src_tp_name,
+          dst_node_name: dst_node_name, dst_tp_name: dst_tp_name
+        )
+        found_links = find_links_with_condition(conds)
+        conds = normalize_find_link_args(
+          dst_node_name: src_node_name, dst_tp_name: src_tp_name,
+          src_node_name: dst_node_name, src_tp_name: dst_tp_name
+        )
+        found_links.concat(find_links_with_condition(conds))
       end
 
       def find_node(name)
@@ -124,6 +125,24 @@ module Netomox
       end
 
       private
+
+      def find_links_with_condition(conds)
+        @links.find_all do |link|
+          conds.inject(true) do |res, cond|
+            res && link.send(cond[0]).send(cond[1]) == cond[2]
+          end
+        end
+      end
+
+      def normalize_find_link_args(src_node_name:, src_tp_name: false,
+                                   dst_node_name:, dst_tp_name: false)
+        conds = []
+        conds.push(['source', 'node_ref', src_node_name])
+        conds.push(['source', 'tp_ref', src_tp_name]) if src_tp_name
+        conds.push(['destination', 'node_ref', dst_node_name])
+        conds.push(['destination', 'tp_ref', dst_tp_name]) if dst_tp_name
+        conds
+      end
 
       def normalize_link_args(src_node, src_tp = false,
                               dst_node = false, dst_tp = false)
@@ -137,5 +156,6 @@ module Netomox
         end
       end
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end

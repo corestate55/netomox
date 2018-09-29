@@ -82,7 +82,7 @@ module Netomox
 
       def links_between(dst)
         find_opts = normalize_links_between(dst)
-        @parent.find_links_between(find_opts)
+        @parent.links_between(find_opts)
       end
 
       def auto_term_point

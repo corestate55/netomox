@@ -20,64 +20,64 @@ RSpec.describe 'methods to find link from/to node/tp', :dsl, :link do
   end
 
   context 'Network#find_links_between' do
-    it 'returns 1 link: nodeX,p0,nodeY,p0' do
+    it 'returns 2 link: nodeX,p0,nodeY,p0' do
       opts = {
         src_node_name: 'nodeX', src_tp_name: 'p0',
         dst_node_name: 'nodeY', dst_tp_name: 'p0'
       }
-      links = @nw.find_links_between(opts)
-      expect(links.length).to eq 1
+      links = @nw.links_between(opts)
+      expect(links.length).to eq 2
     end
 
-    it 'returns 2 links: from nodeX/tpA to nodeY' do
+    it 'returns 4 links: from nodeX/tpA to nodeY' do
       opts = {
         src_node_name: 'nodeX', src_tp_name: 'tpA',
         dst_node_name: 'nodeY'
       }
-      links = @nw.find_links_between(opts)
-      expect(links.length).to eq 2
+      links = @nw.links_between(opts)
+      expect(links.length).to eq 4
     end
 
-    it 'returns 2 links: from nodeX to nodeY/tpB' do
+    it 'returns 4 links: from nodeX to nodeY/tpB' do
       opts = {
         src_node_name: 'nodeX',
         dst_node_name: 'nodeY', dst_tp_name: 'tpB'
       }
-      links = @nw.find_links_between(opts)
-      expect(links.length).to eq 2
+      links = @nw.links_between(opts)
+      expect(links.length).to eq 4
     end
 
-    it 'returns 4 links: from nodeX to nodeY' do
+    it 'returns 8 links: from nodeX to nodeY' do
       opts = {
         src_node_name: 'nodeX',
         dst_node_name: 'nodeY'
       }
-      links = @nw.find_links_between(opts)
-      expect(links.length).to eq 4
+      links = @nw.links_between(opts)
+      expect(links.length).to eq 8
     end
   end
 
   context 'Node#links_between' do
-    it 'returns 4 links: from nodeX to nodeY' do
+    it 'returns 8 links: from nodeX to nodeY' do
       links = @node_x.links_between(@node_y)
-      expect(links.length).to eq 4
+      expect(links.length).to eq 8
     end
 
-    it 'returns 2 links: from nodeX to nodeY/tpB' do
+    it 'returns 4 links: from nodeX to nodeY/tpB' do
       links = @node_x.links_between(@node_y.find_tp('tpB'))
-      expect(links.length).to eq 2
+      expect(links.length).to eq 4
     end
   end
 
   context 'TermPoint#links_between' do
-    it 'returns 2 links: from nodeX/tpA to nodeY' do
+    it 'returns 4 links: from nodeX/tpA to nodeY' do
       links = @node_x.find_tp('tpA').links_between(@node_y)
-      expect(links.length).to eq 2
+      expect(links.length).to eq 4
     end
 
-    it 'returns 1 links: from nodeX/tpA to nodeY/tpB' do
+    it 'returns 2 links: from nodeX/tpA to nodeY/tpB' do
       links = @node_x.find_tp('tpA').links_between(@node_y.find_tp('tpB'))
-      expect(links.length).to eq 1
+      expect(links.length).to eq 2
     end
   end
 end
