@@ -5,8 +5,6 @@ def register_target_layer3(nws)
   nws.register do
     network 'target-L3' do
       type Netomox::NWTYPE_L3
-      support 'target-L1'
-      support 'target-L1.5'
       support 'target-L2'
       attribute(
         name: 'L3 of target network',
