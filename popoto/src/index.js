@@ -61,6 +61,13 @@ popoto.provider.node.Provider = {
 popoto.logger.LEVEL = popoto.logger.LogLevels.INFO;
 
 /**
+ * Query configuration
+ * See: https://github.com/Nhogs/popoto/wiki/Query-configuration
+ */
+popoto.query.USE_RELATION_DIRECTION = false;
+popoto.query.COLLECT_RELATIONS_WITH_VALUES = false;
+
+/**
  * Start popoto.js generation.
  * The function requires the label to use as root element in the graph.
  */
