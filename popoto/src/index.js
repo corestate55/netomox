@@ -7,7 +7,7 @@ const popoto = require('popoto');
  * For more information on Neo4J REST API the documentation is available
  * here: http://neo4j.com/docs/stable/rest-api-cypher.html
  */
-popoto.rest.CYPHER_URL = "http://192.168.1.82:7474/db/data/transaction/commit";
+popoto.rest.CYPHER_URL = "http://10.0.2.4:7474/db/data/transaction/commit";
 
 /**
  * Add this authorization property if your Neo4j server uses basic HTTP authentication.

@@ -9,7 +9,7 @@ module.exports = {
     open: true,
     historyApiFallback: true,
     host: '0.0.0.0',
-    port: process.env.PORT || 8080,
+    port: process.env.PORT || 8081,
     disableHostCheck: true,
     watchOptions: { aggregateTimeout: 500, poll: 2000 },
     headers: {
