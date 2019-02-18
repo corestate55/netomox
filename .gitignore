@@ -1,7 +1,3 @@
-vendor/model/test*.json
-vendor/model/*.xml
-vendor/model/target.json
-vendor/model/target[23]*.json
 fig/*.png
 db_info.json
 *.puml
