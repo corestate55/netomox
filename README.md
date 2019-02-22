@@ -4,6 +4,8 @@ Netomox (**Ne**twork **To**pology **Mo**deling Toolbo**x**) is a tool to make/va
 
 See also:
 * [RFC 8345 \- A YANG Data Model for Network Topologies](https://datatracker.ietf.org/doc/rfc8345/)
+* [Netomox Examples](https://github.com/corestate55/netomox-examples)
+  * Repository of example topology data instance (defined by netomox DSL)
 * [Network topology visualizer](https://github.com/corestate55/netoviz)
 
 ## Installation
@@ -38,11 +40,6 @@ In `vendor` dir, there are some data instances defined/handled with Netomox.
 * `vendor/model`: topology data instance (json) of fictional network.
 * `vendor/model_defs`: topology data definition using `Netomox::DSL` to generate json data instance. 
   * See. [DSL Document](dsl.md)
-
-### Demo
-
-Demo Asciinema : generate topology data and diff old data.
-[![asciicast](https://asciinema.org/a/eundWjBE89J5FwEc57YPldEcG.png)](https://asciinema.org/a/eundWjBE89J5FwEc57YPldEcG)
 
 ### YANG Files
 
@@ -132,6 +129,28 @@ bundle exec netomox graphdb [--info|--clear] target.json
 ```
 * `-i FILE`/`--info FILE` option: graph db connection info file (if not specified, use `db_info.json`)
 * `-c`/`--clear` option: only deleting all data in graph (clear database and do not import graph data)
+
+### Visualize Neo4j graph data using Popoto.js
+
+(Experimental)
+
+[Popoto.js](http://www.popotojs.com/) is a graphical Neo4j query builder.
+If you use Neo4j with `netomox graphdb` command, you can also use popoto.js to query/visualize its data.
+
+Install popoto and required packages at first.
+```bash
+cd popoto/
+npm install
+```
+Next, Edit neo4j API entry point and its account in `src/index.js`. (See [Popoto.js Wiki](https://github.com/Nhogs/popoto/wiki/Getting-started) in detail.)
+
+* `popoto.rest.CYPHER_URL`
+* `popoto.rest.AUTHORIZATION`
+
+Run webpack dev-server and access `localhost:8081` (See `webpack.config.js` to config dev-server).
+```bash
+npm run start
+```
 
 ## Development
 
