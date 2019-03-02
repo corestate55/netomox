@@ -37,11 +37,18 @@ module Netomox
         end
       end
 
-      def check_all_link_pair
+      def check_exist_reverse_link
+        messages = []
         @links.each do |link|
           next if find_link(link.destination, link.source)
-          warn "Not Found: reverse link of #{link}"
+          message = {
+            severity: :warn,
+            path: link.path,
+            message: "reverse link of #{link} is not found."
+          }
+          messages.push(message)
         end
+        messages
       end
 
       def eql?(other)

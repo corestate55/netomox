@@ -104,7 +104,7 @@ module Netomox
         Network.new(data)
       end
 
-      def ununique_element(list)
+      def duplicated_element(list)
         list.group_by { |i| i }.reject { |_k, v| v.one? }.keys
       end
 

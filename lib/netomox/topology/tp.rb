@@ -60,8 +60,8 @@ module Netomox
         @ref_count += 1
       end
 
-      def irregular_ref_count?
-        @ref_count.zero? || @ref_count.odd? || @ref_count >= 4
+      def regular_ref_count?
+        !(@ref_count.zero? || @ref_count.odd? || @ref_count >= 4)
       end
     end
   end
