@@ -37,20 +37,6 @@ module Netomox
         end
       end
 
-      def check_exist_reverse_link
-        messages = []
-        @links.each do |link|
-          next if find_link(link.destination, link.source)
-          message = {
-            severity: :warn,
-            path: link.path,
-            message: "reverse link of #{link} is not found."
-          }
-          messages.push(message)
-        end
-        messages
-      end
-
       def eql?(other)
         # TODO: now network types is literal (NOT object)
         super(other) && @network_types == other.network_types
