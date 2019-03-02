@@ -82,9 +82,9 @@ RSpec.describe 'check existence of definition referred as support', :checkup do
           node 'node2' do
             term_point 'tp1'
           end
-          link *%w[node1 tp1 node2 tp1] do
-            support *%w[nw2 node3,tp1,node4,tp1] # exists
-            support *%w[nw2 node5,tp1,node6,tp1] # not exists
+          link 'node1', 'tp1', 'node2', 'tp1' do
+            support 'nw2', 'node3,tp1,node4,tp1' # exists
+            support 'nw2', 'node5,tp1,node6,tp1' # not exists
           end
         end
         network 'nw2' do
@@ -94,7 +94,7 @@ RSpec.describe 'check existence of definition referred as support', :checkup do
           node 'node4' do
             term_point 'tp1'
           end
-          link *%w[node3 tp1 node4 tp1]
+          link 'node3', 'tp1', 'node4', 'tp1'
         end
       end
       nws = Netomox::Topology::Networks.new(nws_def.topo_data)

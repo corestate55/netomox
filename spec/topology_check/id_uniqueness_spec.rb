@@ -1,14 +1,27 @@
 RSpec.describe 'check id uniqueness', :checkup do
   def message(id_type, id)
-    %Q[found duplicate '#{id_type}_id': ["#{id}"]]
+    %(found duplicate '#{id_type}_id': ["#{id}"])
   end
 
-  # Notice:
-  #   Netomox::DSL::Networks#network,
-  #   Netomox::DSL::Network##node, #link and
-  #   Netomox::DSL::Node#term_point
-  #   checks network_id already exists.
-  #   So, cannot append object which has same name(id).
+  before do
+    # Notice:
+    #   Netomox::DSL::Networks#network,
+    #   Netomox::DSL::Network##node, #link and
+    #   Netomox::DSL::Node#term_point
+    #   checks network_id already exists.
+    #   So, cannot append object which has same name(id).
+    module Netomox
+      module DSL
+        class Network
+          attr_accessor :nodes
+          attr_accessor :links
+        end
+        class Node
+          attr_accessor :term_points
+        end
+      end
+    end
+  end
 
   context 'exists duplicated network' do
     before do
@@ -30,11 +43,6 @@ RSpec.describe 'check id uniqueness', :checkup do
 
   context 'exists duplicated node' do
     before do
-      # monkey patch
-      #   netomox::DSL::Network does not have access to its @nodes
-      class Netomox::DSL::Network
-        attr_accessor :nodes
-      end
       nws_def = Netomox::DSL::Networks.new
       nw1_def = Netomox::DSL::Network.new(nws_def, 'nw1') do
         node 'node1'
@@ -55,13 +63,6 @@ RSpec.describe 'check id uniqueness', :checkup do
 
   context 'exists duplicated tp' do
     before do
-      # monkey patch
-      class Netomox::DSL::Network
-        attr_accessor :nodes
-      end
-      class Netomox::DSL::Node
-        attr_accessor :term_points
-      end
       nws_def = Netomox::DSL::Networks.new
       nw1_def = Netomox::DSL::Network.new(nws_def, 'nw1')
       nws_def.networks.push(nw1_def)
@@ -84,16 +85,12 @@ RSpec.describe 'check id uniqueness', :checkup do
 
   context 'exists duplicated link' do
     before do
-      # monkey patch
-      class Netomox::DSL::Network
-        attr_accessor :links
-      end
       nws_def = Netomox::DSL::Networks.new
       nw1_def = Netomox::DSL::Network.new(nws_def, 'nw1') do
-        link *%w[node1 tp1 node2 tp1] # link1
-        link *%w[node1 tp2 node2 tp2] # link2
+        link 'node1', 'tp1', 'node2', 'tp1' # link1
+        link 'node1', 'tp2', 'node2', 'tp2' # link2
       end
-      link2dup_def = Netomox::DSL::Link.new(nw1_def, *%w[node1 tp2 node2 tp2])
+      link2dup_def = Netomox::DSL::Link.new(nw1_def, 'node1', 'tp2', 'node2', 'tp2')
       nw1_def.links.push(link2dup_def)
       nws_def.networks.push(nw1_def)
       nws = Netomox::Topology::Networks.new(nws_def.topo_data)

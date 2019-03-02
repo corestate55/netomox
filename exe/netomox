@@ -40,7 +40,7 @@ module Netomox
       JSON.parse(File.read(file), opt_hash)
     end
 
-    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    # rubocop:disable Metrics/MethodLength
     def run_check(file)
       networks = Topology::Networks.new(open_data(file))
       results = [
@@ -54,7 +54,7 @@ module Netomox
       ]
       puts JSON.pretty_generate(results)
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+    # rubocop:enable Metrics/MethodLength
 
     def open_graphdb(file)
       db_info_file = options[:info] || './db_info.json'
