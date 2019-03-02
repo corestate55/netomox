@@ -93,6 +93,7 @@ class RB2Puml
   def parse_line
     all_lines do |line|
       next if line =~ /^\s*#.*/ # comment line
+
       parse_single_def(line)
       push_use(line)
       push_var(line)
@@ -182,6 +183,7 @@ class RB2Puml
 
   def push_var(line)
     return unless line =~ /@(\w+)/
+
     push(:vars, Regexp.last_match(1))
   end
 

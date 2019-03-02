@@ -23,6 +23,7 @@ module Netomox
 
       def add_label(object, labels)
         return if labels.nil? || labels.empty?
+
         labels.each do |label|
           @n4j.add_label(object, label)
         end

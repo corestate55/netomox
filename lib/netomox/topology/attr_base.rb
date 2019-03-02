@@ -30,6 +30,7 @@ module Netomox
 
       def eql?(other)
         return false unless self.class.name == other.class.name
+
         @keys.inject(true) { |m, k| m && send(k) == other.send(k) }
       end
 
@@ -84,6 +85,7 @@ module Netomox
     module SubAttributeOps
       def diff_of(attr, other)
         return diff_with_empty_attr unless other.diff?
+
         if empty_added?(send(attr), other.send(attr))
           other.fill(forward: :added)
         elsif empty_deleted?(send(attr), other.send(attr))

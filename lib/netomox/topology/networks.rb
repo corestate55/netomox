@@ -95,6 +95,7 @@ module Netomox
         @networks = []
         nws_key = "#{NS_NW}:networks"
         return unless data.key?(nws_key)
+
         data[nws_key]['network'].each do |each|
           @networks.push create_network(each)
         end

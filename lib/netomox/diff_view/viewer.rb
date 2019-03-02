@@ -72,6 +72,7 @@ module Netomox
 
       def stringify_hash
         return [] if pass_kept?
+
         keys = @data.keys
         keys.delete('_diff_state_')
         strs = if keys.empty?
@@ -113,6 +114,7 @@ module Netomox
 
       def stringify_hash_key_array(key, value)
         return nil if allowed_empty?(key) && empty_value?(value)
+
         dv = Viewer.new(data: value, indent: @indent_b, print_all: @print_all)
         v_str = dv.stringify
         v_state = hash_key_array_color(v_str)
@@ -121,12 +123,14 @@ module Netomox
 
       def stringify_hash_key_hash(key, value)
         return nil if allowed_empty?(key) && empty_value?(value)
+
         dv = Viewer.new(data: value, indent: @indent_b, print_all: @print_all)
         # set key color belongs to its value(Hash)
         # decide dv diff_state before make key str
         # NOTICE: detect_state (diff_state) defined AFTER stringify
         v_str = dv.stringify
         return nil if dv.pass_kept?
+
         "#{dv.head_mark}#{@indent_b}#{dv.coloring(key)}: #{v_str}"
       end
 

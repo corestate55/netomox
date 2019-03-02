@@ -21,6 +21,7 @@ module Netomox
         case child_obj
         when Array then
           return nil if child_obj.empty? # nil for empty list
+
           child_obj.map { |d| d.diff_state.detect }
         else
           child_obj.diff_state.detect

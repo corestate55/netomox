@@ -59,6 +59,7 @@ module Netomox
         @termination_points = []
         tp_key = "#{NS_TOPO}:termination-point"
         return unless data.key?("#{NS_TOPO}:termination-point")
+
         @termination_points = data[tp_key].map do |tp|
           create_termination_point(tp)
         end

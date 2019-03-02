@@ -87,6 +87,7 @@ module Netomox
       def setup_nodes(data)
         @nodes = []
         return unless data.key?('node')
+
         @nodes = data['node'].map do |node|
           create_node(node)
         end
@@ -96,6 +97,7 @@ module Netomox
         @links = []
         link_key = "#{NS_TOPO}:link"
         return unless data.key?(link_key)
+
         @links = data[link_key].map do |link|
           create_link(link)
         end

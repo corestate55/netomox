@@ -59,12 +59,14 @@ module Netomox
       def setup_source(data)
         @source = nil
         return unless data.key?('source')
+
         @source = TpRef.new(data['source'], @parent_path)
       end
 
       def setup_destination(data)
         @destination = nil
         return unless data.key?('destination')
+
         @destination = TpRef.new(data['destination'], @parent_path)
       end
 

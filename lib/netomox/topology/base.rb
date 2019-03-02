@@ -48,6 +48,7 @@ module Netomox
         @attribute = AttributeBase.new([], {}, '_empty_attr_')
         key_klass_list.each do |list|
           next unless data.key?(list[:key])
+
           @attribute = list[:klass].new(data[list[:key]], list[:key])
         end
       end
@@ -55,6 +56,7 @@ module Netomox
       def setup_supports(data, key, klass)
         @supports = []
         return unless data.key?(key)
+
         @supports = data[key].map do |support|
           klass.new(support)
         end

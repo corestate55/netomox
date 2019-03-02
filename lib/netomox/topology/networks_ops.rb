@@ -10,6 +10,7 @@ module Netomox
           all_networks do |nw|
             nw.supports.each do |snw|
               next if find_network(snw.network_ref)
+
               msg = 'definition referred as supporting network ' \
                     "#{snw} is not found."
               messages.push(message(:error, nw.path, msg))
@@ -23,6 +24,7 @@ module Netomox
           all_nodes do |node, _nw|
             node.supports.each do |snode|
               next if find_node(snode.network_ref, snode.node_ref)
+
               msg = 'definition referred as supporting node ' \
                     "#{snode} is not found."
               messages.push(message(:error, node.path, msg))
@@ -36,6 +38,7 @@ module Netomox
           all_termination_points do |tp, _node, _nw|
             tp.supports.each do |stp|
               next if find_tp(stp.network_ref, stp.node_ref, stp.tp_ref)
+
               msg = 'definition referred as supporting tp ' \
                     "#{stp} is not found."
               messages.push(message(:error, tp.path, msg))
@@ -49,6 +52,7 @@ module Netomox
           all_links do |link, _nw|
             link.supports.each do |slink|
               next if find_link(slink.network_ref, slink.link_ref)
+
               msg = 'definition referred as supporting link ' \
                     "#{slink} is not found."
               messages.push(message(:error, link.path, msg))
@@ -61,6 +65,7 @@ module Netomox
         check('check reverse (bi-directional) link existence') do |messages|
           all_links do |link, nw|
             next if nw.find_link(link.destination, link.source)
+
             msg = "reverse link of #{link} is not found."
             messages.push(message(:warn, link.path, msg))
           end
@@ -85,6 +90,7 @@ module Netomox
         check('check link reference count of terminal-point') do |messages|
           all_termination_points do |tp, node, nw|
             next if tp.regular_ref_count?
+
             path = [nw.name, node.name, tp.name].join('/')
             msg = "irregular ref_count:#{tp.ref_count}"
             messages.push(message(:warn, path, msg))
@@ -128,6 +134,7 @@ module Netomox
         check_uniqueness do |messages|
           network_ids = @networks.map(&:name)
           next if @networks.size == network_ids.uniq.size
+
           msg = "found duplicate 'network_id': " \
                 "#{duplicated_element network_ids}"
           messages.push(message(:error, '(networks)', msg))
@@ -139,6 +146,7 @@ module Netomox
           all_networks do |nw|
             node_ids = nw.nodes.map(&:name)
             next if nw.nodes.size == node_ids.uniq.size
+
             msg = "found duplicate 'node_id': #{duplicated_element node_ids}"
             messages.push(message(:error, nw.path, msg))
           end
@@ -150,6 +158,7 @@ module Netomox
           all_networks do |nw|
             link_ids = nw.links.map(&:name)
             next if nw.links.size == link_ids.uniq.size
+
             msg = "found duplicate 'link_id': #{duplicated_element link_ids}"
             messages.push(message(:error, nw.path, msg))
           end
@@ -161,6 +170,7 @@ module Netomox
           all_nodes do |node, _nw|
             tp_ids = node.termination_points.map(&:name)
             next if node.termination_points.size == tp_ids.uniq.size
+
             msg = "found duplicate 'tp_id': #{duplicated_element tp_ids}"
             messages.push(message(:error, node.path, msg))
           end
