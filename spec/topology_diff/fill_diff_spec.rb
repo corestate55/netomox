@@ -1,4 +1,4 @@
-RSpec.describe 'diff_state filling' do
+RSpec.describe 'diff_state filling', :diff do
   context 'when added new object' do
     before do
       nws1_def = Netomox::DSL::Networks.new

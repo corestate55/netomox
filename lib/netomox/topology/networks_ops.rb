@@ -42,7 +42,7 @@ module Netomox
         result
       end
 
-      def check_exist_supporting_tps
+      def check_exist_supporting_tp
         result = {
           checkup: 'supporting terminal-points existence',
           messages: []
@@ -53,7 +53,7 @@ module Netomox
             message = {
               severity: :error,
               path: tp.path,
-              message: "definition referred as supporting tp #{stp} is not found"
+              message: "definition referred as supporting tp #{stp} is not found."
             }
             result[:messages].push(message)
           end
@@ -61,7 +61,7 @@ module Netomox
         result
       end
 
-      def check_exist_supporting_links
+      def check_exist_supporting_link
         result = {
           checkup: 'supporting link existence',
           messages: []
@@ -72,7 +72,7 @@ module Netomox
             message = {
               severity: :error,
               path: link.path,
-              message: "definition referred as supporting link #{slink} is not found"
+              message: "definition referred as supporting link #{slink} is not found."
             }
             result[:messages].push(message)
           end
@@ -89,6 +89,7 @@ module Netomox
           res = nw.check_exist_reverse_link
           result[:messages].push(res) unless res.empty?
         end
+        result[:messages].flatten!
         result
       end
 
@@ -131,11 +132,13 @@ module Netomox
       def check_network_id_uniqueness
         network_ids = @networks.map(&:name)
         return [] if @networks.size == network_ids.uniq.size
-        {
-          severity: :error,
-          path: '(networks)',
-          message: "found duplicate 'network_id': #{duplicated_element network_ids}"
-        }
+        [
+          {
+            severity: :error,
+            path: '(networks)',
+            message: "found duplicate 'network_id': #{duplicated_element network_ids}"
+          }
+        ]
       end
 
       def check_node_id_uniqueness
@@ -176,7 +179,7 @@ module Netomox
           message = {
             severity: :error,
             path: node.path,
-            message: "found duplicated 'tp_id': #{duplicated_element tp_ids}"
+            message: "found duplicate 'tp_id': #{duplicated_element tp_ids}"
           }
           messages.push(message)
         end

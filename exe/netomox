@@ -46,8 +46,8 @@ module Netomox
       results = [
         networks.check_exist_supporting_network,
         networks.check_exist_supporting_node,
-        networks.check_exist_supporting_tps,
-        networks.check_exist_supporting_links,
+        networks.check_exist_supporting_tp,
+        networks.check_exist_supporting_link,
         networks.check_exist_reverse_link,
         networks.check_id_uniqueness,
         networks.check_tp_ref_count
