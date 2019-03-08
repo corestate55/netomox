@@ -1,6 +1,14 @@
 RSpec.describe 'check existence of definition referred as support', :checkup do
-  def message(object_type, path)
-    "definition referred as supporting #{object_type} support:#{path} is not found."
+  def element_not_found_message(target_type, path)
+    "definition referred as supporting #{target_type} support:#{path} is not found."
+  end
+
+  def parent_element_not_found_message(parent, target)
+    "cannot find #{parent}, parent of #{target}"
+  end
+
+  def get_message(result, index)
+    result[:messages][index][:message]
   end
 
   context 'supporting network reference' do
@@ -16,9 +24,12 @@ RSpec.describe 'check existence of definition referred as support', :checkup do
       @result = nws.check_exist_supporting_network
     end
 
-    it 'finds lack of support network definition' do
+    it 'finds 1 error' do
       expect(@result[:messages].length).to eq 1
-      expect(@result[:messages][0][:message]).to eq message('network', 'nw_not_exist')
+    end
+
+    it 'finds lack of support network definition' do
+      expect(get_message(@result, 0)).to eq element_not_found_message('network', 'nw_not_exist')
     end
   end
 
@@ -29,6 +40,7 @@ RSpec.describe 'check existence of definition referred as support', :checkup do
           node 'node1' do
             support %w[nw2 node_exist]
             support %w[nw2 node_not_exist]
+            support %w[nw3 nw_not_exist]
           end
         end
         network 'nw2' do
@@ -39,9 +51,17 @@ RSpec.describe 'check existence of definition referred as support', :checkup do
       @result = nws.check_exist_supporting_node
     end
 
+    it 'finds 3 errors' do
+      expect(@result[:messages].length).to eq 3
+    end
+
     it 'finds lack of support node definition' do
-      expect(@result[:messages].length).to eq 1
-      expect(@result[:messages][0][:message]).to eq message('node', 'nw2/node_not_exist')
+      expect(get_message(@result, 0)).to eq element_not_found_message('node', 'nw2/node_not_exist')
+    end
+
+    it 'finds lack of network ref of support node definition' do
+      expect(get_message(@result, 1)).to eq parent_element_not_found_message('network:nw3', 'node:nw_not_exist')
+      expect(get_message(@result, 2)).to eq element_not_found_message('node', 'nw3/nw_not_exist')
     end
   end
 
@@ -53,6 +73,8 @@ RSpec.describe 'check existence of definition referred as support', :checkup do
             term_point 'tp1' do
               support %w[nw2 node2 tp_exist]
               support %w[nw2 node2 tp_not_exist]
+              support %w[nw2 node3 node_not_exist]
+              support %w[nw3 node2 nw_not_exist]
             end
           end
         end
@@ -66,9 +88,22 @@ RSpec.describe 'check existence of definition referred as support', :checkup do
       @result = nws.check_exist_supporting_tp
     end
 
+    it 'finds 5 errors' do
+      expect(@result[:messages].length).to eq 5
+    end
+
     it 'finds lack of support tp definition' do
-      expect(@result[:messages].length).to eq 1
-      expect(@result[:messages][0][:message]).to eq message('tp', 'nw2/node2/tp_not_exist')
+      expect(get_message(@result, 0)).to eq element_not_found_message('tp', 'nw2/node2/tp_not_exist')
+    end
+
+    it 'finds lack of node ref of support tp definition' do
+      expect(get_message(@result, 1)).to eq parent_element_not_found_message('node:nw2/node3', 'tp:node_not_exist')
+      expect(get_message(@result, 2)).to eq element_not_found_message('tp', 'nw2/node3/node_not_exist')
+    end
+
+    it 'finds lack of nw ref of support tp definition' do
+      expect(get_message(@result, 3)).to eq parent_element_not_found_message('network:nw3', 'node:node2')
+      expect(get_message(@result, 4)).to eq element_not_found_message('tp', 'nw3/node2/nw_not_exist')
     end
   end
 
@@ -85,6 +120,7 @@ RSpec.describe 'check existence of definition referred as support', :checkup do
           link 'node1', 'tp1', 'node2', 'tp1' do
             support 'nw2', 'node3,tp1,node4,tp1' # exists
             support 'nw2', 'node5,tp1,node6,tp1' # not exists
+            support 'nw3', 'node3,tp1,node4,tp1' # not exists network
           end
         end
         network 'nw2' do
@@ -101,9 +137,17 @@ RSpec.describe 'check existence of definition referred as support', :checkup do
       @result = nws.check_exist_supporting_link
     end
 
+    it 'finds 3 errors' do
+      expect(@result[:messages].length).to eq 3
+    end
+
     it 'finds lack of support link definition' do
-      expect(@result[:messages].length).to eq 1
-      expect(@result[:messages][0][:message]).to eq message('link', 'nw2/node5,tp1,node6,tp1')
+      expect(get_message(@result, 0)).to eq element_not_found_message('link', 'nw2/node5,tp1,node6,tp1')
+    end
+
+    it 'finds lack of network ref of support node definition' do
+      expect(get_message(@result, 1)).to eq parent_element_not_found_message('nw:nw3', 'link:node3,tp1,node4,tp1')
+      expect(get_message(@result, 2)).to eq element_not_found_message('link', 'nw3/node3,tp1,node4,tp1')
     end
   end
 end

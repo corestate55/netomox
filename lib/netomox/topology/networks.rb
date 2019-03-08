@@ -1,6 +1,7 @@
 require 'netomox/const'
 require 'netomox/topology/network'
 require 'netomox/topology/base'
+require 'netomox/topology/error'
 
 module Netomox
   module Topology
@@ -18,21 +19,34 @@ module Netomox
       end
 
       def find_node(network_ref, node_ref)
-        find_network(network_ref).nodes.find do |node|
-          node.name == node_ref
+        nw = find_network(network_ref)
+        unless nw
+          raise TopologyElementNotFoundError,
+                "cannot find network:#{network_ref}, parent of node:#{node_ref}"
         end
+
+        nw.nodes.find { |node| node.name == node_ref }
       end
 
       def find_tp(network_ref, node_ref, tp_ref)
-        find_node(network_ref, node_ref).termination_points.find do |tp|
-          tp.name == tp_ref
+        node = find_node(network_ref, node_ref)
+        unless node
+          path = "#{network_ref}/#{node_ref}"
+          raise TopologyElementNotFoundError,
+                "cannot find node:#{path}, parent of tp:#{tp_ref}"
         end
+
+        node.termination_points.find { |tp| tp.name == tp_ref }
       end
 
       def find_link(network_ref, link_ref)
-        find_network(network_ref).links.find do |link|
-          link.name == link_ref
+        nw = find_network(network_ref)
+        unless nw
+          raise TopologyElementNotFoundError,
+                "cannot find nw:#{network_ref}, parent of link:#{link_ref}"
         end
+
+        nw.links.find { |link| link.name == link_ref }
       end
 
       def all_networks

@@ -1,15 +1,21 @@
 require 'netomox/topology/networks'
+require 'netomox/topology/error'
 
 module Netomox
   module Topology
     # Networks for Topology data (operations for multiple networks)
     # rubocop:disable Metrics/ClassLength
     class Networks < TopoObjectBase
+      # rubocop:disable Metrics/MethodLength
       def check_exist_supporting_network
         check('supporting network existence') do |messages|
           all_networks do |nw|
             nw.supports.each do |snw|
-              next if find_network(snw.network_ref)
+              begin
+                next if find_network(snw.network_ref)
+              rescue TopologyElementNotFoundError => e
+                messages.push(message(:error, nw.path, e.message))
+              end
 
               msg = 'definition referred as supporting network ' \
                     "#{snw} is not found."
@@ -18,12 +24,18 @@ module Netomox
           end
         end
       end
+      # rubocop:enable Metrics/MethodLength
 
+      # rubocop:disable Metrics/MethodLength
       def check_exist_supporting_node
         check('supporting node existence') do |messages|
           all_nodes do |node, _nw|
             node.supports.each do |snode|
-              next if find_node(snode.network_ref, snode.node_ref)
+              begin
+                next if find_node(snode.network_ref, snode.node_ref)
+              rescue TopologyElementNotFoundError => e
+                messages.push(message(:error, node.path, e.message))
+              end
 
               msg = 'definition referred as supporting node ' \
                     "#{snode} is not found."
@@ -32,12 +44,18 @@ module Netomox
           end
         end
       end
+      # rubocop:enable Metrics/MethodLength
 
+      # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       def check_exist_supporting_tp
         check('supporting terminal-points existence') do |messages|
           all_termination_points do |tp, _node, _nw|
             tp.supports.each do |stp|
-              next if find_tp(stp.network_ref, stp.node_ref, stp.tp_ref)
+              begin
+                next if find_tp(stp.network_ref, stp.node_ref, stp.tp_ref)
+              rescue TopologyElementNotFoundError => e
+                messages.push(message(:error, tp.path, e.message))
+              end
 
               msg = 'definition referred as supporting tp ' \
                     "#{stp} is not found."
@@ -46,12 +64,18 @@ module Netomox
           end
         end
       end
+      # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
+      # rubocop:disable Metrics/MethodLength
       def check_exist_supporting_link
         check('supporting link existence') do |messages|
           all_links do |link, _nw|
             link.supports.each do |slink|
-              next if find_link(slink.network_ref, slink.link_ref)
+              begin
+                next if find_link(slink.network_ref, slink.link_ref)
+              rescue TopologyElementNotFoundError => e
+                messages.push(message(:error, link.path, e.message))
+              end
 
               msg = 'definition referred as supporting link ' \
                     "#{slink} is not found."
@@ -60,6 +84,7 @@ module Netomox
           end
         end
       end
+      # rubocop:enable Metrics/MethodLength
 
       def check_exist_reverse_link
         check('check reverse (bi-directional) link existence') do |messages|
