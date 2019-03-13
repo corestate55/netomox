@@ -1,6 +1,26 @@
 require 'bundler/setup'
 require 'netomox'
 
+# ref. https://gist.github.com/herrphon/2d2ebbf23c86a10aa955
+module IOHelper
+  # rubocop:disable Metrics/MethodLength
+  def capture
+    begin
+      $stdout = StringIO.new
+      $stderr = StringIO.new
+      yield
+      result = {}
+      result[:stdout] = $stdout.string
+      result[:stderr] = $stderr.string
+    ensure
+      $stdout = STDOUT
+      $stderr = STDERR
+    end
+    result
+  end
+  # rubocop:enable Metrics/MethodLength
+end
+
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = '.rspec_status'
@@ -11,4 +31,7 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  # stdout/stderr capture helper
+  config.include IOHelper
 end

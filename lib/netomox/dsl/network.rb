@@ -12,6 +12,10 @@ module Netomox
         @nw_ref = nw_ref
       end
 
+      def path
+        @nw_ref
+      end
+
       def topo_data
         { 'network-ref' => @nw_ref }
       end
@@ -39,6 +43,8 @@ module Netomox
       end
 
       def support(nw_ref)
+        snw = find_support(nw_ref)
+        warn "Duplicated support definition:#{snw.path} in #{@path}" if snw
         @supports.push(SupportNetwork.new(nw_ref))
       end
 
@@ -122,6 +128,10 @@ module Netomox
 
       def find_link(name)
         @links.find { |link| link.name == name }
+      end
+
+      def find_support(nw_ref)
+        @supports.find { |snw| snw.path == nw_ref }
       end
 
       private

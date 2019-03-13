@@ -81,4 +81,14 @@ RSpec.describe 'link dsl', :dsl, :link do
     }
     expect(link.topo_data).to eq link_data
   end
+
+  it 'has duplicated supporting-link' do
+    result = capture do
+      Netomox::DSL::Link.new(@l1nw, *@link_spec) do
+        support %w[nwY a,p1,b,p2]
+        support %w[nwY a,p1,b,p2] # duplicated
+      end
+    end
+    expect(result[:stderr].chomp!).to eq 'Duplicated support definition:nwY/a,p1,b,p2 in networks/test-L1/nodeX,tp1,nodeY,tp1'
+  end
 end

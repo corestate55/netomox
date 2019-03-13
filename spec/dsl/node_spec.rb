@@ -109,4 +109,14 @@ RSpec.describe 'node dsl', :dsl, :node do
     }
     expect(node.topo_data).to eq node_data
   end
+
+  it 'has duplicated supporting-node' do
+    result = capture do
+      Netomox::DSL::Node.new(@l1nw, 'nodeX') do
+        support %w[nwY nodeY]
+        support %w[nwY nodeY] # duplicated
+      end
+    end
+    expect(result[:stderr].chomp!).to eq 'Duplicated support definition:nwY/nodeY in networks/test-L1/nodeX'
+  end
 end

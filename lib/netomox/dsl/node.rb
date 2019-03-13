@@ -12,6 +12,10 @@ module Netomox
         @node_ref = node_ref
       end
 
+      def path
+        [@nw_ref, @node_ref].join('/')
+      end
+
       def topo_data
         {
           'network-ref' => @nw_ref,
@@ -20,6 +24,7 @@ module Netomox
       end
     end
 
+    # rubocop:disable Metrics/ClassLength
     # node, tp container
     class Node < DSLObjectBase
       attr_reader :type
@@ -49,13 +54,10 @@ module Netomox
       alias tp term_point
 
       def support(nw_ref, node_ref = false)
-        if node_ref
-          # with 2 args
-          @supports.push(SupportNode.new(nw_ref, node_ref))
-        else
-          # with 1 arg (with array)
-          @supports.push(SupportNode.new(*nw_ref))
-        end
+        refs = normalize_support_ref(nw_ref, node_ref)
+        snode = find_support(refs)
+        warn "Duplicated support definition:#{snode.path} in #{@path}" if snode
+        @supports.push(SupportNode.new(*refs))
       end
 
       def attribute(attr)
@@ -106,6 +108,12 @@ module Netomox
       end
       alias find_tp find_term_point
 
+      def find_support(nw_ref, node_ref = false)
+        refs = normalize_support_ref(nw_ref, node_ref)
+        path = refs.join('/')
+        @supports.find { |snode| snode.path == path }
+      end
+
       private
 
       def normalize_link_to(dst)
@@ -130,6 +138,12 @@ module Netomox
           warn "Cannot exec find from #{@path} to #{dst}"
         end
       end
+
+      def normalize_support_ref(nw_ref, node_ref = false)
+        # with 2 args or 1 arg (array)
+        node_ref ? [nw_ref, node_ref] : nw_ref
+      end
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end

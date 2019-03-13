@@ -11,6 +11,10 @@ module Netomox
         @link_ref = link_ref
       end
 
+      def path
+        [@nw_ref, @link_ref].join('/')
+      end
+
       def topo_data
         {
           'network-ref' => @nw_ref,
@@ -67,13 +71,10 @@ module Netomox
       # rubocop:enable Metrics/ParameterLists
 
       def support(nw_ref, link_ref = false)
-        if link_ref
-          # with 2 args
-          @supports.push(SupportLink.new(nw_ref, link_ref))
-        else
-          # with 1 arg (with array)
-          @supports.push(SupportLink.new(*nw_ref))
-        end
+        refs = normalize_support_ref(nw_ref, link_ref)
+        slink = find_support(refs)
+        warn "Duplicated support definition:#{slink.path} in #{@path}" if slink
+        @supports.push(SupportLink.new(*refs))
       end
 
       def attribute(attr)
@@ -84,6 +85,12 @@ module Netomox
                      else
                        {}
                      end
+      end
+
+      def find_support(nw_ref, link_ref = false)
+        refs = normalize_support_ref(nw_ref, link_ref)
+        path = refs.join('/')
+        @supports.find { |slink| slink.path == path }
       end
 
       def topo_data
@@ -97,6 +104,13 @@ module Netomox
         end
         data[@attribute.type] = @attribute.topo_data unless @attribute.empty?
         data
+      end
+
+      private
+
+      def normalize_support_ref(nw_ref, link_ref = false)
+        # with 2 args or 1 arg (array)
+        link_ref ? [nw_ref, link_ref] : nw_ref
       end
     end
   end

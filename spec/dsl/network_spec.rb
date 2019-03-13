@@ -129,4 +129,14 @@ RSpec.describe 'network dsl', :dsl, :network do
     }
     expect(nw.topo_data).to eq nw_data
   end
+
+  it 'has duplicated supporting-network' do
+    result = capture do
+      Netomox::DSL::Network.new(@nws, 'nwX') do
+        support 'nwY'
+        support 'nwY' # duplicated
+      end
+    end
+    expect(result[:stderr].chomp!).to eq 'Duplicated support definition:nwY in networks/nwX'
+  end
 end
