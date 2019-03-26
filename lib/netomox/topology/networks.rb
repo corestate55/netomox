@@ -2,10 +2,12 @@ require 'netomox/const'
 require 'netomox/topology/network'
 require 'netomox/topology/base'
 require 'netomox/topology/error'
+require 'netomox/topology/link_tpref'
 
 module Netomox
   module Topology
     # Networks for Topology data
+    # rubocop:disable Metrics/ClassLength
     class Networks < TopoObjectBase
       attr_accessor :networks
 
@@ -47,6 +49,16 @@ module Netomox
         end
 
         nw.links.find { |link| link.name == link_ref }
+      end
+
+      def find_link_source(network_ref, node_ref, tp_ref)
+        nw = find_network(network_ref)
+        source_data = {
+          'source-node' => node_ref,
+          'source-tp' => tp_ref
+        }
+        source_ref = TpRef.new(source_data, network_ref)
+        nw.links.find { |link| link.source == source_ref }
       end
 
       def all_networks
@@ -128,5 +140,6 @@ module Netomox
         tp.ref_count_up if tp
       end
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end

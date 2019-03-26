@@ -87,7 +87,7 @@ module Netomox
       # rubocop:enable Metrics/MethodLength
 
       def check_exist_reverse_link
-        check('check reverse (bi-directional) link existence') do |messages|
+        check('reverse (bi-directional) link existence') do |messages|
           all_links do |link, nw|
             next if nw.find_link(link.destination, link.source)
 
@@ -98,7 +98,7 @@ module Netomox
       end
 
       def check_id_uniqueness
-        check('check object id uniqueness') do |messages|
+        check('object id uniqueness') do |messages|
           list = [
             check_network_id_uniqueness,
             check_node_id_uniqueness,
@@ -112,7 +112,7 @@ module Netomox
 
       def check_tp_ref_count
         update_tp_ref_count
-        check('check link reference count of terminal-point') do |messages|
+        check('link reference count of terminal-point') do |messages|
           all_termination_points do |tp, node, nw|
             next if tp.regular_ref_count?
 
@@ -122,6 +122,33 @@ module Netomox
           end
         end
       end
+
+      # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      def check_facing_link
+        check('facing link in supported layer') do |messages|
+          all_termination_points do |tp, node, nw|
+            here_link = find_link_source(nw.name, node.name, tp.name)
+            next unless here_link
+
+            destination_tp = destination_tp_from_link(here_link)
+            unless destination_tp
+              msg = "facing-tp:#{destination_tp} is not found"
+              messages.push(message(:warn, tp.path, msg))
+              next
+            end
+
+            tp.supports.each do |ss_tp|
+              found_links = find_links_between(ss_tp, destination_tp.supports)
+              next unless found_links.empty?
+
+              msg = "facing link not found source:#{ss_tp}" \
+                  " (supported #{tp.path}--#{destination_tp.path})"
+              messages.push(message(:warn, tp.path, msg))
+            end
+          end
+        end
+      end
+      # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
       private
 
@@ -146,6 +173,28 @@ module Netomox
           path: path,
           message: message
         }
+      end
+
+      def link_name_between(ss_tp, ds_tp)
+        "#{ss_tp.ref_link_tp_name},#{ds_tp.ref_link_tp_name}"
+      end
+
+      def destination_tp_from_link(link)
+        destination_ref = link.destination
+        find_tp(destination_ref.network_ref,
+                destination_ref.node_ref,
+                destination_ref.tp_ref)
+      end
+
+      def find_links_between(ss_tp, dest_supports)
+        found_links = []
+        dest_supports.each do |ds_tp|
+          support_nw = ss_tp.ref_network
+          link_name = link_name_between(ss_tp, ds_tp)
+          link = find_link(support_nw, link_name)
+          found_links.push(link) if link
+        end
+        found_links
       end
 
       def update_tp_ref_count

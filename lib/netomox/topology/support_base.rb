@@ -13,6 +13,16 @@ module Netomox
         "support:#{ref_path}"
       end
 
+      def ref_network
+        ref_path.split('/').shift
+      end
+
+      def ref_link_tp_name
+        path_elements = ref_path.split('/')
+        path_elements.shift
+        path_elements.join(',')
+      end
+
       def ref_path
         @attr_table.int_keys.map { |r| send(r) }.join('/')
       end

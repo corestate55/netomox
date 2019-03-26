@@ -24,7 +24,6 @@ module Netomox
       end
     end
 
-    # rubocop:disable Metrics/ClassLength
     # node, tp container
     class Node < DSLObjectBase
       attr_reader :type
@@ -144,6 +143,5 @@ module Netomox
         node_ref ? [nw_ref, node_ref] : nw_ref
       end
     end
-    # rubocop:enable Metrics/ClassLength
   end
 end

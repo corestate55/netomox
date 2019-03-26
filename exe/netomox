@@ -34,6 +34,12 @@ module Netomox
       run_graphdb(file)
     end
 
+    desc 'testfunc JSON', 'Test function'
+    def testfunc(file)
+      networks = Topology::Networks.new(open_data(file))
+      puts JSON.pretty_generate(networks.check_facing_link)
+    end
+
     private
 
     def open_data(file, opt_hash = {})
@@ -50,7 +56,8 @@ module Netomox
         networks.check_exist_supporting_link,
         networks.check_exist_reverse_link,
         networks.check_id_uniqueness,
-        networks.check_tp_ref_count
+        networks.check_tp_ref_count,
+        networks.check_facing_link
       ]
       puts JSON.pretty_generate(results)
     end

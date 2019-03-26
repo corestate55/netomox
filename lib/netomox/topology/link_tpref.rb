@@ -31,6 +31,12 @@ module Netomox
           '_diff_state_' => @diff_state.to_data
         }
       end
+
+      def ==(other)
+        @network_ref == other.network_ref &&
+          @node_ref == other.node_ref &&
+          @tp_ref == other.tp_ref
+      end
     end
   end
 end
