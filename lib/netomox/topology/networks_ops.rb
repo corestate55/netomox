@@ -86,6 +86,17 @@ module Netomox
       end
       # rubocop:enable Metrics/MethodLength
 
+      def check_exist_link_tp
+        check('link source/target tp ref check') do |messages|
+          all_links do |link, _nw|
+            src_refs = link.source.refs
+            dst_refs = link.destination.refs
+            check_tp_ref(messages, 'source', src_refs, link)
+            check_tp_ref(messages, 'destination', dst_refs, link)
+          end
+        end
+      end
+
       def check_exist_reverse_link
         check('reverse (bi-directional) link existence') do |messages|
           all_links do |link, nw|
@@ -173,6 +184,14 @@ module Netomox
           path: path,
           message: message
         }
+      end
+
+      def check_tp_ref(messages, target_str, target_refs, link)
+        return if find_tp(*target_refs)
+
+        msg = "link #{target_str} path:#{target_refs.join('/')} is not found " \
+              "in link:#{link.path}"
+        messages.push(message(:error, link.path, msg))
       end
 
       def link_name_between(ss_tp, ds_tp)

@@ -20,8 +20,12 @@ module Netomox
         @tp_ref = data['source-tp'] || data['dest-tp']
       end
 
+      def refs
+        [@network_ref, @node_ref, @tp_ref]
+      end
+
       def ref_path
-        [@network_ref, @node_ref, @tp_ref].join('/')
+        refs.join('/')
       end
 
       def to_data(direction)
