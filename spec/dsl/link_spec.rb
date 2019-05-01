@@ -89,6 +89,6 @@ RSpec.describe 'link dsl', :dsl, :link do
         support %w[nwY a,p1,b,p2] # duplicated
       end
     end
-    expect(result[:stderr].chomp!).to eq 'Duplicated support definition:nwY/a,p1,b,p2 in networks/test-L1/nodeX,tp1,nodeY,tp1'
+    expect(result[:stderr].chomp!).to eq 'Duplicated support definition:nwY__a,p1,b,p2 in networks__test-L1__nodeX,tp1,nodeY,tp1'
   end
 end

@@ -33,7 +33,7 @@ module Netomox
       def find_tp(network_ref, node_ref, tp_ref)
         node = find_node(network_ref, node_ref)
         unless node
-          path = "#{network_ref}/#{node_ref}"
+          path = "#{network_ref}__#{node_ref}"
           raise TopologyElementNotFoundError,
                 "cannot find node:#{path}, parent of tp:#{tp_ref}"
         end

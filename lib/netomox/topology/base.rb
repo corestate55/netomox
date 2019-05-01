@@ -12,7 +12,7 @@ module Netomox
       def initialize(name, parent_path = '')
         @name = name
         @parent_path = parent_path
-        @path = parent_path.empty? ? @name : [@parent_path, @name].join('/')
+        @path = parent_path.empty? ? @name : [@parent_path, @name].join('__')
         @diff_state = DiffState.new # empty state
       end
 

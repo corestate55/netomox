@@ -25,7 +25,7 @@ module Netomox
       end
 
       def ref_path
-        refs.join('/')
+        refs.join('__')
       end
 
       def to_data(direction)

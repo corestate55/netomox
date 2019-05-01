@@ -8,7 +8,7 @@ module Netomox
         @parent = parent
         @name = name
         @path = @name # for networks (parent == nil)
-        @path = [@parent.path, @name].join('/') unless @parent.nil?
+        @path = [@parent.path, @name].join('__') unless @parent.nil?
       end
 
       def register(&block)

@@ -14,17 +14,17 @@ module Netomox
       end
 
       def ref_network
-        ref_path.split('/').shift
+        ref_path.split('__').shift
       end
 
       def ref_link_tp_name
-        path_elements = ref_path.split('/')
+        path_elements = ref_path.split('__')
         path_elements.shift
         path_elements.join(',')
       end
 
       def ref_path
-        @attr_table.int_keys.map { |r| send(r) }.join('/')
+        @attr_table.int_keys.map { |r| send(r) }.join('__')
       end
     end
 

@@ -13,7 +13,7 @@ module Netomox
       end
 
       def path
-        [@nw_ref, @node_ref, @tp_ref].join('/')
+        [@nw_ref, @node_ref, @tp_ref].join('__')
       end
 
       def topo_data
@@ -80,7 +80,7 @@ module Netomox
 
       def find_support(nw_ref, node_ref = false, tp_ref = false)
         refs = normalize_support_ref(nw_ref, node_ref, tp_ref)
-        path = refs.join('/')
+        path = refs.join('__')
         @supports.find { |stp| stp.path == path }
       end
 

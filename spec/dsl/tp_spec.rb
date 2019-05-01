@@ -102,6 +102,6 @@ RSpec.describe 'termination point dsl', :dsl, :tp do
         support %w[nwY nodeY tpY] # duplicated
       end
     end
-    expect(result[:stderr].chomp!).to eq 'Duplicated support definition:nwY/nodeY/tpY in networks/test-L1/l1node/tpX'
+    expect(result[:stderr].chomp!).to eq 'Duplicated support definition:nwY__nodeY__tpY in networks__test-L1__l1node__tpX'
   end
 end

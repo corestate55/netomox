@@ -127,7 +127,7 @@ module Netomox
           all_termination_points do |tp, node, nw|
             next if tp.regular_ref_count?
 
-            path = [nw.name, node.name, tp.name].join('/')
+            path = [nw.name, node.name, tp.name].join('__')
             msg = "irregular ref_count:#{tp.ref_count}"
             messages.push(message(:warn, path, msg))
           end
@@ -189,7 +189,7 @@ module Netomox
       def check_tp_ref(messages, target_str, target_refs, link)
         return if find_tp(*target_refs)
 
-        msg = "link #{target_str} path:#{target_refs.join('/')} is not found " \
+        msg = "link #{target_str} path:#{target_refs.join('__')} is not found " \
               "in link:#{link.path}"
         messages.push(message(:error, link.path, msg))
       end

@@ -47,15 +47,15 @@ RSpec.describe 'check term point ref count', :checkup do
     @result = nws.check_tp_ref_count
   end
 
-  it 'finds irregular ref count at node1/tp2' do
-    expect(find_message('nw1/node1/tp2')).to eq 'irregular ref_count:1'
+  it 'finds irregular ref count at node1__tp2' do
+    expect(find_message('nw1__node1__tp2')).to eq 'irregular ref_count:1'
   end
 
-  it 'finds irregular ref count at node1/tp3' do
-    expect(find_message('nw1/node1/tp3')).to eq 'irregular ref_count:1'
+  it 'finds irregular ref count at node1__tp3' do
+    expect(find_message('nw1__node1__tp3')).to eq 'irregular ref_count:1'
   end
 
-  it 'finds irregular ref count at node2/tp3' do
-    expect(find_message('nw1/node2/tp3')).to eq 'irregular ref_count:0'
+  it 'finds irregular ref count at node2__tp3' do
+    expect(find_message('nw1__node2__tp3')).to eq 'irregular ref_count:0'
   end
 end

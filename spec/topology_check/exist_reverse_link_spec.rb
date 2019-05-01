@@ -24,7 +24,7 @@ RSpec.describe 'check existence of reverse link', :checkup do
   it 'finds unidirectional link' do
     expect(@result[:messages].length).to eq 1
     msg = @result[:messages][0]
-    expect(msg[:path]).to eq 'nw1/node1,tp2,node2,tp2'
+    expect(msg[:path]).to eq 'nw1__node1,tp2,node2,tp2'
     expect(msg[:message]).to eq 'reverse link of link:node1,tp2,node2,tp2 is not found.'
   end
 end

@@ -137,6 +137,6 @@ RSpec.describe 'network dsl', :dsl, :network do
         support 'nwY' # duplicated
       end
     end
-    expect(result[:stderr].chomp!).to eq 'Duplicated support definition:nwY in networks/nwX'
+    expect(result[:stderr].chomp!).to eq 'Duplicated support definition:nwY in networks__nwX'
   end
 end
