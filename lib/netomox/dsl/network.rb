@@ -24,6 +24,8 @@ module Netomox
     # rubocop:disable Metrics/ClassLength
     # network, node and link container
     class Network < DSLObjectBase
+      attr_accessor :nodes, :links, :supports
+
       def initialize(parent, name, &block)
         super(parent, name)
         @type = {}
@@ -132,6 +134,18 @@ module Netomox
 
       def find_support(nw_ref)
         @supports.find { |snw| snw.path == nw_ref }
+      end
+
+      def sort_node_by_name
+        @nodes.sort do |node_a, node_b|
+          ret = node_a.name.casecmp(node_b.name)
+          ret.zero? ? node_a.name <=> node_b.name : ret
+        end
+      end
+
+      def sort_node_by_name!
+        nodes = sort_node_by_name
+        @nodes = nodes
       end
 
       private

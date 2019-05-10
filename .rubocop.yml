@@ -1,13 +1,13 @@
 Metrics/LineLength:
   Exclude:
-  - 'spec/**/*_spec.rb'
-  - 'netomox.gemspec'
+    - 'spec/**/*_spec.rb'
+    - 'netomox.gemspec'
 
 Metrics/BlockLength:
   Exclude:
-  - 'spec/**/*_spec.rb'
-  - 'netomox.gemspec'
+    - 'spec/**/*_spec.rb'
+    - 'netomox.gemspec'
 
 Style/BlockComments:
   Exclude:
-  - 'spec/spec_helper.rb'
+    - 'spec/spec_helper.rb'

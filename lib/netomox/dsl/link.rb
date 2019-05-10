@@ -56,7 +56,8 @@ module Netomox
 
     # link (unidirectional)
     class Link < DSLObjectBase
-      attr_reader :type, :source, :destination
+      attr_reader :type
+      attr_accessor :source, :destination, :supports
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(parent, src_node, src_tp, dst_node, dst_tp, &block)
