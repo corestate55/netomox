@@ -24,10 +24,11 @@ module Netomox
       end
     end
 
+    # rubocop:disable Metrics/ClassLength
     # node, tp container
     class Node < DSLObjectBase
       attr_reader :type
-      attr_accessor :tp_prefix, :tp_number
+      attr_accessor :tp_prefix, :tp_number, :term_points, :supports
 
       def initialize(parent, name, &block)
         super(parent, name)
@@ -113,6 +114,18 @@ module Netomox
         @supports.find { |snode| snode.path == path }
       end
 
+      def sort_tp_by_name
+        @term_points.sort do |tp_a, tp_b|
+          ret = tp_a.name.casecmp(tp_b.name)
+          ret.zero? ? tp_a.name <=> tp_b.name : ret
+        end
+      end
+
+      def sort_tp_by_name!
+        term_points = sort_tp_by_name
+        @term_points = term_points
+      end
+
       private
 
       def normalize_link_to(dst)
@@ -143,5 +156,6 @@ module Netomox
         node_ref ? [nw_ref, node_ref] : nw_ref
       end
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end
