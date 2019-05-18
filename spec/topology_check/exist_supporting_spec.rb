@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'check existence of definition referred as support', :checkup do
   def element_not_found_message(target_type, path)
     "definition referred as supporting #{target_type} support:#{path} is not found."

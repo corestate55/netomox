@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'network dsl', :dsl, :network do
   before do
     @nws = Netomox::DSL::Networks.new

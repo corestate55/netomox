@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'networks diff (network list)', :diff, :networks, :network do
   context 'when network literal attribute changed' do
     before do

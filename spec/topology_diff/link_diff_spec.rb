@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'link diff (supporting-node list)', :diff, :link do
   context 'when link literal attribute changed' do
     before do

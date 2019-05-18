@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'netomox/const'
 require 'netomox/dsl/base'
 require 'netomox/dsl/node_attr'

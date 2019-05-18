@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Netomox
   module DiffView
     # Topology diff data viewer (Utility functions)

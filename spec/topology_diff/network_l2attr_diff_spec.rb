@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'network diff with L2 attribute', :diff, :network, :attr, :l2attr do
   before do
     parent = -> { Netomox::DSL::Networks.new }

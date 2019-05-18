@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'link dsl', :dsl, :link do
   before do
     nws = Netomox::DSL::Networks.new do
@@ -13,7 +15,7 @@ RSpec.describe 'link dsl', :dsl, :link do
     @l2nw = nws.network('test-L2')
     @l3nw = nws.network('test-L3')
 
-    attr_key = 'link-attributes'.freeze
+    attr_key = 'link-attributes'
     @l2attr_key = "#{Netomox::NS_L2NW}:l2-#{attr_key}"
     @l3attr_key = "#{Netomox::NS_L3NW}:l3-#{attr_key}"
     @link_spec = %w[nodeX tp1 nodeY tp1]

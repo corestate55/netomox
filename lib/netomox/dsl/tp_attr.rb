@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'netomox/const'
 
 module Netomox
@@ -40,7 +42,7 @@ module Netomox
                            vlan_id_names.map { |v| L2VlanIdName.new(v) }
                          end
         @tp_state = tp_state
-        @type = "#{NS_L2NW}:l2-termination-point-attributes".freeze
+        @type = "#{NS_L2NW}:l2-termination-point-attributes"
       end
       # rubocop:enable Metrics/ParameterLists, Metrics/MethodLength
 
@@ -69,7 +71,7 @@ module Netomox
 
       def initialize(ip_addrs: [])
         @ip_addrs = ip_addrs
-        @type = "#{NS_L3NW}:l3-termination-point-attributes".freeze
+        @type = "#{NS_L3NW}:l3-termination-point-attributes"
       end
 
       def empty?

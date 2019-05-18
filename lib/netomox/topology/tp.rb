@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'netomox/const'
 require 'netomox/topology/support_base'
 require 'netomox/topology/tp_attr'

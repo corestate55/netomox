@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'network diff (nw list)', :diff, :network, :nw do
   context 'when nw list changed' do
     before do

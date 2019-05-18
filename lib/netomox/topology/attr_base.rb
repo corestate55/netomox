@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'netomox/topology/diff_state'
 require 'netomox/topology/attr_table'
 

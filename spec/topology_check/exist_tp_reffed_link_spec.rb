@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'check existence of tp refered in link src/dst', :checkup do
   before do
     nws_def = Netomox::DSL::Networks.new do

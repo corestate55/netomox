@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'netomox/topology/diff_forward'
 require 'netomox/topology/diff_backward'
 

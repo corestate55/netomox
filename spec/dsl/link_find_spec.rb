@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'methods to find link from/to node/tp', :dsl, :link do
   before do
     nws = Netomox::DSL::Networks.new do

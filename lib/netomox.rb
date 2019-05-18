@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'netomox/version'
 require 'netomox/const'
 require 'netomox/diff_view/viewer'

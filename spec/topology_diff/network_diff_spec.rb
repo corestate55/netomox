@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'network diff (supporting-node list)', :diff, :network do
   before do
     @parent = -> { Netomox::DSL::Networks.new }

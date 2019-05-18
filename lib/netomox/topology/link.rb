@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'netomox/const'
 require 'netomox/topology/link_tpref'
 require 'netomox/topology/link_attr'

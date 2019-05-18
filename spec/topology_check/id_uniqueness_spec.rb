@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'check id uniqueness', :checkup do
   def message(id_type, id)
     %(found duplicate '#{id_type}_id': ["#{id}"])

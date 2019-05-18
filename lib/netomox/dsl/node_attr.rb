@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'netomox/const'
 
 module Netomox
@@ -29,7 +31,7 @@ module Netomox
         @flags = flags
         @router_id = router_id
         @prefixes = prefixes.empty? ? [] : prefixes.map { |p| L3Prefix.new(p) }
-        @type = "#{NS_L3NW}:l3-node-attributes".freeze
+        @type = "#{NS_L3NW}:l3-node-attributes"
       end
 
       def topo_data
@@ -61,7 +63,7 @@ module Netomox
         @mgmt_addrs = mgmt_addrs
         @sys_mac_addr = sys_mac_addr
         @mgmt_vid = mgmt_vid
-        @type = "#{NS_L2NW}:l2-node-attributes".freeze
+        @type = "#{NS_L2NW}:l2-node-attributes"
       end
       # rubocop:enable Metrics/ParameterLists
 

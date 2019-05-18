@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'check term point ref count', :checkup do
   def find_message(path)
     # {

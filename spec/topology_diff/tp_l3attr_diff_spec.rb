@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'termination point diff with L3 attribute', :diff, :tp, :attr, :l3attr do
   before do
     tp_attr = { ip_addrs: %w[192.168.0.1 192.168.1.1] }

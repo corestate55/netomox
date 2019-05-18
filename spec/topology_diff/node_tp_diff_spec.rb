@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'node diff (termination point list)', :diff, :node, :tp do
   context 'when term point list changed' do
     before do

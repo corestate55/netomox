@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'node diff with L2 attribute', :diff, :node, :attr, :l2attr do
   before do
     addrs = %w[192.168.0.1 192.168.1.1]

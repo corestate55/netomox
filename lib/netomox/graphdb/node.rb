@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'netomox/topology/node'
 require 'netomox/graphdb/tp'
 

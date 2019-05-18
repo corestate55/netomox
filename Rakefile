@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bundler/gem_tasks'
 require 'rake/clean'
 
@@ -19,7 +21,7 @@ rescue LoadError
   end
 end
 
-FIG_DIR = './fig'.freeze
+FIG_DIR = './fig'
 desc 'make UML class diagram'
 task :fig do
   directory FIG_DIR

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'networks dsl', :dsl, :networks, :network do
   before do
     @nws_key = "#{Netomox::NS_NW}:networks"

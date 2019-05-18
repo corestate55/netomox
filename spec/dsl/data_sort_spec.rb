@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'node sorting for network', :dsl, :network, :node do
   before do
     nws = Netomox::DSL::Networks.new do

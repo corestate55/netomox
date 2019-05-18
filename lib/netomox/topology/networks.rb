@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'netomox/const'
 require 'netomox/topology/network'
 require 'netomox/topology/base'
@@ -137,7 +139,7 @@ module Netomox
 
       def ref_count(network, tp_ref)
         tp = find_tp(network.name, tp_ref.node_ref, tp_ref.tp_ref)
-        tp.ref_count_up if tp
+        tp&.ref_count_up
       end
     end
     # rubocop:enable Metrics/ClassLength

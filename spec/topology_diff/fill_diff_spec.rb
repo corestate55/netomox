@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'diff_state filling', :diff do
   context 'when added new object' do
     before do

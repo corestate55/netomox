@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'netomox/const'
 
 module Netomox
@@ -12,7 +14,7 @@ module Netomox
         @flags = flags
         @metric1 = metric1
         @metric2 = metric2
-        @type = "#{NS_L3NW}:l3-link-attributes".freeze
+        @type = "#{NS_L3NW}:l3-link-attributes"
       end
 
       def topo_data
@@ -40,7 +42,7 @@ module Netomox
         @rate = rate
         @delay = delay
         @srlg = srlg
-        @type = "#{NS_L2NW}:l2-link-attributes".freeze
+        @type = "#{NS_L2NW}:l2-link-attributes"
       end
 
       def topo_data

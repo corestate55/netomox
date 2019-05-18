@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'node dsl', :dsl, :node do
   before do
     nws = Netomox::DSL::Networks.new do
@@ -14,7 +16,7 @@ RSpec.describe 'node dsl', :dsl, :node do
     @l3nw = nws.network('test-L3')
 
     @tp_key = "#{Netomox::NS_TOPO}:termination-point"
-    attr_key = 'node-attributes'.freeze
+    attr_key = 'node-attributes'
     @l2attr_key = "#{Netomox::NS_L2NW}:l2-#{attr_key}"
     @l3attr_key = "#{Netomox::NS_L3NW}:l3-#{attr_key}"
   end

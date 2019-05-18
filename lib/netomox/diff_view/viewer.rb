@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 require 'termcolor'
 require 'netomox/diff_view/viewer_utils'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'netomox/const'
 
 module Netomox
@@ -29,7 +31,7 @@ module Netomox
     class L3NWAttribute < NetworkAttributeBase
       def initialize(name: '', flags: [])
         super(name: name, flags: flags)
-        @type = "#{NS_L3NW}:l3-topology-attributes".freeze
+        @type = "#{NS_L3NW}:l3-topology-attributes"
       end
     end
 
@@ -37,7 +39,7 @@ module Netomox
     class L2NWAttribute < NetworkAttributeBase
       def initialize(name: '', flags: [])
         super(name: name, flags: flags)
-        @type = "#{NS_L2NW}:l2-network-attributes".freeze
+        @type = "#{NS_L2NW}:l2-network-attributes"
       end
     end
   end

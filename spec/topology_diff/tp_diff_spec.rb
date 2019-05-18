@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'termination point diff (supporting-tp list)', :diff, :tp do
   context 'when tp literal attribute changed' do
     before do
