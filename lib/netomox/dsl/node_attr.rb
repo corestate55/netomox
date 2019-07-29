@@ -6,6 +6,8 @@ module Netomox
   module DSL
     # prefix info for L3 node attribute
     class L3Prefix
+      attr_accessor :prefix, :metric, :flag
+
       def initialize(prefix: '', metric: 10, flag: [])
         @prefix = prefix
         @metric = metric

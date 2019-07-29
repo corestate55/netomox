@@ -62,7 +62,9 @@ module Netomox
         @supports.push(SupportNode.new(*refs))
       end
 
-      def attribute(attr)
+      def attribute(attr = nil)
+        return @attribute if attr.nil?
+
         @attribute = if @type.key?(NWTYPE_L2)
                        L2NodeAttribute.new(attr)
                      elsif @type.key?(NWTYPE_L3)
