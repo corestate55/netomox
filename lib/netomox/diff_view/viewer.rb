@@ -24,7 +24,7 @@ module Netomox
 
       def stringify_data
         case @data
-        when Array then
+        when Array
           stringify_array
         when Hash then
           # @diff_state is used to decide text color, set at first
@@ -105,7 +105,7 @@ module Netomox
 
       def hash_key_array_color(array_str)
         case @diff_state['forward']
-        when 'added', 'deleted' then
+        when 'added', 'deleted'
           # if determined when forward check (filled)
           @diff_state['forward'].intern
         else

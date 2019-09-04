@@ -38,7 +38,7 @@ module Netomox
     desc 'testfunc JSON', 'Test function'
     def testfunc(file)
       networks = Topology::Networks.new(open_data(file))
-      puts JSON.pretty_generate(networks.check_exist_link_tp)
+      puts JSON.pretty_generate(networks.check_family_support_path)
     end
 
     private
@@ -59,7 +59,8 @@ module Netomox
         networks.check_exist_reverse_link,
         networks.check_id_uniqueness,
         networks.check_tp_ref_count,
-        networks.check_facing_link
+        networks.check_facing_link,
+        networks.check_family_support_path
       ]
       puts JSON.pretty_generate(results)
     end

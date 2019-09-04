@@ -28,6 +28,12 @@ module Netomox
       def ref_path
         @attr_table.int_keys.map { |r| send(r) }.join('__')
       end
+
+      def ref_parent_path
+        ref_parents = ref_path.split('__')
+        ref_parents.pop
+        ref_parents.join('__')
+      end
     end
 
     # Supporting network for network topology data

@@ -163,6 +163,41 @@ module Netomox
       end
       # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
+      # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      # rubocop:disable Metrics/CyclomaticComplexity
+      # rubocop:disable Metrics/PerceivedComplexity
+      def check_family_support_path
+        # check node-tp support path consistency
+        # TODO: network-node support path consistency
+        check('family support path consistency') do |messages|
+          all_termination_points do |tp, node, _nw|
+            next if tp.supports.empty? && node.supports.empty?
+
+            if node.supports.empty? && !tp.supports.empty?
+              msg = "tp:#{tp.path} has supports " \
+                    "but node:#{node.path} does not have supports"
+              messages.push(message(:warn, tp.path, msg))
+              next
+            end
+            if !tp.supports.empty? && !node.supports.empty?
+              node_support_paths = node.supports.map(&:ref_path)
+              tp.supports.each do |tp_support|
+                next if node_support_paths.find do |p|
+                  tp_support.ref_path.start_with?(p)
+                end
+
+                msg = "node:#{node.path} does not support same node with " \
+                      "tp:#{tp.path}: #{tp_support.ref_parent_path}"
+                messages.push(message(:warn, tp.path, msg))
+              end
+            end
+          end
+        end
+      end
+      # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+      # rubocop:enable Metrics/CyclomaticComplexity
+      # rubocop:enable Metrics/PerceivedComplexity
+
       private
 
       def check(desc)

@@ -54,7 +54,7 @@ module Netomox
       def fill_diff_state_of(attrs)
         attrs.each do |attr|
           case send(attr)
-          when Array then
+          when Array
             fill_array_diff_state(send(attr))
           else
             state_hash = { forward: @diff_state.forward }
