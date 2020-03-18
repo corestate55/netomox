@@ -48,8 +48,11 @@ module Netomox
 
       def support(nw_ref)
         snw = find_support(nw_ref)
-        warn "Duplicated support definition:#{snw.path} in #{@path}" if snw
-        @supports.push(SupportNetwork.new(nw_ref))
+        if snw
+          warn "Ignore: Duplicated support definition:#{snw.path} in #{@path}"
+        else
+          @supports.push(SupportNetwork.new(nw_ref))
+        end
       end
 
       def attribute(attr)

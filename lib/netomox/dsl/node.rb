@@ -58,8 +58,11 @@ module Netomox
       def support(nw_ref, node_ref = false)
         refs = normalize_support_ref(nw_ref, node_ref)
         snode = find_support(refs)
-        warn "Duplicated support definition:#{snode.path} in #{@path}" if snode
-        @supports.push(SupportNode.new(*refs))
+        if snode
+          warn "Ignore: Duplicated support definition:#{snode.path} in #{@path}"
+        else
+          @supports.push(SupportNode.new(*refs))
+        end
       end
 
       def attribute(attr = nil)

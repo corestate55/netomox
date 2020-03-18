@@ -29,7 +29,8 @@ module Netomox
 
     # termination point
     class TermPoint < DSLObjectBase
-      attr_accessor :type
+      attr_reader :type
+      attr_accessor :supports
 
       def initialize(parent, name, &block)
         super(parent, name)
@@ -42,8 +43,11 @@ module Netomox
       def support(nw_ref, node_ref = false, tp_ref = false)
         refs = normalize_support_ref(nw_ref, node_ref, tp_ref)
         stp = find_support(refs)
-        warn "Duplicated support definition:#{stp.path} in #{@path}" if stp
-        @supports.push(SupportTermPoint.new(*refs))
+        if stp
+          warn "Ignore: Duplicated support definition:#{stp.path} in #{@path}"
+        else
+          @supports.push(SupportTermPoint.new(*refs))
+        end
       end
 
       def attribute(attr)
