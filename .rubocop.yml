@@ -1,13 +1,25 @@
-Metrics/LineLength:
+Layout/LineLength:
+  Enabled: true
   Exclude:
     - 'spec/**/*_spec.rb'
     - 'netomox.gemspec'
 
 Metrics/BlockLength:
+  Enabled: true
   Exclude:
     - 'spec/**/*_spec.rb'
     - 'netomox.gemspec'
 
 Style/BlockComments:
+  Enabled: true
   Exclude:
     - 'spec/spec_helper.rb'
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
