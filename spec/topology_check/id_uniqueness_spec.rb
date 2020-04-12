@@ -89,8 +89,8 @@ RSpec.describe 'check id uniqueness', :checkup do
     before do
       nws_def = Netomox::DSL::Networks.new
       nw1_def = Netomox::DSL::Network.new(nws_def, 'nw1') do
-        link 'node1', 'tp1', 'node2', 'tp1' # link1
-        link 'node1', 'tp2', 'node2', 'tp2' # link2
+        link %w[node1 tp1 node2 tp1] # link1
+        link %w[node1 tp2 node2 tp2] # link2
       end
       link2dup_def = Netomox::DSL::Link.new(nw1_def, 'node1', 'tp2', 'node2', 'tp2')
       nw1_def.links.push(link2dup_def)

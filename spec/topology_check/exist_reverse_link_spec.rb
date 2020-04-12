@@ -13,10 +13,10 @@ RSpec.describe 'check existence of reverse link', :checkup do
           term_point 'p2'
         end
         # bi-directionl
-        link 'node1', 'tp1', 'node2', 'tp1'
-        link 'node2', 'tp1', 'node1', 'tp1'
+        link %w[node1 tp1 node2 tp1]
+        link %w[node2 tp1 node1 tp1]
         # uni-directional
-        link 'node1', 'tp2', 'node2', 'tp2'
+        link %w[node1 tp2 node2 tp2]
       end
     end
     nws = Netomox::Topology::Networks.new(nws_def.topo_data)

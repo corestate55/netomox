@@ -13,11 +13,11 @@ RSpec.describe 'check existence of tp refered in link src/dst', :checkup do
           term_point 'p2'
         end
         # link (correct)
-        link 'node1', 'p1', 'node2', 'p1'
+        link %w[node1 p1 node2 p1]
         # link (wrong: source tp not found
-        link 'node1', 'X1', 'node2', 'p1'
+        link %w[node1 X1 node2 p1]
         # link (wrong: dest tp not found
-        link 'node1', 'p1', 'node2', 'Y1'
+        link %w[node1 p1 node2 Y1]
       end
     end
     nws = Netomox::Topology::Networks.new(nws_def.topo_data)

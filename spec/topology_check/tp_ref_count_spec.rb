@@ -39,10 +39,10 @@ RSpec.describe 'check term point ref count', :checkup do
           term_point 'tp3'
         end
         # normal bi-directional link
-        bdlink 'node1', 'tp1', 'node2', 'tp1'
+        bdlink %w[node1 tp1 node2 tp1]
         # fail to create node1/tp2-node2/tp2 link
-        link 'node1', 'tp2', 'node2', 'tp2'
-        link 'node2', 'tp2', 'node1', 'tp3'
+        link %w[node1 tp2 node2 tp2]
+        link %w[node2 tp2 node1 tp3]
       end
     end
     nws = Netomox::Topology::Networks.new(nws_def.topo_data)

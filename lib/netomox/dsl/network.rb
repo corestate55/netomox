@@ -166,10 +166,10 @@ module Netomox
       def normalize_find_link_args(src_node_name:, src_tp_name: false,
                                    dst_node_name:, dst_tp_name: false)
         conds = []
-        conds.push(['source', 'node_ref', src_node_name])
-        conds.push(['source', 'tp_ref', src_tp_name]) if src_tp_name
-        conds.push(['destination', 'node_ref', dst_node_name])
-        conds.push(['destination', 'tp_ref', dst_tp_name]) if dst_tp_name
+        conds.push(%W[source node_ref #{src_node_name}])
+        conds.push(%W[source tp_ref #{src_tp_name}]) if src_tp_name
+        conds.push(%W[destination node_ref #{dst_node_name}])
+        conds.push(%W[destination tp_ref #{dst_tp_name}]) if dst_tp_name
         conds
       end
 
