@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'netomox/const'
+require 'netomox/dsl/attr_base'
 
 module Netomox
   module DSL
@@ -83,6 +84,14 @@ module Netomox
       def empty?
         @name.empty? && @flags.empty? && @descr.empty? \
       && @mgmt_addrs.empty? && @sys_mac_addr.empty? && @mgmt_vid.empty?
+      end
+    end
+
+    # multi-purpose
+    class MultiPurposeNodeAttribute < MultiPurposeAttributeBase
+      def initialize(hash)
+        super(hash)
+        @type = 'multi-purpose-node-attributes'
       end
     end
   end

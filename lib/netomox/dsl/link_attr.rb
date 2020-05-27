@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'netomox/const'
+require 'netomox/dsl/attr_base'
 
 module Netomox
   module DSL
@@ -58,6 +59,14 @@ module Netomox
       def empty?
         @name.empty? && @flags.empty? && \
           @rate.nil? && @delay.nil? && @srlg.empty?
+      end
+    end
+
+    # multi-purpose
+    class MultiPurposeLinkAttribute < MultiPurposeAttributeBase
+      def initialize(hash)
+        super(hash)
+        @type = 'multi-purpose-link-attributes'
       end
     end
   end

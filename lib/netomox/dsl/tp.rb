@@ -55,6 +55,8 @@ module Netomox
                        L2TPAttribute.new(attr)
                      elsif @type.key?(NWTYPE_L3)
                        L3TPAttribute.new(attr)
+                     elsif @type.key?(NWTYPE_MP)
+                       MultiPurposeTPAttribute.new(attr)
                      else
                        {}
                      end

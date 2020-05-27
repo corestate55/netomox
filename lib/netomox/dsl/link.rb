@@ -88,6 +88,8 @@ module Netomox
                        L2LinkAttribute.new(attr)
                      elsif @type.key?(NWTYPE_L3)
                        L3LinkAttribute.new(attr)
+                     elsif @type.key?(NWTYPE_MP)
+                       MultiPurposeLinkAttribute.new(attr)
                      else
                        {}
                      end

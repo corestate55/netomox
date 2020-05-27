@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'netomox/const'
+require 'netomox/dsl/attr_base'
 
 module Netomox
   module DSL
@@ -80,6 +81,14 @@ module Netomox
 
       def topo_data
         { 'ip-address' => @ip_addrs }
+      end
+    end
+
+    # multi-purpose
+    class MultiPurposeTPAttribute < MultiPurposeAttributeBase
+      def initialize(hash)
+        super(hash)
+        @type = 'multi-purpose-termination-point-attributes'
       end
     end
   end

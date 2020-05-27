@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'netomox/const'
+require 'netomox/dsl/attr_base'
 
 module Netomox
   module DSL
@@ -40,6 +41,14 @@ module Netomox
       def initialize(name: '', flags: [])
         super(name: name, flags: flags)
         @type = "#{NS_L2NW}:l2-network-attributes"
+      end
+    end
+
+    # multi-purpose
+    class MultiPurposeNWAttribute < MultiPurposeAttributeBase
+      def initialize(hash)
+        super(hash)
+        @type = 'multi-purpose-network-attributes'
       end
     end
   end
