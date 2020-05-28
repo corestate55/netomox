@@ -84,11 +84,11 @@ module Netomox
       end
     end
 
-    # multi-purpose
-    class MultiPurposeTPAttribute < MultiPurposeAttributeBase
+    # attribute for ops-topology termination point
+    class OpsTPAttribute < OpsAttributeBase
       def initialize(hash)
         super(hash)
-        @type = 'multi-purpose-termination-point-attributes'
+        @type = "#{NS_OPS}:ops-termination-point-attributes"
       end
     end
   end

@@ -60,8 +60,8 @@ module Netomox
                        L2NWAttribute.new(attr)
                      elsif @type.key?(NWTYPE_L3)
                        L3NWAttribute.new(attr)
-                     elsif @type.key?(NWTYPE_MP)
-                       MultiPurposeNWAttribute.new(attr)
+                     elsif @type.key?(NWTYPE_OPS)
+                       OpsNWAttribute.new(attr)
                      else
                        {}
                      end

@@ -72,8 +72,8 @@ module Netomox
                        L2NodeAttribute.new(attr)
                      elsif @type.key?(NWTYPE_L3)
                        L3NodeAttribute.new(attr)
-                     elsif @type.key?(NWTYPE_MP)
-                       MultiPurposeNodeAttribute.new(attr)
+                     elsif @type.key?(NWTYPE_OPS)
+                       OpsNodeAttribute.new(attr)
                      else
                        {}
                      end

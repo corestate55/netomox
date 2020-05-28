@@ -62,11 +62,11 @@ module Netomox
       end
     end
 
-    # multi-purpose
-    class MultiPurposeLinkAttribute < MultiPurposeAttributeBase
+    # attribute for ops-topology link
+    class OpsLinkAttribute < OpsAttributeBase
       def initialize(hash)
         super(hash)
-        @type = 'multi-purpose-link-attributes'
+        @type = "#{NS_OPS}:ops-link-attributes"
       end
     end
   end

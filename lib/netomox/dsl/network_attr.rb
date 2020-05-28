@@ -44,11 +44,11 @@ module Netomox
       end
     end
 
-    # multi-purpose
-    class MultiPurposeNWAttribute < MultiPurposeAttributeBase
+    # attribute for ops-topology network
+    class OpsNWAttribute < OpsAttributeBase
       def initialize(hash)
         super(hash)
-        @type = 'multi-purpose-network-attributes'
+        @type = "#{NS_OPS}:ops-network-attributes"
       end
     end
   end
