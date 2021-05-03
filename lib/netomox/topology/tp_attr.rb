@@ -35,6 +35,7 @@ module Netomox
       ].freeze
       attr_accessor :descr, :max_frame_size, :mac_addr, :eth_encap,
                     :port_vlan_id, :vlan_id_names, :tp_state
+
       include Diffable
       include SubAttributeOps
 

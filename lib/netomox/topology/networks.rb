@@ -63,10 +63,8 @@ module Netomox
         nw.links.find { |link| link.source == source_ref }
       end
 
-      def all_networks
-        @networks.each do |nw|
-          yield nw
-        end
+      def all_networks(&block)
+        @networks.each(&block)
       end
 
       def all_nodes

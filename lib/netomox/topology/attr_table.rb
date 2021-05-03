@@ -36,7 +36,7 @@ module Netomox
         #   },
         #   ....
         # ]
-        @lines = lines.map { |line| AttributeTableLine.new(line) }
+        @lines = lines.map { |line| AttributeTableLine.new(**line) }
       end
 
       def int_keys

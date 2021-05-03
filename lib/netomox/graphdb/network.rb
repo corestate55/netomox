@@ -8,10 +8,6 @@ module Netomox
   module GraphDB
     # Network for graph data
     class Network < Topology::Network
-      def initialize(data)
-        super(data)
-      end
-
       def n4j_create
         # p "create node, Label:network, id:#{@path}"
         node = network_object

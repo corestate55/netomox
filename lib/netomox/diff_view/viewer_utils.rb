@@ -13,7 +13,7 @@ module Netomox
                 end
         @diff_state = {}
         @indent_a = indent
-        @indent_b = indent + '  ' # 2-space indent
+        @indent_b = "#{indent}  " # 2-space indent
         @print_all = print_all
         @color = color
       end
@@ -61,14 +61,14 @@ module Netomox
       def delete_color_code(str)
         # delete all color tags
         str.gsub!(/<\w+>/, '')
-        str.gsub!(%r{<\/\w+>}, '')
+        str.gsub!(%r{</\w+>}, '')
         # clean over-wrapped hash key - hash/array bracket
-        str.gsub!(/: [\.\-\+]?\s+/, ': ') # without tag
+        str.gsub!(/: [.\-+]?\s+/, ': ') # without tag
       end
 
       def convert_color_code(str)
         # clean over-wrapped hash key - hash/array bracket
-        str.gsub!(%r{: <\w+>[\.\-\+]<\/\w+>}, ': ')
+        str.gsub!(%r{: <\w+>[.\-+]</\w+>}, ': ')
         str.gsub!(/: (<\w+>)\s+/, ': \1') # with tag
         str.gsub!(/:\s+/, ': ') # without tag
         # convert color tag to shell color code

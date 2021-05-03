@@ -69,11 +69,11 @@ module Netomox
         return @attribute if attr.nil?
 
         @attribute = if @type.key?(NWTYPE_L2)
-                       L2NodeAttribute.new(attr)
+                       L2NodeAttribute.new(**attr)
                      elsif @type.key?(NWTYPE_L3)
-                       L3NodeAttribute.new(attr)
+                       L3NodeAttribute.new(**attr)
                      elsif @type.key?(NWTYPE_OPS)
-                       OpsNodeAttribute.new(attr)
+                       OpsNodeAttribute.new(**attr)
                      else
                        {}
                      end
@@ -84,9 +84,7 @@ module Netomox
           'node-id' => @name,
           "#{NS_TOPO}:termination-point" => @term_points.map(&:topo_data)
         }
-        unless @supports.empty?
-          data['supporting-node'] = @supports.map(&:topo_data)
-        end
+        data['supporting-node'] = @supports.map(&:topo_data) unless @supports.empty?
         data[@attribute.type] = @attribute.topo_data unless @attribute.empty?
         data
       end

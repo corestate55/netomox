@@ -9,6 +9,7 @@ module Netomox
     class TopoObjectBase
       attr_reader :name, :path
       attr_accessor :diff_state, :attribute, :supports
+
       include Diffable
 
       def initialize(name, parent_path = '')

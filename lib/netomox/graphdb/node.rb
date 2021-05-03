@@ -7,10 +7,6 @@ module Netomox
   module GraphDB
     # Node for graph data
     class Node < Topology::Node
-      def initialize(data, parent_path)
-        super(data, parent_path)
-      end
-
       def n4j_create
         node = node_object
         snodes = @supports.map do |snode|

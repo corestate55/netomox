@@ -1,5 +1,9 @@
+AllCops:
+  NewCops: enable
+
 Layout/LineLength:
   Enabled: true
+  Max: 125
   Exclude:
     - 'spec/**/*_spec.rb'
     - 'netomox.gemspec'
@@ -15,17 +19,5 @@ Style/BlockComments:
   Exclude:
     - 'spec/spec_helper.rb'
 
-Style/HashEachMethods:
-  Enabled: true
-
-Style/HashTransformKeys:
-  Enabled: true
-
-Style/HashTransformValues:
-  Enabled: true
-
-Lint/RaiseException:
-  Enabled: true
-
-Lint/StructNewOverride:
-  Enabled: true
+Style/OptionalBooleanParameter:
+  Enabled: false # TODO: fix boolean method parameter styles.

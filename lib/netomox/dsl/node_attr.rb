@@ -33,7 +33,7 @@ module Netomox
         @name = name
         @flags = flags
         @router_id = router_id
-        @prefixes = prefixes.empty? ? [] : prefixes.map { |p| L3Prefix.new(p) }
+        @prefixes = prefixes.empty? ? [] : prefixes.map { |p| L3Prefix.new(**p) }
         @type = "#{NS_L3NW}:l3-node-attributes"
       end
 

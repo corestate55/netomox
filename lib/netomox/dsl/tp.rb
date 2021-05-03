@@ -52,11 +52,11 @@ module Netomox
 
       def attribute(attr)
         @attribute = if @type.key?(NWTYPE_L2)
-                       L2TPAttribute.new(attr)
+                       L2TPAttribute.new(**attr)
                      elsif @type.key?(NWTYPE_L3)
-                       L3TPAttribute.new(attr)
+                       L3TPAttribute.new(**attr)
                      elsif @type.key?(NWTYPE_OPS)
-                       OpsTPAttribute.new(attr)
+                       OpsTPAttribute.new(**attr)
                      else
                        {}
                      end
@@ -64,9 +64,7 @@ module Netomox
 
       def topo_data
         data = { 'tp-id' => @name }
-        unless @supports.empty?
-          data['supporting-termination-point'] = @supports.map(&:topo_data)
-        end
+        data['supporting-termination-point'] = @supports.map(&:topo_data) unless @supports.empty?
         data[@attribute.type] = @attribute.topo_data unless @attribute.empty?
         data
       end

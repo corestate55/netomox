@@ -26,7 +26,7 @@ module Netomox
         case @data
         when Array
           stringify_array
-        when Hash then
+        when Hash
           # @diff_state is used to decide text color, set at first
           @diff_state = @data['_diff_state_'] if @data.key?('_diff_state_')
           stringify_hash
@@ -100,7 +100,7 @@ module Netomox
       def state_by_stringified_str(str)
         # return nil means set color with self diff_state
         # string doesn't have any color tags, use color as :kept state
-        str.match?(%r{<\w+>.*<\/\w+>}) ? :changed : :kept
+        str.match?(%r{<\w+>.*</\w+>}) ? :changed : :kept
       end
 
       def hash_key_array_color(array_str)

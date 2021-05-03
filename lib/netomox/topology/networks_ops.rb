@@ -48,7 +48,7 @@ module Netomox
       end
       # rubocop:enable Metrics/MethodLength
 
-      # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      # rubocop:disable Metrics/MethodLength
       def check_exist_supporting_tp
         check('supporting terminal-points existence') do |messages|
           all_termination_points do |tp, _node, _nw|
@@ -66,7 +66,7 @@ module Netomox
           end
         end
       end
-      # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+      # rubocop:enable Metrics/MethodLength
 
       # rubocop:disable Metrics/MethodLength
       def check_exist_supporting_link

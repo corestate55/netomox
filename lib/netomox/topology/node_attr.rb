@@ -49,6 +49,7 @@ module Netomox
         { int: :prefixes, ext: 'prefix', default: [] }
       ].freeze
       attr_accessor :name, :flags, :router_id, :prefixes
+
       include Diffable
       include SubAttributeOps
 

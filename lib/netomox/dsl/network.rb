@@ -101,7 +101,6 @@ module Netomox
         link(args[2], args[3], args[0], args[1], &block)
       end
 
-      # rubocop:disable Metrics/MethodLength
       def topo_data
         data = {
           'network-id' => @name,
@@ -109,16 +108,12 @@ module Netomox
           'node' => @nodes.map(&:topo_data),
           "#{NS_TOPO}:link" => @links.map(&:topo_data)
         }
-        unless @supports.empty?
-          data['supporting-network'] = @supports.map(&:topo_data)
-        end
+        data['supporting-network'] = @supports.map(&:topo_data) unless @supports.empty?
         data[@attribute.type] = @attribute.topo_data unless @attribute.empty?
         data
       end
-      # rubocop:enable Metrics/MethodLength
 
-      def links_between(src_node_name:, src_tp_name: false,
-                        dst_node_name:, dst_tp_name: false)
+      def links_between(src_node_name:, dst_node_name:, src_tp_name: false, dst_tp_name: false)
         conds = normalize_find_link_args(
           src_node_name: src_node_name, src_tp_name: src_tp_name,
           dst_node_name: dst_node_name, dst_tp_name: dst_tp_name
@@ -165,8 +160,7 @@ module Netomox
         end
       end
 
-      def normalize_find_link_args(src_node_name:, src_tp_name: false,
-                                   dst_node_name:, dst_tp_name: false)
+      def normalize_find_link_args(src_node_name:, dst_node_name:, src_tp_name: false, dst_tp_name: false)
         conds = []
         conds.push(%W[source node_ref #{src_node_name}])
         conds.push(%W[source tp_ref #{src_tp_name}]) if src_tp_name

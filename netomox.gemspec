@@ -5,6 +5,8 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'netomox/version'
 
 Gem::Specification.new do |spec|
+  spec.required_ruby_version = '>= 2.4.0'
+
   spec.name          = 'netomox'
   spec.version       = Netomox::VERSION
   spec.authors       = ['corestate55']

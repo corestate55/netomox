@@ -21,7 +21,7 @@ module Netomox
 
       def pick_backward_state(child_obj)
         case child_obj
-        when Array then
+        when Array
           return nil if child_obj.empty? # nil for empty list
 
           child_obj.map { |d| d.diff_state.detect }

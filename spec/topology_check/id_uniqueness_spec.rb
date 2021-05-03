@@ -5,26 +5,6 @@ RSpec.describe 'check id uniqueness', :checkup do
     %(found duplicate '#{id_type}_id': ["#{id}"])
   end
 
-  before do
-    # Notice:
-    #   Netomox::DSL::Networks#network,
-    #   Netomox::DSL::Network##node, #link and
-    #   Netomox::DSL::Node#term_point
-    #   checks network_id already exists.
-    #   So, cannot append object which has same name(id).
-    module Netomox
-      module DSL
-        class Network
-          attr_accessor :nodes
-          attr_accessor :links
-        end
-        class Node
-          attr_accessor :term_points
-        end
-      end
-    end
-  end
-
   context 'exists duplicated network' do
     before do
       nws_def = Netomox::DSL::Networks.new do

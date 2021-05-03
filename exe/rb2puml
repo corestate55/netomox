@@ -7,6 +7,7 @@ require 'optparse'
 class KlassRecords
   attr_accessor :pub_methods, :priv_methods, :prot_methods,
                 :vars, :uses, :parents, :mix_in_modules
+
   def initialize(modules, kls_name, stereotype = '')
     @modules = modules
     @kls_name = kls_name
@@ -62,11 +63,12 @@ class KlassRecords
   end
 
   def method_head(mode)
-    case mode
-    when :pub_methods then '+'
-    when :priv_methods then '-'
-    when :prot_methods then '#'
-    end
+    head_of = {
+      pub_methods: '+',
+      priv_methods: '-',
+      prot_methods: '#'
+    }
+    head_of[mode]
   end
 end
 
@@ -74,6 +76,7 @@ end
 # ruby to PlantUML
 class RB2Puml
   attr_reader :kls_table
+
   def initialize(dir, simple = false)
     @target_files = Dir.glob("#{dir}/*.rb")
     @simple = simple
@@ -111,13 +114,11 @@ class RB2Puml
     @method_mode = :pub_methods
   end
 
-  def all_lines
+  def all_lines(&block)
     @target_files.each do |file_name|
       init_states(file_name)
       File.open(file_name, 'r') do |file|
-        file.each_line do |line|
-          yield line
-        end
+        file.each_line(&block)
       end
     end
   end
@@ -139,7 +140,7 @@ class RB2Puml
     push_parent(parent_kls) if parent_kls
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength
   def parse_single_def(line)
     case line
     when /^\s*class ([\w:]+) < ([\w:]+)/, /^\s*class ([\w:]+)/
@@ -148,7 +149,7 @@ class RB2Puml
       push_module(Regexp.last_match(1))
     when /\s*include (\w+)/
       push_mix_in(Regexp.last_match(1))
-    when /^\s*def ([\w\?]+)/
+    when /^\s*def ([\w?]+)/
       push_method(Regexp.last_match(1))
     when /^\s*protected\s*$/
       @method_mode = :prot_methods
@@ -156,12 +157,10 @@ class RB2Puml
       @method_mode = :priv_methods
     end
   end
-  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength
 
   def push(key, value)
-    unless @kls_table.key?(@kls_name)
-      @kls_table[@kls_name] = KlassRecords.new(@modules, @kls_name, @stereotype)
-    end
+    @kls_table[@kls_name] = KlassRecords.new(@modules, @kls_name, @stereotype) unless @kls_table.key?(@kls_name)
     @kls_table[@kls_name].send(key).push(value)
   end
 

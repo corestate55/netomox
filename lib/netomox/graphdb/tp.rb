@@ -6,10 +6,6 @@ module Netomox
   module GraphDB
     # Termination point for graph data
     class TermPoint < Topology::TermPoint
-      def initialize(data, parent_path)
-        super(data, parent_path)
-      end
-
       def n4j_create
         # p "create node, Label:TerminationPoint, id:#{@path}"
         node = termination_point_object

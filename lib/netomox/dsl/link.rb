@@ -28,6 +28,7 @@ module Netomox
     # termination point reference
     class TermPointRef
       attr_reader :node_ref, :tp_ref
+
       def initialize(node_ref, tp_ref, direction)
         @node_ref = node_ref
         @tp_ref = tp_ref
@@ -107,9 +108,7 @@ module Netomox
           'source' => @source.topo_data,
           'destination' => @destination.topo_data
         }
-        unless @supports.empty?
-          data['supporting-link'] = @supports.map(&:topo_data)
-        end
+        data['supporting-link'] = @supports.map(&:topo_data) unless @supports.empty?
         data[@attribute.type] = @attribute.topo_data unless @attribute.empty?
         data
       end

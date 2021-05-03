@@ -6,10 +6,6 @@ module Netomox
   module GraphDB
     # Link for graph data
     class Link < Topology::Link
-      def initialize(data, parent_path)
-        super(data, parent_path)
-      end
-
       def n4j_create
         # p "create relationship, Label:connected, id:#{@path},
         # src:#{@source.ref_path}, dst:#{@destination.ref_path}"
