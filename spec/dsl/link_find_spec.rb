@@ -27,7 +27,7 @@ RSpec.describe 'methods to find link from/to node/tp', :dsl, :link do
         src_node_name: 'nodeX', src_tp_name: 'p0',
         dst_node_name: 'nodeY', dst_tp_name: 'p0'
       }
-      links = @nw.links_between(opts)
+      links = @nw.links_between(**opts)
       expect(links.length).to eq 2
     end
 
@@ -36,7 +36,7 @@ RSpec.describe 'methods to find link from/to node/tp', :dsl, :link do
         src_node_name: 'nodeX', src_tp_name: 'tpA',
         dst_node_name: 'nodeY'
       }
-      links = @nw.links_between(opts)
+      links = @nw.links_between(**opts)
       expect(links.length).to eq 4
     end
 
@@ -45,7 +45,7 @@ RSpec.describe 'methods to find link from/to node/tp', :dsl, :link do
         src_node_name: 'nodeX',
         dst_node_name: 'nodeY', dst_tp_name: 'tpB'
       }
-      links = @nw.links_between(opts)
+      links = @nw.links_between(**opts)
       expect(links.length).to eq 4
     end
 
@@ -54,7 +54,7 @@ RSpec.describe 'methods to find link from/to node/tp', :dsl, :link do
         src_node_name: 'nodeX',
         dst_node_name: 'nodeY'
       }
-      links = @nw.links_between(opts)
+      links = @nw.links_between(**opts)
       expect(links.length).to eq 8
     end
   end

@@ -18,7 +18,7 @@ module Netomox
         # NOTICE: (a)(b) can use NULL attribute
         (result, d_attr) = compare_attribute(@attribute, other.attribute)
         arg = { forward: result, pair: @attribute }
-        d_attr.diff_state = DiffState.new(arg)
+        d_attr.diff_state = DiffState.new(**arg)
         # update diff_state in sub-class of attribute
         case result
         when :changed
@@ -99,7 +99,7 @@ module Netomox
       end
 
       def set_diff_state(rlhs, state_hash)
-        rlhs.diff_state = DiffState.new(state_hash)
+        rlhs.diff_state = DiffState.new(**state_hash)
         rlhs # set diff state and return itself
       end
 

@@ -71,7 +71,7 @@ module Netomox
 
       def links_between(dst)
         find_opts = normalize_links_between(dst)
-        @parent.parent.links_between(find_opts)
+        @parent.parent.links_between(**find_opts)
       end
 
       def link_to(dst)

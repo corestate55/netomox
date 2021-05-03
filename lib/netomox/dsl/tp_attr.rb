@@ -40,7 +40,7 @@ module Netomox
         @vlan_id_names = if vlan_id_names.empty?
                            []
                          else
-                           vlan_id_names.map { |v| L2VlanIdName.new(v) }
+                           vlan_id_names.map { |v| L2VlanIdName.new(**v) }
                          end
         @tp_state = tp_state
         @type = "#{NS_L2NW}:l2-termination-point-attributes"

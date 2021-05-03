@@ -86,11 +86,11 @@ module Netomox
 
       def attribute(attr)
         @attribute = if @type.key?(NWTYPE_L2)
-                       L2LinkAttribute.new(attr)
+                       L2LinkAttribute.new(**attr)
                      elsif @type.key?(NWTYPE_L3)
-                       L3LinkAttribute.new(attr)
+                       L3LinkAttribute.new(**attr)
                      elsif @type.key?(NWTYPE_OPS)
-                       OpsLinkAttribute.new(attr)
+                       OpsLinkAttribute.new(**attr)
                      else
                        {}
                      end
