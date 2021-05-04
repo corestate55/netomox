@@ -79,8 +79,7 @@ module Netomox
       end
 
       # make uni-directional link
-      def link(src_node, src_tp = false,
-               dst_node = false, dst_tp = false, &block)
+      def link(src_node, src_tp = nil, dst_node = nil, dst_tp = nil, &block)
         args = normalize_link_args(src_node, src_tp, dst_node, dst_tp)
         link = find_link(args.join(','))
         if link
@@ -94,8 +93,7 @@ module Netomox
 
       # make bi-directional link
       # TODO: supporting-link implementation
-      def bdlink(src_node, src_tp = false,
-                 dst_node = false, dst_tp = false, &block)
+      def bdlink(src_node, src_tp = nil, dst_node = nil, dst_tp = nil, &block)
         args = normalize_link_args(src_node, src_tp, dst_node, dst_tp)
         link(args[0], args[1], args[2], args[3], &block)
         link(args[2], args[3], args[0], args[1], &block)
@@ -113,7 +111,7 @@ module Netomox
         data
       end
 
-      def links_between(src_node_name:, dst_node_name:, src_tp_name: false, dst_tp_name: false)
+      def links_between(src_node_name:, dst_node_name:, src_tp_name: nil, dst_tp_name: nil)
         conds = normalize_find_link_args(
           src_node_name: src_node_name, src_tp_name: src_tp_name,
           dst_node_name: dst_node_name, dst_tp_name: dst_tp_name
@@ -169,8 +167,7 @@ module Netomox
         conds
       end
 
-      def normalize_link_args(src_node, src_tp = false,
-                              dst_node = false, dst_tp = false)
+      def normalize_link_args(src_node, src_tp = nil, dst_node = nil, dst_tp = nil)
         case src_node
         when Array
           # with 1 arg (with an array)

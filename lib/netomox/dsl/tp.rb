@@ -40,7 +40,7 @@ module Netomox
         register(&block) if block_given?
       end
 
-      def support(nw_ref, node_ref = false, tp_ref = false)
+      def support(nw_ref, node_ref = nil, tp_ref = nil)
         refs = normalize_support_ref(nw_ref, node_ref, tp_ref)
         stp = find_support(refs)
         if stp
@@ -84,7 +84,7 @@ module Netomox
         @parent.parent.bdlink link_spec
       end
 
-      def find_support(nw_ref, node_ref = false, tp_ref = false)
+      def find_support(nw_ref, node_ref = nil, tp_ref = nil)
         refs = normalize_support_ref(nw_ref, node_ref, tp_ref)
         path = refs.join('__')
         @supports.find { |stp| stp.path == path }
@@ -114,7 +114,7 @@ module Netomox
         end
       end
 
-      def normalize_support_ref(nw_ref, node_ref = false, tp_ref = false)
+      def normalize_support_ref(nw_ref, node_ref = nil, tp_ref = nil)
         # with 3 args or 1 arg (array)
         node_ref && tp_ref ? [nw_ref, node_ref, tp_ref] : nw_ref
       end

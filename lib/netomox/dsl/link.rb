@@ -74,7 +74,7 @@ module Netomox
       end
       # rubocop:enable Metrics/ParameterLists
 
-      def support(nw_ref, link_ref = false)
+      def support(nw_ref, link_ref = nil)
         refs = normalize_support_ref(nw_ref, link_ref)
         slink = find_support(refs)
         if slink
@@ -96,7 +96,7 @@ module Netomox
                      end
       end
 
-      def find_support(nw_ref, link_ref = false)
+      def find_support(nw_ref, link_ref = nil)
         refs = normalize_support_ref(nw_ref, link_ref)
         path = refs.join('__')
         @supports.find { |slink| slink.path == path }
@@ -115,7 +115,7 @@ module Netomox
 
       private
 
-      def normalize_support_ref(nw_ref, link_ref = false)
+      def normalize_support_ref(nw_ref, link_ref = nil)
         # with 2 args or 1 arg (array)
         link_ref ? [nw_ref, link_ref] : nw_ref
       end

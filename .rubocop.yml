@@ -3,7 +3,7 @@ AllCops:
 
 Layout/LineLength:
   Enabled: true
-  Max: 125
+  Max: 120
   Exclude:
     - 'spec/**/*_spec.rb'
     - 'netomox.gemspec'
@@ -18,6 +18,3 @@ Style/BlockComments:
   Enabled: true
   Exclude:
     - 'spec/spec_helper.rb'
-
-Style/OptionalBooleanParameter:
-  Enabled: false # TODO: fix boolean method parameter styles.

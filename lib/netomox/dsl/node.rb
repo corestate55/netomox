@@ -55,7 +55,7 @@ module Netomox
       end
       alias tp term_point
 
-      def support(nw_ref, node_ref = false)
+      def support(nw_ref, node_ref = nil)
         refs = normalize_support_ref(nw_ref, node_ref)
         snode = find_support(refs)
         if snode
@@ -115,7 +115,7 @@ module Netomox
       end
       alias find_tp find_term_point
 
-      def find_support(nw_ref, node_ref = false)
+      def find_support(nw_ref, node_ref = nil)
         refs = normalize_support_ref(nw_ref, node_ref)
         path = refs.join('__')
         @supports.find { |snode| snode.path == path }
@@ -158,7 +158,7 @@ module Netomox
         end
       end
 
-      def normalize_support_ref(nw_ref, node_ref = false)
+      def normalize_support_ref(nw_ref, node_ref = nil)
         # with 2 args or 1 arg (array)
         node_ref ? [nw_ref, node_ref] : nw_ref
       end

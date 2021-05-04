@@ -25,11 +25,15 @@ gem 'netomox'
 
 And then execute:
 
-    $ bundle
+```text
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install netomox
+```text
+$ gem install netomox
+```
 
 -->
 
@@ -113,10 +117,20 @@ $ bundle exec netomox diff [--all|--color] model/target.orig.json model/target.j
 ```
 In default, checker diff output only changed object and its parent object.
 
-* `-a`/`--all` option: checker diff output whole data include unchanged object.
-* `-c`/`--color` option: use color for diff.
-* `-o FILE`/`--output FILE` option: save diff data to FILE (json data includes diff info for diff viewer).
+* `-a`/`--all` : checker diff output whole data include unchanged object.
+* `-c`/`--color` : use color for diff.
+* `-o FILE`/`--output FILE` : save diff data to FILE (json data includes diff info for diff viewer).
 If specified `-o` and other options, ignored them.
+
+### Generate UML class diagram (PlantUML format)
+
+[rb2puml](./bin/rb2puml) generates UML class diagram for PlantUML.
+* `-s`/`--simple` : Simple format (not include class method information)
+* `-d`/`--dir` : Directory path to analyze source code (*.rb)
+
+```text
+$ bundle exec rb2puml -d lib/netomox/dsl > netomox_dsl.puml
+```
 
 ### Store topology data with Graph DB (Neo4j)
 
@@ -157,4 +171,3 @@ npm run start
 ### Netomox UML Class diagrams
 
 Install PlantUML and exec `bundle exec rake fig`. Then, class diagrams will be created in `figs/` directory.
-
