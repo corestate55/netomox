@@ -21,6 +21,18 @@ rescue LoadError
   end
 end
 
+begin
+  require 'yard'
+  require 'yard/rake/yardoc_task'
+  YARD::Rake::YardocTask.new do |task|
+    task.files = FileList['./lib/**/*.rb']
+  end
+rescue LoadError
+  task :yard do
+    warn 'YARD is disabled'
+  end
+end
+
 FIG_DIR = './fig'
 desc 'make UML class diagram'
 task :fig do
