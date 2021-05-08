@@ -19,6 +19,16 @@ module Netomox
         ref_path.split('__').shift
       end
 
+      def ref_node
+        paths = ref_path.split('__')
+        paths.length > 1 ? paths[1] : nil
+      end
+
+      def ref_tp
+        paths = ref_path.split('__')
+        paths.length > 2 ? paths[2] : nil
+      end
+
       def ref_link_tp_name
         path_elements = ref_path.split('__')
         path_elements.shift

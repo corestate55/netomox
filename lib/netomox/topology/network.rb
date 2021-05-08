@@ -39,6 +39,23 @@ module Netomox
         end
       end
 
+      def find_link_by_source(node_ref, tp_ref)
+        source_data = {
+          'source-node' => node_ref,
+          'source-tp' => tp_ref
+        }
+        source_ref = TpRef.new(source_data, @name)
+        @links.find { |link| link.source == source_ref }
+      end
+
+      def find_all_links_by_source_node(node_ref)
+        @links.find_all { |link| link.source.node_ref == node_ref }
+      end
+
+      def find_node_by_name(node_ref)
+        @nodes.find { |node| node.name == node_ref }
+      end
+
       def eql?(other)
         # TODO: now network types is literal (NOT object)
         super(other) && @network_types == other.network_types

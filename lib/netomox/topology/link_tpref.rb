@@ -13,7 +13,7 @@ module Netomox
       # NOTICE: Link source/destination (TpRef) has only node_ref and tp_ref
       # according to yang model. but in netomox, it need network_ref
       # to handle TpRef as same manner as other objects.
-      attr_accessor :node_ref, :tp_ref, :network_ref
+      attr_accessor :network_ref, :node_ref, :tp_ref
 
       def initialize(data, parent_path)
         super(ATTR_DEFS, data)

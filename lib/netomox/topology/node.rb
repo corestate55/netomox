@@ -55,6 +55,29 @@ module Netomox
         add_supports_and_attr(data, 'supporting-node')
       end
 
+      def find_all_supports_by_network(nw_ref)
+        @supports.find_all do |support|
+          support.ref_network == nw_ref
+        end
+      end
+
+      def find_tp_by_name(tp_ref)
+        @termination_points.find { |tp| tp.name == tp_ref }
+      end
+
+      # key: method to read attribute (symbol)
+      def find_all_tps_with_attribute(key)
+        @termination_points.filter { |tp| tp.attribute.attribute?(key) }
+      end
+
+      def each_tps_except_loopback(&block)
+        find_all_tps_except_loopback.each(&block)
+      end
+
+      def each_tps(&block)
+        @termination_points.each(&block)
+      end
+
       private
 
       def setup_termination_points(data)

@@ -26,6 +26,10 @@ module Netomox
         end
       end
 
+      def attribute?(key)
+        self.class.method_defined?(key)
+      end
+
       def ==(other)
         eql?(other)
       end
