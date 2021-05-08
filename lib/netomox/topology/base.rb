@@ -12,6 +12,8 @@ module Netomox
 
       include Diffable
 
+      # @param [String] name Object name
+      # @param [String] parent_path Parent ofject path
       def initialize(name, parent_path = '')
         @name = name
         @parent_path = parent_path
@@ -19,14 +21,20 @@ module Netomox
         @diff_state = DiffState.new # empty state
       end
 
+      # @param [TopoObjectBase] other Target topology object
+      # @return [Boolean]
       def ==(other)
         eql?(other)
       end
 
+      # @param [TopoObjectBase] other Target topology object
+      # @return [Boolean]
       def eql?(other)
         @path == other.path
       end
 
+      # seems empty (if nameless object)
+      # @return [Boolean]
       def empty?
         @name.empty?
       end

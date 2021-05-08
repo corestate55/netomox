@@ -8,20 +8,28 @@ require 'netomox/topology/link_tpref'
 
 module Netomox
   module Topology
-    # Networks for Topology data
     # rubocop:disable Metrics/ClassLength
+    # Networks for Topology data
     class Networks < TopoObjectBase
+      # @!attribute [rw] networks
+      #   @return [Array<Network>]
       attr_accessor :networks
 
+      # @return [Hash] RFC8345 data
       def initialize(data)
         super('networks')
         setup_networks(data)
       end
 
+      # @param [String] network_ref Network name
+      # @return [Network, nil] Found network (nil if not found)
       def find_network(network_ref)
         @networks.find { |nw| nw.name == network_ref }
       end
 
+      # @param [String] network_ref Network name
+      # @param [String] node_ref Node name
+      # @return [Node, nil] Found node in network (nil if not found)
       def find_node(network_ref, node_ref)
         nw = find_network(network_ref)
         unless nw
@@ -32,6 +40,10 @@ module Netomox
         nw.nodes.find { |node| node.name == node_ref }
       end
 
+      # @param [String] network_ref Network name
+      # @param [String] node_ref Node name
+      # @param [String] tp_ref Term-point name
+      # @return [TermPoint, nil] Found term-point in node/network (nil if not found)
       def find_tp(network_ref, node_ref, tp_ref)
         node = find_node(network_ref, node_ref)
         unless node
@@ -43,6 +55,9 @@ module Netomox
         node.termination_points.find { |tp| tp.name == tp_ref }
       end
 
+      # @param [String] network_ref Network name
+      # @param [String] link_ref Link name
+      # @return [Link, nil] Found link in network
       def find_link(network_ref, link_ref)
         nw = find_network(network_ref)
         unless nw
@@ -53,6 +68,11 @@ module Netomox
         nw.links.find { |link| link.name == link_ref }
       end
 
+      # Find link by its source term point
+      # @param [String] network_ref Network name
+      # @param [String] node_ref Node name
+      # @param [String] tp_ref Term-point name
+      # @return [Link, nil] Found link (nil if not found)
       def find_link_source(network_ref, node_ref, tp_ref)
         nw = find_network(network_ref)
         source_data = {
@@ -63,10 +83,12 @@ module Netomox
         nw.links.find { |link| link.source == source_ref }
       end
 
+      # exec for each networks
       def all_networks(&block)
         @networks.each(&block)
       end
 
+      # exec for each node in all networks
       def all_nodes
         all_networks do |nw|
           nw.nodes.each do |node|
@@ -75,6 +97,7 @@ module Netomox
         end
       end
 
+      # exec for each links in all networks
       def all_links
         all_networks do |nw|
           nw.links.each do |link|
@@ -83,6 +106,7 @@ module Netomox
         end
       end
 
+      # exec for each term-points in all nodes and networks
       def all_termination_points
         all_nodes do |node, nw|
           node.termination_points.each do |tp|
@@ -91,6 +115,8 @@ module Netomox
         end
       end
 
+      # @param [Networks] other Networks to compare
+      # @return [Networks] Result of comparison
       def diff(other)
         # forward check
         d_networks = Networks.new({})
@@ -106,6 +132,8 @@ module Netomox
         fill_diff_state_of(%i[networks])
       end
 
+      # Convert to data for RFC8345 format
+      # @return [Hash]
       def to_data
         {
           "#{NS_NW}:networks" => {

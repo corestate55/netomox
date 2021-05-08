@@ -9,6 +9,10 @@ module Netomox
   module Topology
     # Link for topology data
     class Link < TopoObjectBase
+      # @!attribute [rw] source
+      #   @return [TpRef]
+      # @!attribute [rw] destination
+      #   @return [TpRef]
       attr_accessor :source, :destination
 
       ATTR_KEY_KLASS_LIST = [
@@ -16,6 +20,8 @@ module Netomox
         { key: "#{NS_L3NW}:l3-link-attributes", klass: L3LinkAttribute }
       ].freeze
 
+      # @param [Hash] data RFC8345 data (link element)
+      # @param [String] parent_path Parent (Network) path
       def initialize(data, parent_path)
         super(data['link-id'], parent_path)
         setup_source(data)
@@ -24,6 +30,8 @@ module Netomox
         setup_attribute(data, ATTR_KEY_KLASS_LIST)
       end
 
+      # @param [Link] other Link to compare
+      # @return [Link] Result of comparison
       def diff(other)
         # forward check
         d_link = Link.new({ 'link-id' => @name }, @parent_path)
@@ -42,10 +50,13 @@ module Netomox
         fill_diff_state_of(%i[source destination supports attribute])
       end
 
+      # @return [String]
       def to_s
         "link:#{name}" # "#{@source}->#{@destination}"
       end
 
+      # Convert to data for RFC8345 format
+      # @return [Hash]
       def to_data
         data = {
           'link-id' => @name,

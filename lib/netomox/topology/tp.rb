@@ -12,16 +12,12 @@ module Netomox
       attr_reader :ref_count
 
       ATTR_KEY_KLASS_LIST = [
-        {
-          key: "#{NS_L2NW}:l2-termination-point-attributes",
-          klass: L2TPAttribute
-        },
-        {
-          key: "#{NS_L3NW}:l3-termination-point-attributes",
-          klass: L3TPAttribute
-        }
+        { key: "#{NS_L2NW}:l2-termination-point-attributes", klass: L2TPAttribute },
+        { key: "#{NS_L3NW}:l3-termination-point-attributes", klass: L3TPAttribute }
       ].freeze
 
+      # @param [Hash] data RFC8345 data (term-point element)
+      # @param [String] parent_path Parent (node) path
       def initialize(data, parent_path)
         super(data['tp-id'], parent_path)
         @ref_count = 0
@@ -30,10 +26,13 @@ module Netomox
         setup_attribute(data, ATTR_KEY_KLASS_LIST)
       end
 
+      # @return [String]
       def to_s
         "term_point:#{@name}"
       end
 
+      # Convert to data for RFC8345 format
+      # @return [Hash]
       def to_data
         data = {
           'tp-id' => @name,
@@ -42,6 +41,8 @@ module Netomox
         add_supports_and_attr(data, 'supporting-termination-point')
       end
 
+      # @param [TermPoint] other Term-point to compare
+      # @return [TermPoint] Result of comparison
       def diff(other)
         # forward check
         d_tp = TermPoint.new({ 'tp-id' => @name }, @parent_path)
@@ -58,10 +59,13 @@ module Netomox
         fill_diff_state_of(%i[supports attribute])
       end
 
+      # @return [Integer]
       def ref_count_up
         @ref_count += 1
       end
 
+      # Is reference count normal?
+      # @return [Boolean]
       def regular_ref_count?
         !(@ref_count.zero? || @ref_count.odd? || @ref_count >= 4)
       end

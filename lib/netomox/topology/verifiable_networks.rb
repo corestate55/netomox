@@ -5,8 +5,8 @@ require 'netomox/topology/error'
 
 module Netomox
   module Topology
-    # Networks for Topology data verification
     # rubocop:disable Metrics/ClassLength
+    # Networks for Topology data verification
     class VerifiableNetworks < Networks
       def check_exist_supporting_network
         check('supporting network existence') do |messages|

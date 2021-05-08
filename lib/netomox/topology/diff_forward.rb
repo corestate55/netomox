@@ -8,11 +8,16 @@ module Netomox
     # NOTICE: who receive the method? (receiver?)
     # when (a) - (b) => (c)
     module Diffable
+      # Diff of supports
+      # @param [TopoObjectBase] other Target object to compare
+      # @return [Array<SupportingRefBase>]
       def diff_supports(other)
         # receiver of this method will be (a), other will be (b)
         diff_list(:supports, other)
       end
 
+      # @param [TopoObjectBase] other Target object to compare
+      # @return [AttributeBase]
       def diff_attribute(other)
         # receiver of this method will be (a), other will be (b)
         # NOTICE: (a)(b) can use NULL attribute
@@ -29,6 +34,10 @@ module Netomox
         d_attr
       end
 
+      # Forward diff of attribute
+      # @param [Symbol] attr Attribute to check
+      # @param [TopoObjectBase] other Target object to compare
+      # @return [Array<TopoObjectBase, AttributeBase>]
       def diff_forward_check_of(attr, other)
         # receiver of this method will be (a), other will be (b)
         obj_diff = diff_list(attr, other)
@@ -72,6 +81,9 @@ module Netomox
         end
       end
 
+      # @param [Symbol] attr Attribute of object to compare
+      # @param [TopoObjectBase, AttributeBase] other Target object to compare
+      # @return [Array<TopoObjectBase, AttributeBase>] Objects of specified attribute (added DiffState)
       def diff_list(attr, other)
         results = []
         send(attr).each do |lhs|
@@ -88,6 +100,10 @@ module Netomox
         results
       end
 
+      # Set diff state for list of objects
+      # @param [TopoObjectBase, AttributeBase] lhs left-hand-side object
+      # @param [TopoObjectBase, AttributeBase] rhs right-hand-side object
+      # @return [TopoObjectBase, AttributeBase]
       def select_diff_list(lhs, rhs)
         if rhs
           # lhs found in rhs -> kept
@@ -98,11 +114,18 @@ module Netomox
         end
       end
 
+      # Set diff state and return itself
+      # @param [TopoObjectBase, AttributeBase] rlhs right or left hand side of diff
+      # @param [Hash] state_hash forward/backward diff state
+      # @return [TopoObjectBase, AttributeBase] rlhs itself (added DiffState)
       def set_diff_state(rlhs, state_hash)
         rlhs.diff_state = DiffState.new(**state_hash)
-        rlhs # set diff state and return itself
+        rlhs
       end
 
+      # @param [AttributeBase] lhs
+      # @param [AttributeBase] rhs
+      # @return [Array<Symbol, AttributeBase>]
       def compare_attribute(lhs, rhs)
         # NOTICE: attribute (lhs and/or rhs) allowed be empty.
         if lhs == rhs

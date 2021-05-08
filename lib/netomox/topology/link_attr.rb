@@ -6,6 +6,18 @@ module Netomox
   module Topology
     # attribute for L2 link
     class L2LinkAttribute < AttributeBase
+      # @!attribute [rw] name
+      #   @return [string]
+      # @!attribute [rw] flags
+      #   @return [Array<<String>]
+      # @!attribute [rw] rate
+      #   @return [Integer]
+      # @!attribute [rw] delay
+      #   @return [Integer]
+      # @!attribute [rw] srlg
+      #   @return [String]
+      attr_accessor :name, :flags, :rate, :delay, :srlg
+
       ATTR_DEFS = [
         { int: :name, ext: 'name', default: '' },
         { int: :flags, ext: 'flag', default: [] },
@@ -13,12 +25,14 @@ module Netomox
         { int: :delay, ext: 'delay', default: 0 },
         { int: :srlg, ext: 'srlg', default: '' }
       ].freeze
-      attr_accessor :name, :flags, :rate, :delay, :srlg
 
+      # @param [Hash] data Data in RFC8345
+      # @param [String] type Keyword of data
       def initialize(data, type)
         super(ATTR_DEFS, data, type)
       end
 
+      # @return [String]
       def to_s
         "attribute: #{@name}"
       end
@@ -26,18 +40,30 @@ module Netomox
 
     # attribute for L3 link
     class L3LinkAttribute < AttributeBase
+      # @!attribute [rw] name
+      #   @return [string]
+      # @!attribute [rw] flags
+      #   @return [Array<String>]
+      # @!attribute [rw] metric1
+      #   @return [Integer]
+      # @!attribute [rw] metric2
+      #   @return [Integer]
+      attr_accessor :name, :flags, :metric1, :metric2
+
       ATTR_DEFS = [
         { int: :name, ext: 'name', default: '' },
         { int: :flags, ext: 'flag', default: [] },
         { int: :metric1, ext: 'metric1', default: 0 },
         { int: :metric2, ext: 'metric2', default: 0 }
       ].freeze
-      attr_accessor :name, :flags, :metric1, :metric2
 
+      # @param [Hash] data Data in RFC8345
+      # @param [String] type Keyword of data
       def initialize(data, type)
         super(ATTR_DEFS, data, type)
       end
 
+      # @return [String]
       def to_s
         "attribute: #{@name}"
       end

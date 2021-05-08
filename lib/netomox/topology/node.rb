@@ -10,6 +10,8 @@ module Netomox
   module Topology
     # Node for topology data
     class Node < TopoObjectBase
+      # @!attribute [rw] termination_points
+      #   @return [Array<TermPoint>]
       attr_accessor :termination_points
 
       ATTR_KEY_KLASS_LIST = [
@@ -17,6 +19,8 @@ module Netomox
         { key: "#{NS_L3NW}:l3-node-attributes", klass: L3NodeAttribute }
       ].freeze
 
+      # @param [Hash] data RFC8345 data (node element)
+      # @param [String] parent_path Parent (network) path
       def initialize(data, parent_path)
         super(data['node-id'], parent_path)
         setup_termination_points(data)
@@ -24,6 +28,8 @@ module Netomox
         setup_attribute(data, ATTR_KEY_KLASS_LIST)
       end
 
+      # @param [Node] other Node to compare
+      # @return [Node] Result of comparison
       def diff(other)
         # forward check
         d_node = Node.new({ 'node-id' => @name }, @parent_path)
@@ -42,10 +48,13 @@ module Netomox
         fill_diff_state_of(%i[termination_points supports attribute])
       end
 
+      # @return [String]
       def to_s
         "node:#{@name}"
       end
 
+      # Convert ot data for RFC8345 format
+      # @return [Hash]
       def to_data
         data = {
           'node-id' => @name,
@@ -55,25 +64,28 @@ module Netomox
         add_supports_and_attr(data, 'supporting-node')
       end
 
+      # Find all support-node that links to specified network
+      # @param [String] nw_ref Network name
+      # @return [Array<SupportingNode>] (empty array if not found)
       def find_all_supports_by_network(nw_ref)
         @supports.find_all do |support|
           support.ref_network == nw_ref
         end
       end
 
+      # @param [String] tp_ref Term-point name
+      # @return [TermPoint, nil] Found term-point (nil if not found)
       def find_tp_by_name(tp_ref)
         @termination_points.find { |tp| tp.name == tp_ref }
       end
 
-      # key: method to read attribute (symbol)
+      # @@param [Symbol] key Method name Dread attribute)
+      # @return [Array<TermPoint>] Found term-points (empty array if not found)
       def find_all_tps_with_attribute(key)
         @termination_points.filter { |tp| tp.attribute.attribute?(key) }
       end
 
-      def each_tps_except_loopback(&block)
-        find_all_tps_except_loopback.each(&block)
-      end
-
+      # exec for each term-points
       def each_tps(&block)
         @termination_points.each(&block)
       end

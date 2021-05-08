@@ -11,19 +11,19 @@ module Netomox
   module Topology
     # Network for topology data
     class Network < TopoObjectBase
+      # @!attribute [rw] network_types
+      # @!attribute [rw] nodes
+      #   @return [Array<Node>]
+      # @!attribute [rw] links
+      #   @return [Array<Link>]
       attr_accessor :network_types, :nodes, :links
 
       ATTR_KEY_KLASS_LIST = [
-        {
-          key: "#{NS_L2NW}:l2-network-attributes",
-          klass: L2NetworkAttribute
-        },
-        {
-          key: "#{NS_L3NW}:l3-topology-attributes",
-          klass: L3NetworkAttribute
-        }
+        { key: "#{NS_L2NW}:l2-network-attributes", klass: L2NetworkAttribute },
+        { key: "#{NS_L3NW}:l3-topology-attributes", klass: L3NetworkAttribute }
       ].freeze
 
+      # @param [Hash] data RFC8345 data (network element)
       def initialize(data)
         super(data['network-id'])
         setup_network_types(data)
@@ -33,12 +33,18 @@ module Netomox
         setup_attribute(data, ATTR_KEY_KLASS_LIST)
       end
 
+      # @param [TpRef] source
+      # @param [TpRef] destination
+      # @return [Link, nil] Found link (nil if not found)
       def find_link(source, destination)
         @links.find do |link|
           link.source == source && link.destination == destination
         end
       end
 
+      # @param [String] node_ref Source node_ref
+      # @param [String] tp_ref Source tp_ref
+      # @return [Link, nil] Found link (nil if not found)
       def find_link_by_source(node_ref, tp_ref)
         source_data = {
           'source-node' => node_ref,
@@ -48,23 +54,32 @@ module Netomox
         @links.find { |link| link.source == source_ref }
       end
 
+      # @param [String] node_ref Source node name
+      # @return [Array<Link>] Found links (empty array if not found)
       def find_all_links_by_source_node(node_ref)
         @links.find_all { |link| link.source.node_ref == node_ref }
       end
 
+      # @param [String] node_ref Node name
+      # @return [Node, nil] Found node (nil if not found)
       def find_node_by_name(node_ref)
         @nodes.find { |node| node.name == node_ref }
       end
 
+      # @param [Network] other Target network
+      # @return [Boolean]
       def eql?(other)
         # TODO: now network types is literal (NOT object)
         super(other) && @network_types == other.network_types
       end
 
+      # @return [String]
       def to_s
         "network:#{@name}"
       end
 
+      # @param [Network] other Network to compare
+      # @return [Network] Result of comparison
       def diff(other)
         # forward check
         d_network = Network.new('network-id' => @name)
@@ -86,6 +101,8 @@ module Netomox
         fill_diff_state_of(%i[nodes links supports attribute])
       end
 
+      # Convert to data for RFC8345 format
+      # @return [Hash]
       def to_data
         data = {
           'network-types' => @network_types,

@@ -15,6 +15,8 @@ module Netomox
       # to handle TpRef as same manner as other objects.
       attr_accessor :network_ref, :node_ref, :tp_ref
 
+      # @param [Hash] data RFC8345 data (link source/destination element)
+      # @param [String] parent_path Parent (link) path
       def initialize(data, parent_path)
         super(ATTR_DEFS, data)
         @network_ref = parent_path
@@ -22,14 +24,18 @@ module Netomox
         @tp_ref = data['source-tp'] || data['dest-tp']
       end
 
+      # @return [Array<String>]
       def refs
         [@network_ref, @node_ref, @tp_ref]
       end
 
+      # @return [String]
       def ref_path
         refs.join('__')
       end
 
+      # Convert to data for RFC8345 format
+      # @return [Hash]
       def to_data(direction)
         {
           "#{direction}-node" => @node_ref,
@@ -38,6 +44,8 @@ module Netomox
         }
       end
 
+      # @param [TpRef] other Target term-point-ref
+      # @return [Boolean]
       def ==(other)
         @network_ref == other.network_ref &&
           @node_ref == other.node_ref &&

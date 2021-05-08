@@ -7,8 +7,17 @@ module Netomox
   module Topology
     # Base class for attribute
     class AttributeBase
+      # @!attribute [rw] diff_state
+      #   @return [DiffState]
+      # @!attribute [rw] path
+      #   @return [String]
+      # @!attribute [rw] type
+      #   @return [String]
       attr_accessor :diff_state, :path, :type
 
+      # @param [Array<Hash>] attr_table Attribute data
+      # @param [Hash] data Attribute data (RFC8345 external_key:value)
+      # @param [String] type Attribute type (keyword of data in RFC8345)
       def initialize(attr_table, data, type)
         @attr_table = AttributeTable.new(attr_table)
         @keys = @attr_table.int_keys
@@ -19,6 +28,7 @@ module Netomox
         setup_members(data)
       end
 
+      # @return [Boolean]
       def empty?
         mark = @type == '_empty_attr_'
         mark || @keys_with_empty_check.inject(true) do |m, k|
@@ -26,42 +36,46 @@ module Netomox
         end
       end
 
+      # @param [Symbol] key Attribute to check existence
+      # @return [Boolean]
       def attribute?(key)
         self.class.method_defined?(key)
       end
 
+      # @param [AttributeBase] other
+      # @return [Boolean]
       def ==(other)
         eql?(other)
       end
 
+      # @param [AttributeBase] other
+      # @return [Boolean]
       def eql?(other)
         return false unless self.class.name == other.class.name
 
         @keys.inject(true) { |m, k| m && send(k) == other.send(k) }
       end
 
+      # @return [String]
       def to_s
         '## AttributeBase#to_s MUST override in sub class ##'
       end
 
+      # attribute class has #diff method or not?
+      # when attribute has sub-attribute, define #diff method in sub class.
+      # @return [Boolean]
       def diff?
-        # attribute class has #diff method or not?
-        # when attribute has sub-attribute, define #diff method in sub class.
         self.class.instance_methods.include?(:diff)
       end
 
+      # attribute class has #fill method or not?
+      # @return [Boolean]
       def fill?
         self.class.instance_methods.include?(:fill)
       end
 
-      def select_child_attr(attr)
-        if attr.is_a?(Array) && attr.all? { |d| d.is_a?(AttributeBase) }
-          attr.map(&:to_data)
-        else
-          attr
-        end
-      end
-
+      # Convert to data for RFC8345 format
+      # @return [Hash]
       def to_data
         data = {}
         @keys.each do |k|
@@ -74,6 +88,14 @@ module Netomox
       end
 
       private
+
+      def select_child_attr(attr)
+        if attr.is_a?(Array) && attr.all? { |d| d.is_a?(AttributeBase) }
+          attr.map(&:to_data)
+        else
+          attr
+        end
+      end
 
       def setup_members(data)
         # define member (attribute) of the class

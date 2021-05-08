@@ -8,6 +8,7 @@ module Netomox
     # NOTICE: who receive the method? (receiver?)
     # when (a) - (b) => (c)
     module Diffable
+      # @param [Array<Symbol>] attrs Attributes
       def diff_backward_check(attrs)
         # receiver of this method will be (c)
         bwd_states = []
