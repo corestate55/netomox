@@ -65,14 +65,14 @@ You can find latest yang files defined in [RFC8345](https://www.rfc-editor.org/i
 
 Use topology model DSL (Domain Specific Language) to make target data.
 e.g.
-```
-$ bundle exec ruby model_defs/target.rb
+```shell
+bundle exec ruby model_defs/target.rb
 ```
 It generate topology data and print it to standard-output as JSON.
 
 ### Check data consistency
-```
-$ bundle exec netomox check target.json
+```shell
+bundle exec netomox check target.json
 ```
 
 ### Validate JSON
@@ -80,11 +80,11 @@ $ bundle exec netomox check target.json
 Install pyang JSON Schema plugin from [EAGLE\-Open\-Model\-Profile\-and\-Tools/YangJsonTools at ToolChain](https://github.com/OpenNetworkingFoundation/EAGLE-Open-Model-Profile-and-Tools/tree/ToolChain/YangJsonTools) instead of [cmoberg/pyang\-json\-schema\-plugin](https://github.com/cmoberg/pyang-json-schema-plugin). (because cmoberg's plugin [can work only on single yang module at a time](https://github.com/cmoberg/pyang-json-schema-plugin/issues/4))
 
 Generate json schema
-```
+```shell
 pyang -f json_schema -o topo.jsonschema ietf-network@2018-02-26.yang ietf-network-topology@2018-02-26.yang
 ```
 and validate (using [jsonlint](https://www.npmjs.com/package/jsonlint-cli) or other json tool).
-```
+```shell
 jsonlint-cli -s topo.jsonschema target.json
 ```
 
@@ -93,27 +93,27 @@ jsonlint-cli -s topo.jsonschema target.json
 Create jtox file at first.
 
 **[Notice]** use base topology model (NOT augmented model such as L2/L3).
-```
+```shell
 pyang -f jtox -o topo.jtox ietf-network-topology@2018-02-26.yang ietf-network@2018-02-26.yang
 ```
 
 Convert json to xml
-```
+```shell
 json2xml topo.jtox target.json | xmllint --format - > target.xml
 ```
 
 ### Validate XML
 
 Notice, topology YANG models are YANG/1.1, so you have to set `-x` option to `yang2dsdl`.
-```
-$ yang2dsdl -x -j -t config -v model/target.xml yang/ietf-network-topology@2018-02-26.yang yang/ietf-network@2018-02-26.yang
+```shell
+yang2dsdl -x -j -t config -v model/target.xml yang/ietf-network-topology@2018-02-26.yang yang/ietf-network@2018-02-26.yang
 ```
 
 ### Show diff between topology data
 
 You can see diff of 2 topology data like that:
-```
-$ bundle exec netomox diff [--all|--color] model/target.orig.json model/target.json
+```shell
+bundle exec netomox diff model/target.orig.json model/target.json
 ```
 In default, checker diff output only changed object and its parent object.
 
@@ -122,24 +122,14 @@ In default, checker diff output only changed object and its parent object.
 * `-o FILE`/`--output FILE` : save diff data to FILE (json data includes diff info for diff viewer).
 If specified `-o` and other options, ignored them.
 
-### Generate UML class diagram (PlantUML format)
-
-[rb2puml](./bin/rb2puml) generates UML class diagram for PlantUML.
-* `-s`/`--simple` : Simple format (not include class method information)
-* `-d`/`--dir` : Directory path to analyze source code (*.rb)
-
-```text
-$ bundle exec rb2puml -d lib/netomox/dsl > netomox_dsl.puml
-```
-
 ### Store topology data with Graph DB (Neo4j)
 
 Ready `db_info.json` file to store information to connect your Neo4j database.
 
 This application is using [neography](https://github.com/maxdemarzi/neography) to post the data into neo4j graph database.
 Execute like below
-```
-bundle exec netomox graphdb [--info|--clear] target.json
+```shell
+bundle exec netomox graphdb target.json
 ```
 * `-i FILE`/`--info FILE` option: graph db connection info file (if not specified, use `db_info.json`)
 * `-c`/`--clear` option: only deleting all data in graph (clear database and do not import graph data)
@@ -168,6 +158,31 @@ npm run start
 
 ## Development
 
+### API Documents
+
+Generate document using YARD.
+```shell
+bundle exec rake yard
+```
+Then, documents are generated at `doc/` directory. 
+Read documents from `doc/index.html` directly or yard http server. (default localhost:8808)
+```shell
+bundle exec yard server
+```
+
+
 ### Netomox UML Class diagrams
 
-Install PlantUML and exec `bundle exec rake fig`. Then, class diagrams will be created in `figs/` directory.
+[rb2puml](./bin/rb2puml) generates UML class diagram for PlantUML.
+* `-s`/`--simple` : Simple format (not include class method information)
+* `-d`/`--dir` : Directory path to analyze source code (*.rb)
+
+```shell
+bundle exec rb2puml -d lib/netomox/dsl > netomox_dsl.puml
+```
+
+Or, install PlantUML and exec `rake fig`.
+```shell
+bundle exec rake fig
+```
+Then, class diagrams will be created in `figs/` directory.
