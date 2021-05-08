@@ -12,6 +12,7 @@ module Netomox
       #   @return [Array<String>]
       attr_accessor :name, :flags
 
+      # Attribute definition of network
       ATTR_DEFS = [
         { int: :name, ext: 'name', default: '' },
         { int: :flags, ext: 'flag', default: [] }

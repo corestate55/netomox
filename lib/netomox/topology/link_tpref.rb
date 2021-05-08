@@ -6,14 +6,23 @@ module Netomox
   module Topology
     # Termination point reference
     class TpRef < SupportingRefBase
+      # NOTICE: Link source/destination (TpRef) has only node_ref and tp_ref
+      # according to yang model. but in netomox, it need network_ref
+      # to handle TpRef as same manner as other objects.
+      #
+      # @!attribute [rw] network_ref
+      #   @return [String]
+      # @!attribute [rw] node_ref
+      #   @return [String]
+      # @!attribute [rw] tp_ref
+      #   @return [String]
+      attr_accessor :network_ref, :node_ref, :tp_ref
+
+      # Attribute definition of term-point reference
       ATTR_DEFS = [
         { int: :node_ref, ext: 'node-ref' },
         { int: :tp_ref, ext: 'tp-ref' }
       ].freeze
-      # NOTICE: Link source/destination (TpRef) has only node_ref and tp_ref
-      # according to yang model. but in netomox, it need network_ref
-      # to handle TpRef as same manner as other objects.
-      attr_accessor :network_ref, :node_ref, :tp_ref
 
       # @param [Hash] data RFC8345 data (link source/destination element)
       # @param [String] parent_path Parent (link) path

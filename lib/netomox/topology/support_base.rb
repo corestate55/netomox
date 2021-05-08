@@ -64,6 +64,7 @@ module Netomox
       #   @return [String]
       attr_accessor :network_ref
 
+      # Attribute definition of supporting-network
       ATTR_DEFS = [{ int: :network_ref, ext: 'network-ref' }].freeze
 
       # @param [Hash] data Support ref data in RFC834g
@@ -80,6 +81,7 @@ module Netomox
       #   @return [String]
       attr_accessor :network_ref, :node_ref
 
+      # Attribute definition of supporting-node
       ATTR_DEFS = [
         { int: :network_ref, ext: 'network-ref' },
         { int: :node_ref, ext: 'node-ref' }
@@ -99,6 +101,7 @@ module Netomox
       #   @return [String]
       attr_accessor :network_ref, :link_ref
 
+      # Attribute definition of supporting-link
       ATTR_DEFS = [
         { int: :network_ref, ext: 'network-ref' },
         { int: :link_ref, ext: 'link-ref' }
@@ -120,6 +123,7 @@ module Netomox
       #   @return [String]
       attr_accessor :network_ref, :node_ref, :tp_ref
 
+      # Attribute definition of supporting-term-point
       ATTR_DEFS = [
         { int: :network_ref, ext: 'network-ref' },
         { int: :node_ref, ext: 'node-ref' },

@@ -18,6 +18,7 @@ module Netomox
       #   @return [String]
       attr_accessor :name, :flags, :rate, :delay, :srlg
 
+      # Attribute definition of L2 link
       ATTR_DEFS = [
         { int: :name, ext: 'name', default: '' },
         { int: :flags, ext: 'flag', default: [] },
@@ -50,6 +51,7 @@ module Netomox
       #   @return [Integer]
       attr_accessor :name, :flags, :metric1, :metric2
 
+      # Attribute definition of L3 link
       ATTR_DEFS = [
         { int: :name, ext: 'name', default: '' },
         { int: :flags, ext: 'flag', default: [] },

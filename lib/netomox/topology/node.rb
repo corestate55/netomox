@@ -14,6 +14,7 @@ module Netomox
       #   @return [Array<TermPoint>]
       attr_accessor :termination_points
 
+      # Attribute type key and its class for Node
       ATTR_KEY_KLASS_LIST = [
         { key: "#{NS_L2NW}:l2-node-attributes", klass: L2NodeAttribute },
         { key: "#{NS_L3NW}:l3-node-attributes", klass: L3NodeAttribute }

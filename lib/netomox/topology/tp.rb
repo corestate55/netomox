@@ -11,6 +11,7 @@ module Netomox
     class TermPoint < TopoObjectBase
       attr_reader :ref_count
 
+      # Attribute type key and its class for TermPoint
       ATTR_KEY_KLASS_LIST = [
         { key: "#{NS_L2NW}:l2-termination-point-attributes", klass: L2TPAttribute },
         { key: "#{NS_L3NW}:l3-termination-point-attributes", klass: L3TPAttribute }

@@ -13,6 +13,7 @@ module Netomox
       #   @return [String]
       attr_accessor :id, :name
 
+      # Attribute definition of Port VLAN ID & Name for L2 network
       ATTR_DEFS = [
         { int: :id, ext: 'vlan-id', default: 0 },
         { int: :name, ext: 'vlan-name', default: '' }
@@ -49,6 +50,7 @@ module Netomox
       attr_accessor :descr, :max_frame_size, :mac_addr, :eth_encap,
                     :port_vlan_id, :vlan_id_names, :tp_state
 
+      # Attribute definition of L2 termination-point
       ATTR_DEFS = [
         { int: :descr, ext: 'description', default: '' },
         { int: :max_frame_size, ext: 'maximum-frame-size', default: 1500 },
@@ -105,6 +107,7 @@ module Netomox
       #   @return [Array<String>]
       attr_accessor :ip_addrs
 
+      # Attribute definition of L3 termination-point
       ATTR_DEFS = [
         { int: :ip_addrs, ext: 'ip-address', default: [] }
       ].freeze

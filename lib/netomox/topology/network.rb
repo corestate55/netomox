@@ -18,6 +18,7 @@ module Netomox
       #   @return [Array<Link>]
       attr_accessor :network_types, :nodes, :links
 
+      # Attribute type key and its class for Network
       ATTR_KEY_KLASS_LIST = [
         { key: "#{NS_L2NW}:l2-network-attributes", klass: L2NetworkAttribute },
         { key: "#{NS_L3NW}:l3-topology-attributes", klass: L3NetworkAttribute }

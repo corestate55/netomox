@@ -15,6 +15,7 @@ module Netomox
       #   @return [TpRef]
       attr_accessor :source, :destination
 
+      # Attribute type key and its class for Link
       ATTR_KEY_KLASS_LIST = [
         { key: "#{NS_L2NW}:l2-link-attributes", klass: L2LinkAttribute },
         { key: "#{NS_L3NW}:l3-link-attributes", klass: L3LinkAttribute }

@@ -8,6 +8,7 @@ module Netomox
     # rubocop:disable Metrics/ClassLength
     # Networks for Topology data verification
     class VerifiableNetworks < Networks
+      # Search networks that support non-existent network
       def check_exist_supporting_network
         check('supporting network existence') do |messages|
           all_networks do |nw|
@@ -26,6 +27,7 @@ module Netomox
         end
       end
 
+      # Search nodes that support non-existent node
       def check_exist_supporting_node
         check('supporting node existence') do |messages|
           all_nodes do |node, _nw|
@@ -43,6 +45,7 @@ module Netomox
         end
       end
 
+      # Search term-points that support non-existent term-point
       def check_exist_supporting_tp
         check('supporting terminal-points existence') do |messages|
           all_termination_points do |tp, _node, _nw|
@@ -60,6 +63,7 @@ module Netomox
         end
       end
 
+      # search links that support non-existent link
       def check_exist_supporting_link
         check('supporting link existence') do |messages|
           all_links do |link, _nw|
@@ -77,6 +81,7 @@ module Netomox
         end
       end
 
+      # search links that has non-existent endpoint (term-point)
       def check_exist_link_tp
         check('link source/target tp ref check') do |messages|
           all_links do |link, _nw|
@@ -88,6 +93,7 @@ module Netomox
         end
       end
 
+      # search uni-directional links
       def check_exist_reverse_link
         check('reverse (bi-directional) link existence') do |messages|
           all_links do |link, nw|
@@ -99,6 +105,7 @@ module Netomox
         end
       end
 
+      # search objects that has same id (id duplication check)
       def check_id_uniqueness
         check('object id uniqueness') do |messages|
           list = [
@@ -112,6 +119,7 @@ module Netomox
         end
       end
 
+      # search term-points that has irregular reference count
       def check_tp_ref_count
         update_tp_ref_count
         check('link reference count of terminal-point') do |messages|
@@ -126,6 +134,8 @@ module Netomox
       end
 
       # rubocop:disable Metrics/AbcSize
+      #
+      # search corresponding link in supported layer of term-points of a link
       def check_facing_link
         check('facing link in supported layer') do |messages|
           all_termination_points do |tp, node, nw|
@@ -155,9 +165,10 @@ module Netomox
       # rubocop:disable Metrics/AbcSize
       # rubocop:disable Metrics/CyclomaticComplexity
       # rubocop:disable Metrics/PerceivedComplexity
+      #
+      # check node-tp support path consistency
+      # @todo network-node support path consistency
       def check_family_support_path
-        # check node-tp support path consistency
-        # TODO: network-node support path consistency
         check('family support path consistency') do |messages|
           all_termination_points do |tp, node, _nw|
             next if tp.supports.empty? && node.supports.empty?

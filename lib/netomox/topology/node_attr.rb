@@ -21,6 +21,7 @@ module Netomox
       #   @return [Array<String>]
       attr_accessor :name, :descr, :mgmt_addrs, :sys_mac_addr, :mgmt_vid, :flags
 
+      # Attribute definition of L2 node
       ATTR_DEFS = [
         { int: :name, ext: 'name', default: '' },
         { int: :descr, ext: 'description', default: '' },
@@ -52,6 +53,7 @@ module Netomox
       #   @return [Array<String>]
       attr_accessor :prefix, :metric, :flag
 
+      # Attribute definition of L3 prefix ()for L3 node)
       ATTR_DEFS = [
         { int: :prefix, ext: 'prefix', default: '' },
         { int: :metric, ext: 'metric', default: 0 },
@@ -77,6 +79,7 @@ module Netomox
       #   @return [Array<L3Prefix>]
       attr_accessor :name, :flags, :router_id, :prefixes
 
+      # Attribute definition of L3 node
       ATTR_DEFS = [
         { int: :name, ext: 'name', default: '' },
         { int: :flags, ext: 'flag', default: [] },
