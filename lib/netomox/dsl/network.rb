@@ -10,14 +10,18 @@ module Netomox
   module DSL
     # supporting network container
     class SupportNetwork
+      # @param [String] nw_ref Network name
       def initialize(nw_ref)
         @nw_ref = nw_ref
       end
 
+      # @return [String]
       def path
         @nw_ref
       end
 
+      # Convert to RFC8345 topology data
+      # @return [Hash]
       def topo_data
         { 'network-ref' => @nw_ref }
       end
@@ -26,8 +30,17 @@ module Netomox
     # rubocop:disable Metrics/ClassLength
     # network, node and link container
     class Network < DSLObjectBase
+      # @!attribute [rw] nodes
+      #   @return [Array<Node>]
+      # @!attribute [rw] links
+      #   @return [Array<Link>]
+      # @!attribute [rw] supports
+      #   @return [Array<SupportNetwork>]
       attr_accessor :nodes, :links, :supports
 
+      # @param [Networks] parent Parent object (Networks)
+      # @param [String] name Network name
+      # @param [Proc] block Code block to eval this instance
       def initialize(parent, name, &block)
         super(parent, name)
         @type = {}
@@ -38,6 +51,7 @@ module Netomox
         register(&block) if block_given?
       end
 
+      # @param [Hash] type Network type object
       def type(type = nil)
         if type
           @type[type] = {} ## TODO recursive type definition
@@ -46,6 +60,8 @@ module Netomox
         end
       end
 
+      # Add supporting network
+      # @param [String] nw_ref Network name
       def support(nw_ref)
         snw = find_support(nw_ref)
         if snw
@@ -55,6 +71,8 @@ module Netomox
         end
       end
 
+      # Set attribute
+      # @param [Hash] attr Attribute data
       def attribute(attr)
         @attribute = if @type.key?(NWTYPE_L2)
                        L2NWAttribute.new(**attr)
@@ -67,6 +85,10 @@ module Netomox
                      end
       end
 
+      # Add or get node
+      # @param [String] name Node name
+      # @param [Proc] block Code block to eval the node
+      # @return [Node]
       def node(name, &block)
         node = find_node(name)
         if node
@@ -79,6 +101,12 @@ module Netomox
       end
 
       # make uni-directional link
+      # @param [String, Array<String>] src_node Source node name or Array [src_node, src_tp, dst_node, dst_tp]
+      # @param [String] src_tp Source term-point name
+      # @param [String] dst_node Destination node name
+      # @param [String] dst_tp Destination term-point name
+      # @param [Proc] block Code block to eval the link
+      # @return [Link]
       def link(src_node, src_tp = nil, dst_node = nil, dst_tp = nil, &block)
         args = normalize_link_args(src_node, src_tp, dst_node, dst_tp)
         link = find_link(args.join(','))
@@ -92,13 +120,20 @@ module Netomox
       end
 
       # make bi-directional link
-      # TODO: supporting-link implementation
+      # @param [String, Array<String>] src_node Source node name or Array [src_node, src_tp, dst_node, dst_tp]
+      # @param [String] src_tp Source term-point name
+      # @param [String] dst_node Destination node name
+      # @param [String] dst_tp Destination term-point name
+      # @param [Proc] block Code block to eval the link
+      # @todo: supporting-link implementation
       def bdlink(src_node, src_tp = nil, dst_node = nil, dst_tp = nil, &block)
         args = normalize_link_args(src_node, src_tp, dst_node, dst_tp)
         link(args[0], args[1], args[2], args[3], &block)
         link(args[2], args[3], args[0], args[1], &block)
       end
 
+      # Convert to RFC8345 topology data
+      # @return [Hash]
       def topo_data
         data = {
           'network-id' => @name,
@@ -111,6 +146,12 @@ module Netomox
         data
       end
 
+      # Find all links that between self and destination
+      # @param [String, Array<String>] src_node_name Source node name or Array [src_node, src_tp, dst_node, dst_tp]
+      # @param [String] src_tp_name Source term-point name
+      # @param [String] dst_node_name Destination node name
+      # @param [String] dst_tp_name Destination term-point name
+      # @return [Array<Link>]
       def links_between(src_node_name:, dst_node_name:, src_tp_name: nil, dst_tp_name: nil)
         conds = normalize_find_link_args(
           src_node_name: src_node_name, src_tp_name: src_tp_name,
@@ -124,18 +165,28 @@ module Netomox
         found_links.concat(find_links_with_condition(conds))
       end
 
+      # Find node by name
+      # @param [String] name Node name
+      # @return [Node, nil] Found node (nil if not found)
       def find_node(name)
         @nodes.find { |node| node.name == name }
       end
 
+      # Find link by name
+      # @param [String] name Link name
+      # @return [Link, nil] Found link (nil if not found)
       def find_link(name)
         @links.find { |link| link.name == name }
       end
 
+      # Find supporting network
+      # @param [String] nw_ref Network name
+      # @return [SupportNetwork, nil] Found supporting network (nil if not found)
       def find_support(nw_ref)
         @supports.find { |snw| snw.path == nw_ref }
       end
 
+      # Sort nodes by name
       def sort_node_by_name
         @nodes.sort do |node_a, node_b|
           ret = node_a.name.casecmp(node_b.name)
@@ -143,6 +194,7 @@ module Netomox
         end
       end
 
+      # Sort nodes by name (overwrite)
       def sort_node_by_name!
         nodes = sort_node_by_name
         @nodes = nodes
@@ -167,6 +219,11 @@ module Netomox
         conds
       end
 
+      # Normalize path (elements or array of elements) to array
+      # @param [String, Array<String>] src_node Source node name or Array [src_node, src_tp, dst_node, dst_tp]
+      # @param [String] src_tp Source term-point name
+      # @param [String] dst_node Destination node name
+      # @param [String] dst_tp Destination term-point name
       def normalize_link_args(src_node, src_tp = nil, dst_node = nil, dst_tp = nil)
         case src_node
         when Array

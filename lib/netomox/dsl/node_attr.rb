@@ -7,14 +7,25 @@ module Netomox
   module DSL
     # prefix info for L3 node attribute
     class L3Prefix
+      # @!attribute [rw] prefix
+      #   @return [String]
+      # @!attribute [rw] metric
+      #   @return [Integer]
+      # @!attribute [rw] flag
+      #   @return [Array<String>]
       attr_accessor :prefix, :metric, :flag
 
+      # @param [String] prefix
+      # @param [Integer] metric
+      # @param [Array<String>] flag
       def initialize(prefix: '', metric: 10, flag: [])
         @prefix = prefix
         @metric = metric
         @flag = flag
       end
 
+      # Convert to RFC8345 topology data
+      # @return [Hash]
       def topo_data
         {
           'prefix' => @prefix,
@@ -26,9 +37,23 @@ module Netomox
 
     # attribute for L3 node
     class L3NodeAttribute
+      # @!attribute [rw] name
+      #   @return [String]
+      # @!attribute [rw] flags
+      #   @return [Array<String>]
+      # @!attribute [rw] router_id
+      #   @return [String]
+      # @!attribute [rw] prefixes
+      #   @return [Array<L3Prefix>]
       attr_accessor :name, :flags, :router_id, :prefixes
+      # @!attribute [r] type
+      #   @return [String]
       attr_reader :type
 
+      # @param [String] name
+      # @param [Array<String>] flags
+      # @param [String] router_id
+      # @param [Array<L3Prefix>] prefixes
       def initialize(name: '', flags: [], router_id: '', prefixes: [])
         @name = name
         @flags = flags
@@ -37,8 +62,10 @@ module Netomox
         @type = "#{NS_L3NW}:l3-node-attributes"
       end
 
+      # Convert to RFC8345 topology data
+      # @return [Hash]
+      # @todo router-id is now single value, but it must be leaf-list
       def topo_data
-        # TODO: router-id is now single value, but it must be leaf-list
         {
           'name' => @name,
           'flag' => @flags,
@@ -47,6 +74,7 @@ module Netomox
         }
       end
 
+      # @return [Boolean]
       def empty?
         @name.empty? && @flags.empty? && @router_id.empty? && @prefixes.empty?
       end
@@ -54,9 +82,29 @@ module Netomox
 
     # attribute for L2 node
     class L2NodeAttribute
+      # @!attribute [rw] name
+      #   @return [String]
+      # @!attribute [rw] flags
+      #   @return [Array<String>]
+      # @!attribute [rw] descr
+      #   @return [String]
+      # @!attribute [rw] mgmt_addrs
+      #   @return [Array<String>]
+      # @!attribute [rw] sys_mac_addr
+      #   @return [String]
+      # @!attribute [rw] mgmt_vid
+      #   @return [Integer]
       attr_accessor :name, :flags, :descr, :mgmt_addrs, :sys_mac_addr, :mgmt_vid
+      # @!attribute [r] type
+      #   @return [String]
       attr_reader :type
 
+      # @param [String] name
+      # @param [Array<String>] flags
+      # @param [String] descr
+      # @param [Array<String>] mgmt_addrs
+      # @param [String] sys_mac_addr
+      # @param [Integer] mgmt_vid
       # rubocop:disable Metrics/ParameterLists
       def initialize(name: '', flags: [], descr: '',
                      mgmt_addrs: [], sys_mac_addr: '', mgmt_vid: 0)
@@ -70,6 +118,8 @@ module Netomox
       end
       # rubocop:enable Metrics/ParameterLists
 
+      # Convert to RFC8345 topology data
+      # @return [Hash]
       def topo_data
         {
           'name' => @name,
@@ -81,6 +131,7 @@ module Netomox
         }
       end
 
+      # @return [Boolean]
       def empty?
         @name.empty? && @flags.empty? && @descr.empty? \
       && @mgmt_addrs.empty? && @sys_mac_addr.empty? && @mgmt_vid.empty?
@@ -89,6 +140,7 @@ module Netomox
 
     # attribute for ops-topology node
     class OpsNodeAttribute < OpsAttributeBase
+      # @param [Hash] hash Key-Value data of any attribute
       def initialize(hash)
         super(hash)
         @type = "#{NS_OPS}:ops-node-attributes"
