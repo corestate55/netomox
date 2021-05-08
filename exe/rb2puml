@@ -4,7 +4,7 @@
 require 'optparse'
 
 # info record of klass
-class KlassRecords
+class ClassRecord
   attr_accessor :pub_methods, :priv_methods, :prot_methods,
                 :vars, :uses, :parents, :mix_in_modules
 
@@ -140,7 +140,6 @@ class RB2Puml
     push_parent(parent_kls) if parent_kls
   end
 
-  # rubocop:disable Metrics/MethodLength
   def parse_single_def(line)
     case line
     when /^\s*class ([\w:]+) < ([\w:]+)/, /^\s*class ([\w:]+)/
@@ -157,10 +156,9 @@ class RB2Puml
       @method_mode = :priv_methods
     end
   end
-  # rubocop:enable Metrics/MethodLength
 
   def push(key, value)
-    @kls_table[@kls_name] = KlassRecords.new(@modules, @kls_name, @stereotype) unless @kls_table.key?(@kls_name)
+    @kls_table[@kls_name] = ClassRecord.new(@modules, @kls_name, @stereotype) unless @kls_table.key?(@kls_name)
     @kls_table[@kls_name].send(key).push(value)
   end
 

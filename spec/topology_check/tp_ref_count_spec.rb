@@ -45,7 +45,7 @@ RSpec.describe 'check term point ref count', :checkup do
         link %w[node2 tp2 node1 tp3]
       end
     end
-    nws = Netomox::Topology::Networks.new(nws_def.topo_data)
+    nws = Netomox::Topology::VerifiableNetworks.new(nws_def.topo_data)
     @result = nws.check_tp_ref_count
   end
 

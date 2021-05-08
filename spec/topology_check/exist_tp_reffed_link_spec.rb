@@ -20,7 +20,7 @@ RSpec.describe 'check existence of tp refered in link src/dst', :checkup do
         link %w[node1 p1 node2 Y1]
       end
     end
-    nws = Netomox::Topology::Networks.new(nws_def.topo_data)
+    nws = Netomox::Topology::VerifiableNetworks.new(nws_def.topo_data)
     @result = nws.check_exist_link_tp
   end
 

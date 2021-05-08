@@ -13,7 +13,7 @@ RSpec.describe 'check id uniqueness', :checkup do
       end
       nw2dup_def = Netomox::DSL::Network.new(nws_def, 'nw2')
       nws_def.networks.push(nw2dup_def) # force push
-      nws = Netomox::Topology::Networks.new(nws_def.topo_data)
+      nws = Netomox::Topology::VerifiableNetworks.new(nws_def.topo_data)
       @result = nws.check_id_uniqueness
     end
 
@@ -33,7 +33,7 @@ RSpec.describe 'check id uniqueness', :checkup do
       node2dup_def = Netomox::DSL::Node.new(nw1_def, 'node2')
       nw1_def.nodes.push(node2dup_def)
       nws_def.networks.push(nw1_def)
-      nws = Netomox::Topology::Networks.new(nws_def.topo_data)
+      nws = Netomox::Topology::VerifiableNetworks.new(nws_def.topo_data)
       @result = nws.check_id_uniqueness
     end
 
@@ -55,7 +55,7 @@ RSpec.describe 'check id uniqueness', :checkup do
       tp2dup_def = Netomox::DSL::TermPoint.new(node1_def, 'tp2')
       node1_def.term_points.push(tp2dup_def)
       nw1_def.nodes.push(node1_def)
-      nws = Netomox::Topology::Networks.new(nws_def.topo_data)
+      nws = Netomox::Topology::VerifiableNetworks.new(nws_def.topo_data)
       @result = nws.check_id_uniqueness
     end
 
@@ -75,7 +75,7 @@ RSpec.describe 'check id uniqueness', :checkup do
       link2dup_def = Netomox::DSL::Link.new(nw1_def, 'node1', 'tp2', 'node2', 'tp2')
       nw1_def.links.push(link2dup_def)
       nws_def.networks.push(nw1_def)
-      nws = Netomox::Topology::Networks.new(nws_def.topo_data)
+      nws = Netomox::Topology::VerifiableNetworks.new(nws_def.topo_data)
       @result = nws.check_id_uniqueness
     end
 

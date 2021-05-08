@@ -19,7 +19,7 @@ RSpec.describe 'check existence of reverse link', :checkup do
         link %w[node1 tp2 node2 tp2]
       end
     end
-    nws = Netomox::Topology::Networks.new(nws_def.topo_data)
+    nws = Netomox::Topology::VerifiableNetworks.new(nws_def.topo_data)
     @result = nws.check_exist_reverse_link
   end
 

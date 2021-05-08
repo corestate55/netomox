@@ -8,6 +8,9 @@ Layout/LineLength:
     - 'spec/**/*_spec.rb'
     - 'netomox.gemspec'
 
+Metrics/MethodLength:
+  Max: 25
+
 Metrics/BlockLength:
   Enabled: true
   Exclude:

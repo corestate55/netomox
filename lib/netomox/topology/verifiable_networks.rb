@@ -5,10 +5,9 @@ require 'netomox/topology/error'
 
 module Netomox
   module Topology
-    # Networks for Topology data (operations for multiple networks)
+    # Networks for Topology data verification
     # rubocop:disable Metrics/ClassLength
-    class Networks < TopoObjectBase
-      # rubocop:disable Metrics/MethodLength
+    class VerifiableNetworks < Networks
       def check_exist_supporting_network
         check('supporting network existence') do |messages|
           all_networks do |nw|
@@ -26,9 +25,7 @@ module Netomox
           end
         end
       end
-      # rubocop:enable Metrics/MethodLength
 
-      # rubocop:disable Metrics/MethodLength
       def check_exist_supporting_node
         check('supporting node existence') do |messages|
           all_nodes do |node, _nw|
@@ -39,16 +36,13 @@ module Netomox
                 messages.push(message(:error, node.path, e.message))
               end
 
-              msg = 'definition referred as supporting node ' \
-                    "#{snode} is not found."
+              msg = "definition referred as supporting node #{snode} is not found."
               messages.push(message(:error, node.path, msg))
             end
           end
         end
       end
-      # rubocop:enable Metrics/MethodLength
 
-      # rubocop:disable Metrics/MethodLength
       def check_exist_supporting_tp
         check('supporting terminal-points existence') do |messages|
           all_termination_points do |tp, _node, _nw|
@@ -59,16 +53,13 @@ module Netomox
                 messages.push(message(:error, tp.path, e.message))
               end
 
-              msg = 'definition referred as supporting tp ' \
-                    "#{stp} is not found."
+              msg = "definition referred as supporting tp #{stp} is not found."
               messages.push(message(:error, tp.path, msg))
             end
           end
         end
       end
-      # rubocop:enable Metrics/MethodLength
 
-      # rubocop:disable Metrics/MethodLength
       def check_exist_supporting_link
         check('supporting link existence') do |messages|
           all_links do |link, _nw|
@@ -79,14 +70,12 @@ module Netomox
                 messages.push(message(:error, link.path, e.message))
               end
 
-              msg = 'definition referred as supporting link ' \
-                    "#{slink} is not found."
+              msg = "definition referred as supporting link #{slink} is not found."
               messages.push(message(:error, link.path, msg))
             end
           end
         end
       end
-      # rubocop:enable Metrics/MethodLength
 
       def check_exist_link_tp
         check('link source/target tp ref check') do |messages|
@@ -136,7 +125,7 @@ module Netomox
         end
       end
 
-      # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      # rubocop:disable Metrics/AbcSize
       def check_facing_link
         check('facing link in supported layer') do |messages|
           all_termination_points do |tp, node, nw|
@@ -161,9 +150,9 @@ module Netomox
           end
         end
       end
-      # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+      # rubocop:enable Metrics/AbcSize
 
-      # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      # rubocop:disable Metrics/AbcSize
       # rubocop:disable Metrics/CyclomaticComplexity
       # rubocop:disable Metrics/PerceivedComplexity
       def check_family_support_path
@@ -179,6 +168,7 @@ module Netomox
               messages.push(message(:warn, tp.path, msg))
               next
             end
+
             if !tp.supports.empty? && !node.supports.empty?
               node_support_paths = node.supports.map(&:ref_path)
               tp.supports.each do |tp_support|
@@ -194,7 +184,7 @@ module Netomox
           end
         end
       end
-      # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+      # rubocop:enable Metrics/AbcSize
       # rubocop:enable Metrics/CyclomaticComplexity
       # rubocop:enable Metrics/PerceivedComplexity
 

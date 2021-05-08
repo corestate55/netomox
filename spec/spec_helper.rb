@@ -5,7 +5,6 @@ require 'netomox'
 
 # ref. https://gist.github.com/herrphon/2d2ebbf23c86a10aa955
 module IOHelper
-  # rubocop:disable Metrics/MethodLength
   def capture
     begin
       $stdout = StringIO.new
@@ -20,7 +19,6 @@ module IOHelper
     end
     result
   end
-  # rubocop:enable Metrics/MethodLength
 end
 
 RSpec.configure do |config|

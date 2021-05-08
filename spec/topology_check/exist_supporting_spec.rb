@@ -22,7 +22,7 @@ RSpec.describe 'check existence of definition referred as support', :checkup do
         end
         network 'nw_exist'
       end
-      nws = Netomox::Topology::Networks.new(nws_def.topo_data)
+      nws = Netomox::Topology::VerifiableNetworks.new(nws_def.topo_data)
       @result = nws.check_exist_supporting_network
     end
 
@@ -49,7 +49,7 @@ RSpec.describe 'check existence of definition referred as support', :checkup do
           node 'node_exist'
         end
       end
-      nws = Netomox::Topology::Networks.new(nws_def.topo_data)
+      nws = Netomox::Topology::VerifiableNetworks.new(nws_def.topo_data)
       @result = nws.check_exist_supporting_node
     end
 
@@ -86,7 +86,7 @@ RSpec.describe 'check existence of definition referred as support', :checkup do
           end
         end
       end
-      nws = Netomox::Topology::Networks.new(nws_def.topo_data)
+      nws = Netomox::Topology::VerifiableNetworks.new(nws_def.topo_data)
       @result = nws.check_exist_supporting_tp
     end
 
@@ -135,7 +135,7 @@ RSpec.describe 'check existence of definition referred as support', :checkup do
           link %w[node3 tp1 node4 tp1]
         end
       end
-      nws = Netomox::Topology::Networks.new(nws_def.topo_data)
+      nws = Netomox::Topology::VerifiableNetworks.new(nws_def.topo_data)
       @result = nws.check_exist_supporting_link
     end
 

@@ -24,7 +24,6 @@ module Netomox
         "#{c_begin}#{str}#{c_end}"
       end
 
-      # rubocop:disable Metrics/MethodLength
       def detect_state
         if @diff_state.empty?
           :changed # TODO: ok?
@@ -39,7 +38,6 @@ module Netomox
           :kept
         end
       end
-      # rubocop:enable Metrics/MethodLength
 
       def head_mark(state = nil)
         d_state = state.nil? ? detect_state : state

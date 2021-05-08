@@ -47,9 +47,8 @@ module Netomox
       JSON.parse(File.read(file), opt_hash)
     end
 
-    # rubocop:disable Metrics/MethodLength
     def run_check(file)
-      networks = Topology::Networks.new(open_data(file))
+      networks = Topology::VerifiableNetworks.new(open_data(file))
       results = [
         networks.check_exist_link_tp,
         networks.check_exist_supporting_network,
@@ -64,7 +63,6 @@ module Netomox
       ]
       puts JSON.pretty_generate(results)
     end
-    # rubocop:enable Metrics/MethodLength
 
     def open_graphdb(file)
       db_info_file = options[:info] || './db_info.json'
@@ -72,7 +70,7 @@ module Netomox
       GraphDB::Networks.new(open_data(file), db_info)
     end
 
-    # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    # rubocop:disable Metrics/AbcSize
     def run_graphdb(file)
       g_nws = open_graphdb(file)
       if options[:verbose]
@@ -89,7 +87,7 @@ module Netomox
       puts '# create nodes/relationships'
       g_nws.exec_create_objects
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
 
     def write_diff_file(json_str)
       File.open(options[:output], 'w') do |file|

@@ -37,7 +37,7 @@ RSpec.describe 'check node-tp support path consistency', :checkup do
         end
       end
     end
-    nws = Netomox::Topology::Networks.new(nws_def.topo_data)
+    nws = Netomox::Topology::VerifiableNetworks.new(nws_def.topo_data)
     @result = nws.check_family_support_path
   end
 
