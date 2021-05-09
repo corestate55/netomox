@@ -83,12 +83,17 @@ module Netomox
         nw.links.find { |link| link.source == source_ref }
       end
 
-      # exec for each networks
+      # exec for each network
+      # @yield [nw] For each network
+      # @yieldparam [Network] nw Network
       def all_networks(&block)
         @networks.each(&block)
       end
 
       # exec for each node in all networks
+      # @yield [node, nw] For each node
+      # @yieldparam [Node] node Node
+      # @yieldparam [Network] nw Network
       def all_nodes
         all_networks do |nw|
           nw.nodes.each do |node|
@@ -97,7 +102,10 @@ module Netomox
         end
       end
 
-      # exec for each links in all networks
+      # exec for each link in all networks
+      # @yield [link, nw] For each link
+      # @yieldparam [Link] link Link
+      # @yieldparam [Network] nw Network
       def all_links
         all_networks do |nw|
           nw.links.each do |link|
@@ -106,7 +114,11 @@ module Netomox
         end
       end
 
-      # exec for each term-points in all nodes and networks
+      # exec for each term-point in all nodes and networks
+      # @yield [tp, link, nw] For each term-point
+      # @yieldparam [TermPoint] tp Term-point
+      # @yieldparam [Node] node Node
+      # @yieldparam [Network] nw Network
       def all_termination_points
         all_nodes do |node, nw|
           node.termination_points.each do |tp|

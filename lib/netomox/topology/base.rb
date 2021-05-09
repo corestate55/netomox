@@ -5,7 +5,7 @@ require 'netomox/topology/attr_base'
 
 module Netomox
   module Topology
-    # Toloplogy Object Base
+    # Topology Object Base
     class TopoObjectBase
       attr_reader :name, :path
       attr_accessor :diff_state, :attribute, :supports

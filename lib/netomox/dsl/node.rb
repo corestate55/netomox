@@ -175,6 +175,7 @@ module Netomox
       end
 
       # sort term-points by name (overwrite itself)
+      # @return [Array<TermPoint>]
       def sort_tp_by_name!
         term_points = sort_tp_by_name
         @term_points = term_points
