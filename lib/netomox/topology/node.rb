@@ -86,11 +86,6 @@ module Netomox
         @termination_points.filter { |tp| tp.attribute.attribute?(key) }
       end
 
-      # exec for each term-points
-      def each_tps(&block)
-        @termination_points.each(&block)
-      end
-
       private
 
       def setup_termination_points(data)

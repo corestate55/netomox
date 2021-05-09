@@ -86,19 +86,12 @@ module Netomox
         nw.links.find { |link| link.source == source_ref }
       end
 
-      # exec for each network
-      # @yield [nw] For each network
-      # @yieldparam [Network] nw Network
-      def all_networks(&block)
-        @networks.each(&block)
-      end
-
       # exec for each node in all networks
       # @yield [node, nw] For each node
       # @yieldparam [Node] node Node
       # @yieldparam [Network] nw Network
       def all_nodes
-        all_networks do |nw|
+        @networks.each do |nw|
           nw.nodes.each do |node|
             yield node, nw
           end
@@ -110,7 +103,7 @@ module Netomox
       # @yieldparam [Link] link Link
       # @yieldparam [Network] nw Network
       def all_links
-        all_networks do |nw|
+        @networks.each do |nw|
           nw.links.each do |link|
             yield link, nw
           end

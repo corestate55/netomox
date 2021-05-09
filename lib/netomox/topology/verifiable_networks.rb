@@ -11,7 +11,7 @@ module Netomox
       # Search networks that support non-existent network
       def check_exist_supporting_network
         check('supporting network existence') do |messages|
-          all_networks do |nw|
+          @networks.each do |nw|
             nw.supports.each do |snw|
               begin
                 next if find_network(snw.network_ref)
@@ -274,7 +274,7 @@ module Netomox
 
       def check_node_id_uniqueness
         check_uniqueness do |messages|
-          all_networks do |nw|
+          @networks.each do |nw|
             node_ids = nw.nodes.map(&:name)
             next if nw.nodes.size == node_ids.uniq.size
 
@@ -286,7 +286,7 @@ module Netomox
 
       def check_link_id_uniqueness
         check_uniqueness do |messages|
-          all_networks do |nw|
+          @networks.each do |nw|
             link_ids = nw.links.map(&:name)
             next if nw.links.size == link_ids.uniq.size
 
