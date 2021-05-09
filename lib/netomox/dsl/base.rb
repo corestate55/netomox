@@ -5,7 +5,7 @@ module Netomox
     # DSl common methods
     class DSLObjectBase
       # @!attribute [rw] parent
-      #   @return [String] Parent object path
+      #   @return [DSLObjectBase] Parent object path
       # @!attribute [rw] name
       #   @return [String]
       # @!attribute [rw] path
@@ -24,6 +24,12 @@ module Netomox
       # @param [Proc] block Code Block to eval in this instance
       def register(&block)
         instance_eval(&block)
+      end
+
+      protected
+
+      def check_normalize_args(args, length)
+        !args.map { |e| e.is_a?(String) && !e.empty? }.include?(false) && args.length == length
       end
     end
   end

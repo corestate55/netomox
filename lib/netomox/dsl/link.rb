@@ -160,9 +160,17 @@ module Netomox
       # @param [String, Array<String>] nw_ref Network name or Array [nw_ref, node_ref, tp\ref]
       # @param [String] link_ref (if nw_ref is a String)
       # @return [Array<String>]
+      # @raise [DSLInvalidArgumentError]
       def normalize_support_ref(nw_ref, link_ref = nil)
-        # with 2 args or 1 arg (array)
-        link_ref ? [nw_ref, link_ref] : nw_ref
+        # with 1 arg (an array)
+        return nw_ref if nw_ref.is_a?(Array) && check_normalize_args(nw_ref, 2)
+
+        # with 2 args
+        args = [nw_ref, link_ref]
+        return args if check_normalize_args(args, 2)
+
+        raise DSLInvalidArgumentError, 'Support link args is not satisfied: ' \
+          "nw_ref:#{nw_ref}, link_ref:#{link_ref}"
       end
     end
   end

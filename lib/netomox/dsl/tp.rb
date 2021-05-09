@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'netomox/const'
+require 'netomox/dsl/error'
 require 'netomox/dsl/base'
 require 'netomox/dsl/tp_attr'
 
@@ -44,7 +45,7 @@ module Netomox
 
       # @param [Node] parent Parent object (Node)
       # @param [String] name Term-point name
-      # @param [Block] block Conde block to eval in this instance
+      # @param [Proc] block Conde block to eval in this instance
       def initialize(parent, name, &block)
         super(parent, name)
         @supports = [] # supporting termination point
@@ -95,22 +96,28 @@ module Netomox
       # @return [Array<Link>]
       def links_between(dst)
         find_opts = normalize_links_between(dst)
+        # Notice network#links_between (parent of parent)
         @parent.parent.links_between(**find_opts)
       end
 
-      # Find or add (unidirectional) link from self to dst
-      # @param [TermPoint] dst Destination term-point
+      # Find or add unidirectional link from self to dst.
+      #   If destination is node (not specified term-point),
+      #   added term-point automatically in destination node and connect it.
+      # @param [Node, TermPoint] dst Destination node or term-point
       # @return [Link]
       def link_to(dst)
         link_spec = normalize_link_to(dst).map(&:name)
+        # Notice network#link (parent of parent)
         @parent.parent.link link_spec
       end
 
-      # Find or add (bidirectional) links between self and dst
+      # Add bidirectional link between self and dst.
+      #   If destination is node (not specified term-point),
+      #   added term-point automatically in destination node and connect it.
       # @param [TermPoint] dst Destination term-point
-      # @return [Link]
       def bdlink_to(dst)
         link_spec = normalize_link_to(dst).map(&:name)
+        # Notice network#bdlink (parent of parent)
         @parent.parent.bdlink link_spec
       end
 
@@ -126,17 +133,25 @@ module Netomox
 
       private
 
+      # @param [Node, TermPoint] dst Destination node or term-point
+      # @return [Array<DSLObjectBase>] Search options (array of Node or TermPoint)
+      # @raise [DSLInvalidArgumentError]
+      # @see Network#normalize_link_args
       def normalize_link_to(dst)
         case dst
         when TermPoint
           [@parent, self, dst.parent, dst]
         when Node
           [@parent, self, dst, dst.auto_term_point]
+        else
+          raise DSLInvalidArgumentError, "Cannot connect from #{@path} to #{dst}"
         end
       end
 
       # @param [Node, TermPoint] dst Destination node or term-point
-      # @return [Hash] search option
+      # @return [Hash] Search options
+      # @raise [DSLInvalidArgumentError]
+      # @see Network#normalize_find_link_args
       def normalize_links_between(dst)
         case dst
         when TermPoint
@@ -146,7 +161,7 @@ module Netomox
           { src_node_name: @parent.name, src_tp_name: @name,
             dst_node_name: dst.name }
         else
-          warn "Cannot exec find from #{@path} to #{dst}"
+          raise DSLInvalidArgumentError, "Cannot exec find from #{@path} to #{dst}"
         end
       end
 
@@ -155,9 +170,17 @@ module Netomox
       # @param node_ref [String] node_ref (if nw_ref is a String)
       # @param tp_ref [String] tp_ref (if nw_ref is a String)
       # @return [Array<String>]
+      # @raise [DSLInvalidArgumentError]
       def normalize_support_ref(nw_ref, node_ref = nil, tp_ref = nil)
-        # with 3 args or 1 arg (array)
-        node_ref && tp_ref ? [nw_ref, node_ref, tp_ref] : nw_ref
+        # with 1 arg (an array)
+        return nw_ref if nw_ref.is_a?(Array) && check_normalize_args(nw_ref, 3)
+
+        # with 3 args
+        args = [nw_ref, node_ref, tp_ref]
+        return args if check_normalize_args(args, 3)
+
+        raise DSLInvalidArgumentError, 'Support term-point args is not satisfied: ' \
+          "nw_ref:#{nw_ref}, node_ref:#{node_ref}, tp_ref:#{tp_ref}"
       end
     end
   end

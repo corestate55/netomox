@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'netomox/const'
+require 'netomox/dsl/error'
 require 'netomox/dsl/base'
 require 'netomox/dsl/node_attr'
 require 'netomox/dsl/tp'
@@ -132,7 +133,10 @@ module Netomox
         term_point(tp_name)
       end
 
-      # Add link to dst
+      # Find or add unidirectional link from self to dst.
+      #   Source term-point is added automatically.
+      #   If destination is node (not specified term-point),
+      #   added term-point automatically in destination node and connect it.
       # @param [Node, TermPoint] dst Destination node or term-point
       # @return [Link]
       def link_to(dst)
@@ -140,9 +144,11 @@ module Netomox
         @parent.link link_spec
       end
 
-      # Add bidirectional link to dst
+      # Add bidirectional link from self to dst.
+      #   Source term-point is added automatically.
+      #   If destination is node (not specified term-point),
+      #   added term-point automatically in destination node and connect it.
       # @param [Node, TermPoint] dst Destination node or term-point
-      # @return [Link]
       def bdlink_to(dst)
         link_spec = normalize_link_to(dst).map(&:name)
         @parent.bdlink link_spec
@@ -183,6 +189,10 @@ module Netomox
 
       private
 
+      # @param [Node, TermPoint] dst Destination node or term-point
+      # @return [Array<DSLObjectBase>] Search option (array of Node or TermPoint)
+      # @raise [DSLInvalidArgumentError]
+      # @see Network#normalize_link_args
       def normalize_link_to(dst)
         case dst
         when TermPoint
@@ -190,12 +200,14 @@ module Netomox
         when Node
           [self, auto_term_point, dst, dst.auto_term_point]
         else
-          warn "Cannot connect from #{@path} to #{dst}"
+          raise DSLInvalidArgumentError, "Cannot connect from #{@path} to #{dst}"
         end
       end
 
       # @param [Node, TermPoint] dst Destination node or term-point
-      # @return [Hash] search option
+      # @return [Hash] Search options
+      # @raise [DSLInvalidArgumentError]
+      # @see Network#normalize_find_link_args
       def normalize_links_between(dst)
         case dst
         when TermPoint
@@ -204,17 +216,25 @@ module Netomox
         when Node
           { src_node_name: @name, dst_node_name: dst.name }
         else
-          warn "Cannot exec find from #{@path} to #{dst}"
+          raise DSLInvalidArgumentError, "Cannot exec find from #{@path} to #{dst}"
         end
       end
 
       # Normalize path (elements or array of elements) to array
-      # @param [String, Array<String>] nw_ref Network name or Array [nw_ref, node_ref, tp\ref]
+      # @param [String, Array<String>] nw_ref Network name or Array [nw_ref, node_ref]
       # @param node_ref [String] node_ref (if nw_ref is a String)
       # @return [Array<String>]
+      # @raise [DSLInvalidArgumentError]
       def normalize_support_ref(nw_ref, node_ref = nil)
-        # with 2 args or 1 arg (array)
-        node_ref ? [nw_ref, node_ref] : nw_ref
+        # with 1 arg (an array)
+        return nw_ref if nw_ref.is_a?(Array) && check_normalize_args(nw_ref, 2)
+
+        # with 2 args
+        args = [nw_ref, node_ref]
+        return args if check_normalize_args(args, 2)
+
+        raise DSLInvalidArgumentError, 'Support node args is not satisfied: ' \
+          "nw_ref:#{nw_ref}, node_ref:#{node_ref}"
       end
     end
     # rubocop:enable Metrics/ClassLength

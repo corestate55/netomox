@@ -29,7 +29,8 @@ module Netomox
 
       # @param [String] network_ref Network name
       # @param [String] node_ref Node name
-      # @return [Node, nil] Found node in network (nil if not found)
+      # @return [Node, nil] Found node in network (nil if node is not found)
+      # @raise [TopologyElementNotFoundError] If parent network is not found
       def find_node(network_ref, node_ref)
         nw = find_network(network_ref)
         unless nw
@@ -43,7 +44,8 @@ module Netomox
       # @param [String] network_ref Network name
       # @param [String] node_ref Node name
       # @param [String] tp_ref Term-point name
-      # @return [TermPoint, nil] Found term-point in node/network (nil if not found)
+      # @return [TermPoint, nil] Found term-point in node/network (nil if term-point is not found)
+      # @raise [TopologyElementNotFoundError] If parent network or node is not found
       def find_tp(network_ref, node_ref, tp_ref)
         node = find_node(network_ref, node_ref)
         unless node
@@ -57,7 +59,8 @@ module Netomox
 
       # @param [String] network_ref Network name
       # @param [String] link_ref Link name
-      # @return [Link, nil] Found link in network
+      # @return [Link, nil] Found link in network (nil if link is not found)
+      # @raise [TopologyElementNotFoundError] If parent network or link is not found
       def find_link(network_ref, link_ref)
         nw = find_network(network_ref)
         unless nw

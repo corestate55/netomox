@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'netomox/const'
+require 'netomox/dsl/error'
 require 'netomox/dsl/base'
 require 'netomox/dsl/network_attr'
 require 'netomox/dsl/node'
@@ -206,7 +207,7 @@ module Netomox
 
       # Find all links src/dst and node/tp name match.
       # @param [Array<Array<String>>] conds Match conditions
-      # @return Array<Link> Found links (Empty array if not found)
+      # @return [Array<Link>] Found links (Empty array if not found)
       def find_links_with_condition(conds)
         @links.find_all do |link|
           conds.inject(true) do |res, cond|
@@ -215,13 +216,14 @@ module Netomox
         end
       end
 
-      # construct link search conditions to input find_links_with_conditions:
+      # construct link search conditions to input
       #   condition = [method1 method2 match_value]
       # @param [String] src_node_name Source node name
       # @param [String] dst_node_name Destination node name
       # @param [String] src_tp_name Source term-point name
       # @param [String] dst_tp_name Destination term-point name
-      # @return Array<Array<String>> Array of condition
+      # @return [Array<Array<String>>] Array of condition
+      # @see find_links_with_conditions
       def normalize_find_link_args(src_node_name:, dst_node_name:, src_tp_name: false, dst_tp_name: false)
         conds = []
         conds.push(%W[source node_ref #{src_node_name}])
@@ -236,13 +238,18 @@ module Netomox
       # @param [String] src_tp Source term-point name
       # @param [String] dst_node Destination node name
       # @param [String] dst_tp Destination term-point name
+      # @return [Array<String>]
+      # @raise [DSLInvalidArgumentError]
       def normalize_link_args(src_node, src_tp = nil, dst_node = nil, dst_tp = nil)
-        case src_node
-        when Array
-          src_node # with 1 arg (with an array)
-        else
-          [src_node, src_tp, dst_node, dst_tp] # with 4 args
-        end
+        # with 1 arg (an array)
+        return src_node if src_node.is_a?(Array) && check_normalize_args(src_node, 4)
+
+        # with 4 args
+        args = [src_node, src_tp, dst_node, dst_tp]
+        return args if check_normalize_args(args, 4)
+
+        raise DSLInvalidArgumentError, 'Link args is not satisfied: ' \
+          "src: { node:#{src_node}, tp:#{src_tp}}, dst: { node:#{dst_node}, tp:#{dst_tp} }"
       end
     end
     # rubocop:enable Metrics/ClassLength
