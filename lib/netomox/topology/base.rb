@@ -17,7 +17,7 @@ module Netomox
       def initialize(name, parent_path = '')
         @name = name
         @parent_path = parent_path
-        @path = parent_path.empty? ? @name : [@parent_path, @name].join('__')
+        @path = parent_path.empty? ? @name : make_path
         @diff_state = DiffState.new # empty state
       end
 
@@ -37,6 +37,13 @@ module Netomox
       # @return [Boolean]
       def empty?
         @name.empty?
+      end
+
+      # Rename object name (Notice: dangerous method)
+      # @param [String] name New name of the object.
+      def rename!(name)
+        @name = name
+        @path = make_path
       end
 
       protected
@@ -71,6 +78,12 @@ module Netomox
         @supports = data[key].map do |support|
           klass.new(support)
         end
+      end
+
+      private
+
+      def make_path
+        [@parent_path, @name].join('__')
       end
     end
   end
