@@ -23,7 +23,7 @@ module Netomox
       # @param [String] name
       # @param [Array<String>] flags
       # @param [String] router_id
-      # @param [Array<L3Prefix>] prefixes
+      # @param [Array<Hash>] prefixes
       def initialize(name: '', flags: [], router_id: '', prefixes: [])
         @name = name
         @flags = flags

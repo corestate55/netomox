@@ -16,11 +16,11 @@ module Netomox
 
       # @param [String] prefix
       # @param [Integer] metric
-      # @param [Array<String>] flag
-      def initialize(prefix: '', metric: 10, flag: [])
+      # @param [Array<String>] flags
+      def initialize(prefix: '', metric: 10, flags: [])
         @prefix = prefix
         @metric = metric
-        @flag = flag
+        @flags = flags
       end
 
       # Convert to RFC8345 topology data
@@ -29,7 +29,7 @@ module Netomox
         {
           'prefix' => @prefix,
           'metric' => @metric,
-          'flag' => @flag
+          'flag' => @flags
         }
       end
     end

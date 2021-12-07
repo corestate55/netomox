@@ -8,14 +8,18 @@ module Netomox
     class MddoL1TPAttribute
       # @!attribute [rw] description
       #   @return [String]
-      attr_accessor :description
+      # @!attribute [rw] flags
+      #   @return [Array<String>]
+      attr_accessor :description, :flags
       # @!attribute [r] type
       #   @return [String]
       attr_reader :type
 
       # @param [String] description Interface description
-      def initialize(description: '')
+      # @param [Array<String>] flags Flags
+      def initialize(description: '', flags: [])
         @description = description
+        @flags = flags
         @type = "#{NS_MDDO}:l1-termination-point-attributes"
       end
 
@@ -23,13 +27,14 @@ module Netomox
       # @return [Hash]
       def topo_data
         {
-          'description' => @description
+          'description' => @description,
+          'flag' => @flags
         }
       end
 
       # @return [Boolean]
       def empty?
-        @description.empty?
+        @description.empty? && @flags.empty?
       end
     end
 
@@ -41,16 +46,19 @@ module Netomox
       #   @return [String]
       # @!attribute [rw] switchport_mode
       #   @return [String]
-      attr_accessor :description, :encapsulation, :switchport_mode
+      # @!attribute [rw] flags
+      #   @return [Array<String>]
+      attr_accessor :description, :encapsulation, :switchport_mode, :flags
       # @!attribute [r] type
       #   @return [String]
       attr_reader :type
 
       # @param [String] description Interface description
-      def initialize(description: '', encapsulation: '', switchport_mode: '')
+      def initialize(description: '', encapsulation: '', switchport_mode: '', flags: [])
         @description = description
         @encapsulation = encapsulation
-        @switchport_mode = @switchport_mode
+        @switchport_mode = switchport_mode
+        @flags = flags
         @type = "#{NS_MDDO}:l2-termination-point-attributes"
       end
 
@@ -60,13 +68,14 @@ module Netomox
         {
           'description' => @description,
           'encapsulation' => @encapsulation,
-          'switchport-mode' => @switchport_mode
+          'switchport-mode' => @switchport_mode,
+          'flag' => @flags
         }
       end
 
       # @return [Boolean]
       def empty?
-        @description.empty? && @encapsulation.empty? && @switchport_mode.empty?
+        @description.empty? && @encapsulation.empty? && @switchport_mode.empty? && flags.empty?
       end
     end
 
@@ -76,15 +85,18 @@ module Netomox
       #   @return [String]
       # @!attribute [rw] ip_address
       #   @return [String]
-      attr_accessor :description, :ip_address
+      # @!attribute [rw] flags
+      #   @return [Array<String>]
+      attr_accessor :description, :ip_address, :flags
       # @!attribute [r] type
       #   @return [String]
       attr_reader :type
 
       # @param [String] description Interface description
-      def initialize(description: '', ip_address: '')
+      def initialize(description: '', ip_address: '', flags: [])
         @description = description
         @ip_address = ip_address
+        @flags = flags
         @type = "#{NS_MDDO}:l3-termination-point-attributes"
       end
 
@@ -93,13 +105,14 @@ module Netomox
       def topo_data
         {
           'description' => @description,
-          'ip-address' => @ip_address
+          'ip-address' => @ip_address,
+          'flag' => @flags
         }
       end
 
       # @return [Boolean]
       def empty?
-        @description.empty? && @ip_address.empty?
+        @description.empty? && @ip_address.empty? && @flags.empty?
       end
     end
   end

@@ -81,7 +81,7 @@ RSpec.describe 'node dsl', :dsl, :node do
   end
 
   it 'generate node that has L3 attribute', :attr, :l3attr do
-    seg_a_prefix = { prefix: '192.168,10.0/24', metric: 100 }
+    seg_a_prefix = { prefix: '192.168.10.0/24', metric: 100 }
     seg_b_prefix = { prefix: '192.168.20.0/24', metric: 100 }
     pref = { prefixes: [seg_a_prefix, seg_b_prefix] }
     node = Netomox::DSL::Node.new(@l3nw, 'nodeX') do
@@ -97,7 +97,7 @@ RSpec.describe 'node dsl', :dsl, :node do
         'router-id' => [''],
         'prefix' => [
           {
-            'prefix' => '192.168,10.0/24',
+            'prefix' => '192.168.10.0/24',
             'metric' => 100,
             'flag' => []
           },
