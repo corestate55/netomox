@@ -18,7 +18,7 @@ module Netomox
       # @param [String] description Interface description
       # @param [Array<String>] flags Flags
       def initialize(description: '', flags: [])
-        @description = description
+        @description = description || '' # avoid nil if the interface doesn't have description
         @flags = flags
         @type = "#{NS_MDDO}:l1-termination-point-attributes"
       end
@@ -54,8 +54,11 @@ module Netomox
       attr_reader :type
 
       # @param [String] description Interface description
+      # @param [String] encapsulation VLAN encapsulation
+      # @param [String] switchport_mode Switch-port mode
+      # @param [Array<String>] flags Flags
       def initialize(description: '', encapsulation: '', switchport_mode: '', flags: [])
-        @description = description
+        @description = description || '' # avoid nil if the interface doesn't have description
         @encapsulation = encapsulation
         @switchport_mode = switchport_mode
         @flags = flags
@@ -84,7 +87,7 @@ module Netomox
       # @!attribute [rw] description
       #   @return [String]
       # @!attribute [rw] ip_address
-      #   @return [String]
+      #   @return [Array<String>]
       # @!attribute [rw] flags
       #   @return [Array<String>]
       attr_accessor :description, :ip_address, :flags
@@ -93,8 +96,10 @@ module Netomox
       attr_reader :type
 
       # @param [String] description Interface description
-      def initialize(description: '', ip_address: '', flags: [])
-        @description = description
+      # @param [Array<String>] ip_address IP addresses
+      # @param [Array<String>] flags Flags
+      def initialize(description: '', ip_address: [], flags: [])
+        @description = description || '' # avoid nil if the interface doesn't have description
         @ip_address = ip_address
         @flags = flags
         @type = "#{NS_MDDO}:l3-termination-point-attributes"

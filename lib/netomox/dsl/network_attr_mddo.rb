@@ -5,6 +5,7 @@ require 'netomox/dsl/base_attr_rfc'
 
 module Netomox
   module DSL
+    # attribute for mddo-topology layer1 network
     class MddoL1NWAttribute < NetworkAttributeBase
       def initialize(**hash)
         super(**hash)
@@ -12,6 +13,7 @@ module Netomox
       end
     end
 
+    # attribute for mddo-topology layer2 network
     class MddoL2NWAttribute < NetworkAttributeBase
       def initialize(**hash)
         super(**hash)
@@ -19,6 +21,7 @@ module Netomox
       end
     end
 
+    # attribute for mddo-topology layer3 network
     class MddoL3NWAttribute < NetworkAttributeBase
       def initialize(**hash)
         super(**hash)

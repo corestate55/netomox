@@ -92,6 +92,8 @@ module Netomox
         end
       end
 
+      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+
       # Set attribute
       # @param [Hash] attr Attribute data
       def attribute(attr = nil)
@@ -113,6 +115,7 @@ module Netomox
                        {}
                      end
       end
+      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
       # Convert to RFC8345 topology data
       # @return [Hash]

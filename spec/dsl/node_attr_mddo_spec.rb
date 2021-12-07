@@ -24,7 +24,7 @@ RSpec.describe 'node dsl', :dsl, :node, :mddo do
   end
 
   it 'generate node that has L21attribute', :attr, :l1attr do
-    node_attr = { os_type: 'JUNOS', flags: %w[foo bar]}
+    node_attr = { os_type: 'JUNOS', flags: %w[foo bar] }
     node = Netomox::DSL::Node.new(@l1nw, 'nodeX') do
       attribute(node_attr)
     end
@@ -40,7 +40,7 @@ RSpec.describe 'node dsl', :dsl, :node, :mddo do
   end
 
   it 'generate node that has L2 attribute', :attr, :l2attr do
-    node_attr = { name: 'l1nodeX', vlan_id: 10, flags: %w[foo bar]}
+    node_attr = { name: 'l1nodeX', vlan_id: 10, flags: %w[foo bar] }
     node = Netomox::DSL::Node.new(@l2nw, 'nodeX') do
       attribute(node_attr)
     end
@@ -74,8 +74,8 @@ RSpec.describe 'node dsl', :dsl, :node, :mddo do
       @l3attr_key => {
         'node-type' => 'segment',
         'prefix' => [
-          { 'prefix' => '192.168.10.0/24', 'metric' => 10, 'flag' => %w[connected]},
-          { 'prefix' => '192.168.20.0/24', 'metric' => 100, 'flag' => []}
+          { 'prefix' => '192.168.10.0/24', 'metric' => 10, 'flag' => %w[connected] },
+          { 'prefix' => '192.168.20.0/24', 'metric' => 100, 'flag' => [] }
         ],
         'flag' => %w[foo bar]
       }
