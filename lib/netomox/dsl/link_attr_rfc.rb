@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'netomox/const'
-require 'netomox/dsl/attr_base'
 
 module Netomox
   module DSL
@@ -96,15 +95,6 @@ module Netomox
       def empty?
         @name.empty? && @flags.empty? && \
           @rate.nil? && @delay.nil? && @srlg.empty?
-      end
-    end
-
-    # attribute for ops-topology link
-    class OpsLinkAttribute < OpsAttributeBase
-      # @param [Hash] hash Key-Value data of any attribute
-      def initialize(hash)
-        super(hash)
-        @type = "#{NS_OPS}:ops-link-attributes"
       end
     end
   end

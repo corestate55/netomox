@@ -3,7 +3,9 @@
 require 'netomox/const'
 require 'netomox/dsl/error'
 require 'netomox/dsl/base'
-require 'netomox/dsl/tp_attr'
+require 'netomox/dsl/tp_attr_rfc'
+require 'netomox/dsl/tp_attr_ops'
+require 'netomox/dsl/tp_attr_mddo'
 
 module Netomox
   module DSL
@@ -77,6 +79,12 @@ module Netomox
                        L3TPAttribute.new(**attr)
                      elsif @type.key?(NWTYPE_OPS)
                        OpsTPAttribute.new(**attr)
+                     elsif @type.key?(NWTYPE_MDDO_L1)
+                       MddoL1TPAttribute.new(**attr)
+                     elsif @type.key?(NWTYPE_MDDO_L2)
+                       MddoL2TPAttribute.new(**attr)
+                     elsif @type.key?(NWTYPE_MDDO_L3)
+                       MddoL3TPAttribute.new(**attr)
                      else
                        {}
                      end

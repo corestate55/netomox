@@ -10,12 +10,20 @@ module Netomox
   # Namespace for RFC8346 (L3 network object and topology data model)
   NS_L3NW = 'ietf-l3-unicast-topology'
   # Experimental namespace (not defined yang)
+  # for ops project
   NS_OPS = 'ops-topology'
+  # for ool-mddo project
+  NS_MDDO = 'mddo-topology'
 
   # Layer2 network type (draft-ietf-i2rs-l2-network-topology)
   NWTYPE_L2 = "#{NS_L2NW}:l2-network"
   # Layer3 network type (RFC83446)
   NWTYPE_L3 = "#{NS_L3NW}:l3-unicast-topology"
   # Experimental network type
+  # for ops project
   NWTYPE_OPS = "#{NS_OPS}:ops-network"
+  # for MDDO project
+  NWTYPE_MDDO_L1 = "#{NS_MDDO}:l1-network"
+  NWTYPE_MDDO_L2 = "#{NS_MDDO}:l2-network"
+  NWTYPE_MDDO_L3 = "#{NS_MDDO}:l3-network"
 end

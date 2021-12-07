@@ -2,7 +2,9 @@
 
 require 'netomox/const'
 require 'netomox/dsl/base'
-require 'netomox/dsl/link_attr'
+require 'netomox/dsl/link_attr_rfc'
+require 'netomox/dsl/link_attr_ops'
+require 'netomox/dsl/link_attr_mddo'
 
 module Netomox
   module DSL
@@ -127,6 +129,12 @@ module Netomox
                        L3LinkAttribute.new(**attr)
                      elsif @type.key?(NWTYPE_OPS)
                        OpsLinkAttribute.new(**attr)
+                     elsif @type.key?(NWTYPE_MDDO_L1)
+                       MddoL1LinkAttribute.new(**attr)
+                     elsif @type.key?(NWTYPE_MDDO_L2)
+                       MddoL2LinkAttribute.new(**attr)
+                     elsif @type.key?(NWTYPE_MDDO_L3)
+                       MddoL3LinkAttribute.new(**attr)
                      else
                        {}
                      end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'netomox/const'
-require 'netomox/dsl/attr_base'
 
 module Netomox
   module DSL
@@ -123,15 +122,6 @@ module Netomox
       # @return [Hash]
       def topo_data
         { 'ip-address' => @ip_addrs }
-      end
-    end
-
-    # attribute for ops-topology termination point
-    class OpsTPAttribute < OpsAttributeBase
-      # @param [Hash] hash Key-Value data of any attribute
-      def initialize(hash)
-        super(hash)
-        @type = "#{NS_OPS}:ops-termination-point-attributes"
       end
     end
   end

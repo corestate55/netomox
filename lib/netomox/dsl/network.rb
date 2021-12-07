@@ -3,7 +3,9 @@
 require 'netomox/const'
 require 'netomox/dsl/error'
 require 'netomox/dsl/base'
-require 'netomox/dsl/network_attr'
+require 'netomox/dsl/network_attr_rfc'
+require 'netomox/dsl/network_attr_ops'
+require 'netomox/dsl/network_attr_mddo'
 require 'netomox/dsl/node'
 require 'netomox/dsl/link'
 
@@ -81,6 +83,12 @@ module Netomox
                        L3NWAttribute.new(**attr)
                      elsif @type.key?(NWTYPE_OPS)
                        OpsNWAttribute.new(**attr)
+                     elsif @type.key?(NWTYPE_MDDO_L1)
+                       MddoL1NWAttribute.new(**attr)
+                     elsif @type.key?(NWTYPE_MDDO_L2)
+                       MddoL2NWAttribute.new(**attr)
+                     elsif @type.key?(NWTYPE_MDDO_L3)
+                       MddoL3NWAttribute.new(**attr)
                      else
                        {}
                      end
