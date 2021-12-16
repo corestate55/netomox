@@ -29,10 +29,5 @@ module Netomox
         "attribute:#{@name},#{@flags}"
       end
     end
-
-    # attribute for L2 network
-    class L2NetworkAttribute < NetworkAttributeBase; end
-    # attribute for L3 network
-    class L3NetworkAttribute < NetworkAttributeBase; end
   end
 end

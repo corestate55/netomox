@@ -4,7 +4,8 @@ require 'netomox/const'
 require 'netomox/topology/node'
 require 'netomox/topology/link'
 require 'netomox/topology/support_base'
-require 'netomox/topology/network_attr'
+require 'netomox/topology/network_attr_rfc'
+require 'netomox/topology/network_attr_mddo'
 require 'netomox/topology/base'
 
 module Netomox
@@ -21,7 +22,10 @@ module Netomox
       # Attribute type key and its class for Network
       ATTR_KEY_KLASS_LIST = [
         { key: "#{NS_L2NW}:l2-network-attributes", klass: L2NetworkAttribute },
-        { key: "#{NS_L3NW}:l3-topology-attributes", klass: L3NetworkAttribute }
+        { key: "#{NS_L3NW}:l3-topology-attributes", klass: L3NetworkAttribute },
+        { key: "#{NS_MDDO}:l1-network-attributes", klass: MddoL1NetworkAttribute },
+        { key: "#{NS_MDDO}:l2-network-attributes", klass: MddoL2NetworkAttribute },
+        { key: "#{NS_MDDO}:l3-network-attributes", klass: MddoL3NetworkAttribute }
       ].freeze
 
       # @param [Hash] data RFC8345 data (network element)
