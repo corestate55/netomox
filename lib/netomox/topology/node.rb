@@ -3,7 +3,8 @@
 require 'netomox/const'
 require 'netomox/topology/tp'
 require 'netomox/topology/support_base'
-require 'netomox/topology/node_attr'
+require 'netomox/topology/node_attr_rfc'
+require 'netomox/topology/node_attr_mddo'
 require 'netomox/topology/base'
 
 module Netomox
@@ -17,7 +18,10 @@ module Netomox
       # Attribute type key and its class for Node
       ATTR_KEY_KLASS_LIST = [
         { key: "#{NS_L2NW}:l2-node-attributes", klass: L2NodeAttribute },
-        { key: "#{NS_L3NW}:l3-node-attributes", klass: L3NodeAttribute }
+        { key: "#{NS_L3NW}:l3-node-attributes", klass: L3NodeAttribute },
+        { key: "#{NS_MDDO}:l1-node-attributes", klass: MddoL1NodeAttribute },
+        { key: "#{NS_MDDO}:l2-node-attributes", klass: MddoL2NodeAttribute },
+        { key: "#{NS_MDDO}:l3-node-attributes", klass: MddoL3NodeAttribute },
       ].freeze
 
       # @param [Hash] data RFC8345 data (node element)
