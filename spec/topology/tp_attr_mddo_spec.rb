@@ -8,7 +8,7 @@ RSpec.describe 'check term-point attribute with RFC' do
         node('node1') do
           term_point('eth1') do
             attribute(
-              description: "descr of layer1 node1 eth1",
+              description: 'descr of layer1 node1 eth1',
               flags: %w[layer1 term-point]
             )
           end
@@ -19,7 +19,7 @@ RSpec.describe 'check term-point attribute with RFC' do
         node('node1') do
           term_point('eth1') do
             attribute(
-              description: "descr of layer2 node1 eth1",
+              description: 'descr of layer2 node1 eth1',
               encapsulation: 'dot1q',
               switchport_mode: 'trunk',
               flags: %w[layer2 term-point]
@@ -32,7 +32,7 @@ RSpec.describe 'check term-point attribute with RFC' do
         node('node1') do
           term_point('eth1') do
             attribute(
-              description: "descr of layer3 node1 eth1",
+              description: 'descr of layer3 node1 eth1',
               ip_addrs: %w[192.168.0.1/24 169.254.0.1],
               flags: %w[layer3 term-point]
             )
@@ -42,14 +42,14 @@ RSpec.describe 'check term-point attribute with RFC' do
     end
     topo_data = nws.topo_data
     @nws = Netomox::Topology::Networks.new(topo_data)
-    @default_diff_state = { :backward=>nil, :forward=>:kept, :pair=>"" }
+    @default_diff_state = { backward: nil, forward: :kept, pair: '' }
   end
 
   it 'has MDDO layer1 term-point attribute' do
     attr = @nws.find_network('nw1')&.find_node_by_name('node1')&.find_tp_by_name('eth1')&.attribute
     expected_attr = {
       '_diff_state_' => @default_diff_state,
-      'description' => "descr of layer1 node1 eth1",
+      'description' => 'descr of layer1 node1 eth1',
       'flag' => %w[layer1 term-point]
     }
     expect(attr&.to_data).to eq expected_attr
@@ -59,7 +59,7 @@ RSpec.describe 'check term-point attribute with RFC' do
     attr = @nws.find_network('nw2')&.find_node_by_name('node1')&.find_tp_by_name('eth1')&.attribute
     expected_attr = {
       '_diff_state_' => @default_diff_state,
-      'description' => "descr of layer2 node1 eth1",
+      'description' => 'descr of layer2 node1 eth1',
       'encapsulation' => 'dot1q',
       'switchport-mode' => 'trunk',
       'flag' => %w[layer2 term-point]
@@ -71,7 +71,7 @@ RSpec.describe 'check term-point attribute with RFC' do
     attr = @nws.find_network('nw3')&.find_node_by_name('node1')&.find_tp_by_name('eth1')&.attribute
     expected_attr = {
       '_diff_state_' => @default_diff_state,
-      'description' => "descr of layer3 node1 eth1",
+      'description' => 'descr of layer3 node1 eth1',
       'ip-address' => %w[192.168.0.1/24 169.254.0.1],
       'flag' => %w[layer3 term-point]
     }

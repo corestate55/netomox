@@ -8,8 +8,8 @@ RSpec.describe 'check node attribute with RFC' do
         node('node1') do
           attribute(
             prefixes: [
-              { prefix: '192.168.0.0/24', metric: 1, flags: 'test'},
-              { prefix: '192.168.1.0/24', metric: 10, flags: %w[foo bar]}
+              { prefix: '192.168.0.0/24', metric: 1, flags: 'test' },
+              { prefix: '192.168.1.0/24', metric: 10, flags: %w[foo bar] }
             ],
             router_id: '192.168.0.1',
             flags: %w[layer3 node],
@@ -20,7 +20,7 @@ RSpec.describe 'check node attribute with RFC' do
     end
     topo_data = nws.topo_data
     @nws = Netomox::Topology::Networks.new(topo_data)
-    @default_diff_state = { :backward=>nil, :forward=>:kept, :pair=>"" }
+    @default_diff_state = { backward: nil, forward: :kept, pair: '' }
   end
 
   it 'has rfc8345-based node attribute' do
@@ -28,8 +28,8 @@ RSpec.describe 'check node attribute with RFC' do
     expected_attr = {
       '_diff_state_' => @default_diff_state,
       'prefix' => [
-        { '_diff_state_' => @default_diff_state, 'prefix' => '192.168.0.0/24', 'metric' => 1, 'flag' => 'test'},
-        { '_diff_state_' => @default_diff_state, 'prefix' => '192.168.1.0/24', 'metric' => 10, 'flag' => %w[foo bar]}
+        { '_diff_state_' => @default_diff_state, 'prefix' => '192.168.0.0/24', 'metric' => 1, 'flag' => 'test' },
+        { '_diff_state_' => @default_diff_state, 'prefix' => '192.168.1.0/24', 'metric' => 10, 'flag' => %w[foo bar] }
       ],
       'router-id' => ['192.168.0.1'],
       'flag' => %w[layer3 node],

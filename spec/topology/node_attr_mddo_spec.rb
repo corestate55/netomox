@@ -28,8 +28,8 @@ RSpec.describe 'check node attribute with RFC' do
           attribute(
             node_type: 'node',
             prefixes: [
-              { prefix: '192.168.0.0/24', metric: 1, flags: 'test'},
-              { prefix: '192.168.1.0/24', metric: 10, flags: %w[foo bar]}
+              { prefix: '192.168.0.0/24', metric: 1, flags: 'test' },
+              { prefix: '192.168.1.0/24', metric: 10, flags: %w[foo bar] }
             ]
           )
         end
@@ -37,7 +37,7 @@ RSpec.describe 'check node attribute with RFC' do
     end
     topo_data = nws.topo_data
     @nws = Netomox::Topology::Networks.new(topo_data)
-    @default_diff_state = { :backward=>nil, :forward=>:kept, :pair=>"" }
+    @default_diff_state = { backward: nil, forward: :kept, pair: '' }
   end
 
   it 'has MDDO layer1 node attribute' do
@@ -67,8 +67,8 @@ RSpec.describe 'check node attribute with RFC' do
       '_diff_state_' => @default_diff_state,
       'node-type' => 'node',
       'prefix' => [
-        { '_diff_state_' => @default_diff_state, 'prefix' => '192.168.0.0/24', 'metric' => 1, 'flag' => 'test'},
-        { '_diff_state_' => @default_diff_state, 'prefix' => '192.168.1.0/24', 'metric' => 10, 'flag' => %w[foo bar]}
+        { '_diff_state_' => @default_diff_state, 'prefix' => '192.168.0.0/24', 'metric' => 1, 'flag' => 'test' },
+        { '_diff_state_' => @default_diff_state, 'prefix' => '192.168.1.0/24', 'metric' => 10, 'flag' => %w[foo bar] }
       ]
     }
     expect(attr&.to_data).to eq expected_attr

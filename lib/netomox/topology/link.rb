@@ -2,7 +2,8 @@
 
 require 'netomox/const'
 require 'netomox/topology/link_tpref'
-require 'netomox/topology/link_attr'
+require 'netomox/topology/link_attr_rfc'
+require 'netomox/topology/link_attr_mddo'
 require 'netomox/topology/base'
 
 module Netomox
@@ -18,7 +19,10 @@ module Netomox
       # Attribute type key and its class for Link
       ATTR_KEY_KLASS_LIST = [
         { key: "#{NS_L2NW}:l2-link-attributes", klass: L2LinkAttribute },
-        { key: "#{NS_L3NW}:l3-link-attributes", klass: L3LinkAttribute }
+        { key: "#{NS_L3NW}:l3-link-attributes", klass: L3LinkAttribute },
+        { key: "#{NS_MDDO}:l1-link-attributes", klass: MddoL1LinkAttribute },
+        { key: "#{NS_MDDO}:l2-link-attributes", klass: MddoL2LinkAttribute },
+        { key: "#{NS_MDDO}:l3-link-attributes", klass: MddoL3LinkAttribute }
       ].freeze
 
       # @param [Hash] data RFC8345 data (link element)

@@ -27,7 +27,7 @@ RSpec.describe 'check network attribute for MDDO' do
     end
     topo_data = nws.topo_data
     @nws = Netomox::Topology::Networks.new(topo_data)
-    @default_diff_state = { :backward=>nil, :forward=>:kept, :pair=>"" }
+    @default_diff_state = { backward: nil, forward: :kept, pair: '' }
   end
 
   it 'has MDDO layer1 network attribute' do

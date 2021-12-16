@@ -21,7 +21,7 @@ module Netomox
         { key: "#{NS_L3NW}:l3-node-attributes", klass: L3NodeAttribute },
         { key: "#{NS_MDDO}:l1-node-attributes", klass: MddoL1NodeAttribute },
         { key: "#{NS_MDDO}:l2-node-attributes", klass: MddoL2NodeAttribute },
-        { key: "#{NS_MDDO}:l3-node-attributes", klass: MddoL3NodeAttribute },
+        { key: "#{NS_MDDO}:l3-node-attributes", klass: MddoL3NodeAttribute }
       ].freeze
 
       # @param [Hash] data RFC8345 data (node element)

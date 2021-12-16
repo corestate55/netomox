@@ -12,7 +12,7 @@ RSpec.describe 'check network attribute with RFC' do
       end
     end
     @topo_data = nws.topo_data
-    @default_diff_state = { :backward=>nil, :forward=>:kept, :pair=>"" }
+    @default_diff_state = { backward: nil, forward: :kept, pair: '' }
   end
 
   it 'has rfc8345-based network attribute' do

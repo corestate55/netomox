@@ -16,7 +16,7 @@ RSpec.describe 'check term-point attribute with RFC' do
     end
     topo_data = nws.topo_data
     @nws = Netomox::Topology::Networks.new(topo_data)
-    @default_diff_state = { :backward=>nil, :forward=>:kept, :pair=>"" }
+    @default_diff_state = { backward: nil, forward: :kept, pair: '' }
   end
 
   it 'has rfc8345-based node attribute' do
