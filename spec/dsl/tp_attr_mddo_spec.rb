@@ -58,7 +58,7 @@ RSpec.describe 'termination point dsl', :dsl, :tp do
   end
 
   it 'generate term point that has L3 attribute', :attr, :l3attr do
-    tp_attr = { description: 'tp descr', ip_address: %w[192.168.3.2/24 192.168.3.1/24], flags: %w[foo bar] }
+    tp_attr = { description: 'tp descr', ip_addrs: %w[192.168.3.2/24 192.168.3.1/24], flags: %w[foo bar] }
     tp = Netomox::DSL::TermPoint.new(@l3node, 'tpX') do
       attribute(tp_attr)
     end

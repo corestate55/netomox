@@ -86,21 +86,21 @@ module Netomox
     class MddoL3TPAttribute
       # @!attribute [rw] description
       #   @return [String]
-      # @!attribute [rw] ip_address
+      # @!attribute [rw] ip_addrs
       #   @return [Array<String>]
       # @!attribute [rw] flags
       #   @return [Array<String>]
-      attr_accessor :description, :ip_address, :flags
+      attr_accessor :description, :ip_addrs, :flags
       # @!attribute [r] type
       #   @return [String]
       attr_reader :type
 
       # @param [String] description Interface description
-      # @param [Array<String>] ip_address IP addresses
+      # @param [Array<String>] ip_addrs IP addresses
       # @param [Array<String>] flags Flags
-      def initialize(description: '', ip_address: [], flags: [])
+      def initialize(description: '', ip_addrs: [], flags: [])
         @description = description || '' # avoid nil if the interface doesn't have description
-        @ip_address = ip_address
+        @ip_addrs = ip_addrs
         @flags = flags
         @type = "#{NS_MDDO}:l3-termination-point-attributes"
       end
@@ -110,14 +110,14 @@ module Netomox
       def topo_data
         {
           'description' => @description,
-          'ip-address' => @ip_address,
+          'ip-address' => @ip_addrs,
           'flag' => @flags
         }
       end
 
       # @return [Boolean]
       def empty?
-        @description.empty? && @ip_address.empty? && @flags.empty?
+        @description.empty? && @ip_addrs.empty? && @flags.empty?
       end
     end
   end
