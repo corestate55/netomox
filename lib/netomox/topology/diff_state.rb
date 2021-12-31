@@ -40,7 +40,7 @@ module Netomox
         {
           forward: @forward,
           backward: @backward,
-          pair: @pair.nil? ? '' : @pair.path # TODO
+          pair: @pair.nil? || @pair.empty? ? '' : @pair.path # TODO
         }
       end
 

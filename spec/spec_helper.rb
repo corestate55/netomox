@@ -7,6 +7,7 @@ end
 
 require 'bundler/setup'
 require 'netomox'
+require 'json'
 
 # ref. https://gist.github.com/herrphon/2d2ebbf23c86a10aa955
 module IOHelper

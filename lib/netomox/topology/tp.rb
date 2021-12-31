@@ -25,8 +25,9 @@ module Netomox
       # @param [String] parent_path Parent (node) path
       def initialize(data, parent_path)
         super(data['tp-id'], parent_path)
+
         @ref_count = 0
-        key = 'supporting-termination-point' # alias
+        key = 'supporting-termination-point'.freeze # alias
         setup_supports(data, key, SupportingTerminationPoint)
         setup_attribute(data, ATTR_KEY_KLASS_LIST)
         setup_diff_state(data)

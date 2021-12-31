@@ -29,6 +29,7 @@ module Netomox
       # @param [String] parent_path Parent (Network) path
       def initialize(data, parent_path)
         super(data['link-id'], parent_path)
+
         setup_source(data)
         setup_destination(data)
         setup_supports(data, 'supporting-link', SupportingLink)

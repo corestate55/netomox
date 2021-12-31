@@ -31,6 +31,7 @@ module Netomox
       # @param [Hash] data RFC8345 data (network element)
       def initialize(data)
         super(data['network-id'])
+
         setup_network_types(data)
         setup_nodes(data)
         setup_links(data)
@@ -46,6 +47,12 @@ module Netomox
         @links.find do |link|
           link.source == source && link.destination == destination
         end
+      end
+
+      # @param [String] name Link name
+      # @return [Link, nil] Found link (nil if not found)
+      def find_link_by_name(name)
+        @links.find { |link| link.name == name}
       end
 
       # @param [String] node_ref Source node_ref

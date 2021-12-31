@@ -81,12 +81,13 @@ module Netomox
       end
 
       def setup_diff_state(data)
-        return unless data['_diff_state_']
+        ds_key = '_diff_state_'.freeze
+        return unless data[ds_key]
 
         @diff_state = DiffState.new(
-          forward: data['_diff_state_']['forward']&.intern,
-          backward: data['_diff_state_']['backward']&.intern,
-          pair: data['_diff_state_']['pair']
+          forward: data[ds_key]['forward']&.intern,
+          backward: data[ds_key]['backward']&.intern,
+          pair: data[ds_key]['pair']
         )
       end
 

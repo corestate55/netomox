@@ -28,6 +28,7 @@ module Netomox
       # @param [String] parent_path Parent (network) path
       def initialize(data, parent_path)
         super(data['node-id'], parent_path)
+
         setup_termination_points(data)
         setup_supports(data, 'supporting-node', SupportingNode)
         setup_attribute(data, ATTR_KEY_KLASS_LIST)

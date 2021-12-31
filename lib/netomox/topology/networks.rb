@@ -18,8 +18,12 @@ module Netomox
       # @return [Hash] RFC8345 data
       def initialize(data)
         super('networks')
-        setup_networks(data)
-        setup_diff_state(data)
+
+        nws_key = "#{NS_NW}:networks".freeze
+        if data.key?(nws_key)
+          setup_networks(data[nws_key])
+          setup_diff_state(data[nws_key])
+        end
       end
 
       # @param [String] network_ref Network name
@@ -156,10 +160,7 @@ module Netomox
 
       def setup_networks(data)
         @networks = []
-        nws_key = "#{NS_NW}:networks"
-        return unless data.key?(nws_key)
-
-        data[nws_key]['network'].each do |each|
+        data['network'].each do |each|
           @networks.push create_network(each)
         end
       end
