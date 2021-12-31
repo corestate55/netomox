@@ -31,6 +31,7 @@ module Netomox
         setup_termination_points(data)
         setup_supports(data, 'supporting-node', SupportingNode)
         setup_attribute(data, ATTR_KEY_KLASS_LIST)
+        setup_diff_state(data)
       end
 
       # @param [Node] other Node to compare

@@ -33,6 +33,7 @@ module Netomox
         setup_destination(data)
         setup_supports(data, 'supporting-link', SupportingLink)
         setup_attribute(data, ATTR_KEY_KLASS_LIST)
+        setup_diff_state(data)
       end
 
       # @param [Link] other Link to compare

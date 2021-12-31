@@ -80,6 +80,16 @@ module Netomox
         end
       end
 
+      def setup_diff_state(data)
+        return unless data['_diff_state_']
+
+        @diff_state = DiffState.new(
+          forward: data['_diff_state_']['forward']&.intern,
+          backward: data['_diff_state_']['backward']&.intern,
+          pair: data['_diff_state_']['pair']
+        )
+      end
+
       private
 
       def make_path

@@ -19,6 +19,7 @@ module Netomox
       def initialize(data)
         super('networks')
         setup_networks(data)
+        setup_diff_state(data)
       end
 
       # @param [String] network_ref Network name

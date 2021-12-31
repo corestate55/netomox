@@ -29,6 +29,7 @@ module Netomox
         key = 'supporting-termination-point' # alias
         setup_supports(data, key, SupportingTerminationPoint)
         setup_attribute(data, ATTR_KEY_KLASS_LIST)
+        setup_diff_state(data)
       end
 
       # @return [String]

@@ -36,6 +36,7 @@ module Netomox
         setup_links(data)
         setup_supports(data, 'supporting-network', SupportingNetwork)
         setup_attribute(data, ATTR_KEY_KLASS_LIST)
+        setup_diff_state(data)
       end
 
       # @param [TpRef] source
