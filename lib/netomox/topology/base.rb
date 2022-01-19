@@ -81,7 +81,7 @@ module Netomox
       end
 
       def setup_diff_state(data)
-        ds_key = '_diff_state_'.freeze
+        ds_key = '_diff_state_'
         return unless data[ds_key]
 
         @diff_state = DiffState.new(

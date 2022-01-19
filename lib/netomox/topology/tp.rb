@@ -27,7 +27,7 @@ module Netomox
         super(data['tp-id'], parent_path)
 
         @ref_count = 0
-        key = 'supporting-termination-point'.freeze # alias
+        key = 'supporting-termination-point' # alias
         setup_supports(data, key, SupportingTerminationPoint)
         setup_attribute(data, ATTR_KEY_KLASS_LIST)
         setup_diff_state(data)

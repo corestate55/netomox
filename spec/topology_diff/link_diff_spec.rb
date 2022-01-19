@@ -50,6 +50,7 @@ RSpec.describe 'link diff (supporting-node list)', :diff, :link do
       @link_sup2 = Netomox::Topology::Link.new(link_sup2_def.topo_data, '')
       @link_sup2_changed = Netomox::Topology::Link.new(link_sup2_changed_def.topo_data, '')
     end
+
     it 'kept link supports' do
       d_link = @link_sup1.diff(@link_sup1.dup)
       expect(d_link.diff_state.detect).to eq :kept

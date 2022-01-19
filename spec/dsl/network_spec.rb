@@ -133,14 +133,15 @@ RSpec.describe 'network dsl', :dsl, :network do
   end
 
   it 'ignore duplicated supporting-network' do
+    allow(Netomox.logger).to receive(:debug)
+    expect(Netomox.logger).to receive(:debug).with('Ignore: Duplicated support definition:nwY in networks__nwX')
+
     nw = Netomox::DSL::Network.new(@nws, 'nwX')
-    result = capture do
-      nw.register do
-        support 'nwY'
-        support 'nwY' # duplicated
-      end
+    nw.register do
+      support 'nwY'
+      support 'nwY' # duplicated
     end
-    expect(result[:stderr].chomp!).to eq 'Ignore: Duplicated support definition:nwY in networks__nwX'
+
     expect(nw.supports.length).to eq 1
   end
 end

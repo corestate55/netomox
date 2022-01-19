@@ -68,7 +68,7 @@ module Netomox
       def support(nw_ref)
         snw = find_support(nw_ref)
         if snw
-          warn "Ignore: Duplicated support definition:#{snw.path} in #{@path}"
+          Netomox.logger.debug "Ignore: Duplicated support definition:#{snw.path} in #{@path}"
         else
           @supports.push(SupportNetwork.new(nw_ref))
         end
@@ -257,7 +257,7 @@ module Netomox
         return args if check_normalize_args(args, 4)
 
         raise DSLInvalidArgumentError, 'Link args is not satisfied: ' \
-          "src: { node:#{src_node}, tp:#{src_tp}}, dst: { node:#{dst_node}, tp:#{dst_tp} }"
+                                       "src: { node:#{src_node}, tp:#{src_tp}}, dst: { node:#{dst_node}, tp:#{dst_tp} }"
       end
     end
     # rubocop:enable Metrics/ClassLength

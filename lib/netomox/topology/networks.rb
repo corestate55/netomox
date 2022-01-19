@@ -19,11 +19,11 @@ module Netomox
       def initialize(data)
         super('networks')
 
-        nws_key = "#{NS_NW}:networks".freeze
-        if data.key?(nws_key)
-          setup_networks(data[nws_key])
-          setup_diff_state(data[nws_key])
-        end
+        nws_key = "#{NS_NW}:networks"
+        return unless data.key?(nws_key)
+
+        setup_networks(data[nws_key])
+        setup_diff_state(data[nws_key])
       end
 
       # @param [String] network_ref Network name

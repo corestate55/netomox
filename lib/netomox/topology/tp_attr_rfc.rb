@@ -92,7 +92,7 @@ module Netomox
       private
 
       def setup_vlan_id_names(data)
-        key = 'vlan-id-name'.freeze # alias
+        key = 'vlan-id-name' # alias
         if data.key?(key) && !data[key].empty?
           data[key].map { |p| L2VlanIdName.new(p, key) }
         else

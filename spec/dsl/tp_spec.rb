@@ -98,14 +98,15 @@ RSpec.describe 'termination point dsl', :dsl, :tp do
   end
 
   it 'ignore duplicated supporting-tp' do
+    allow(Netomox.logger).to receive(:debug)
+    expect(Netomox.logger).to receive(:debug).with('Ignore: Duplicated support definition:nwY__nodeY__tpY in networks__test-L1__l1node__tpX')
+
     tp = Netomox::DSL::TermPoint.new(@l1node, 'tpX')
-    result = capture do
-      tp.register do
-        support %w[nwY nodeY tpY]
-        support %w[nwY nodeY tpY] # duplicated
-      end
+    tp.register do
+      support %w[nwY nodeY tpY]
+      support %w[nwY nodeY tpY] # duplicated
     end
-    expect(result[:stderr].chomp!).to eq 'Ignore: Duplicated support definition:nwY__nodeY__tpY in networks__test-L1__l1node__tpX'
+
     expect(tp.supports.length).to eq 1
   end
 end

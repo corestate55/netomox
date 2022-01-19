@@ -154,7 +154,7 @@ module Netomox
               next unless found_links.empty?
 
               msg = "facing link not found source:#{ss_tp}" \
-                  " (supported #{tp.path}--#{destination_tp.path})"
+                    " (supported #{tp.path}--#{destination_tp.path})"
               messages.push(message(:warn, tp.path, msg))
             end
           end

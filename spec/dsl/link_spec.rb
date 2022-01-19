@@ -85,14 +85,15 @@ RSpec.describe 'link dsl', :dsl, :link do
   end
 
   it 'ignore duplicated supporting-link' do
+    allow(Netomox.logger).to receive(:debug)
+    expect(Netomox.logger).to receive(:debug).with('Ignore: Duplicated support definition:nwY__a,p1,b,p2 in networks__test-L1__nodeX,tp1,nodeY,tp1')
+
     link = Netomox::DSL::Link.new(@l1nw, *@link_spec)
-    result = capture do
-      link.register do
-        support %w[nwY a,p1,b,p2]
-        support %w[nwY a,p1,b,p2] # duplicated
-      end
+    link.register do
+      support %w[nwY a,p1,b,p2]
+      support %w[nwY a,p1,b,p2] # duplicated
     end
-    expect(result[:stderr].chomp!).to eq 'Ignore: Duplicated support definition:nwY__a,p1,b,p2 in networks__test-L1__nodeX,tp1,nodeY,tp1'
+
     expect(link.supports.length).to eq 1
   end
 end

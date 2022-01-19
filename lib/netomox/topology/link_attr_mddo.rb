@@ -7,7 +7,6 @@ module Netomox
     # Link attribute base
     #   TBA: Not defined yet, reserve class names
     class MddoLinkAttributeBase < AttributeBase
-
       # TBA
       ATTR_DEFS = [].freeze
 

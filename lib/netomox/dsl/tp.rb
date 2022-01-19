@@ -64,7 +64,7 @@ module Netomox
         refs = normalize_support_ref(nw_ref, node_ref, tp_ref)
         stp = find_support(refs)
         if stp
-          warn "Ignore: Duplicated support definition:#{stp.path} in #{@path}"
+          Netomox.logger.debug "Ignore: Duplicated support definition:#{stp.path} in #{@path}"
         else
           @supports.push(SupportTermPoint.new(*refs))
         end
@@ -188,7 +188,7 @@ module Netomox
         return args if check_normalize_args(args, 3)
 
         raise DSLInvalidArgumentError, 'Support term-point args is not satisfied: ' \
-          "nw_ref:#{nw_ref}, node_ref:#{node_ref}, tp_ref:#{tp_ref}"
+                                       "nw_ref:#{nw_ref}, node_ref:#{node_ref}, tp_ref:#{tp_ref}"
       end
     end
   end

@@ -89,7 +89,6 @@ module Netomox
       #   @return [Array<SupportLink>]
       attr_accessor :source, :destination, :supports
 
-      # rubocop:disable Metrics/ParameterLists
       # @param [Network] parent Parent object (Network)
       # @param [String] src_node Source node name
       # @param [String] src_tp Source term-point name
@@ -105,7 +104,6 @@ module Netomox
         @attribute = {} # for augments
         register(&block) if block_given?
       end
-      # rubocop:enable Metrics/ParameterLists
 
       # Add supporting link
       # @param [String, Array<String>] nw_ref Network name or Array of elements
@@ -114,7 +112,7 @@ module Netomox
         refs = normalize_support_ref(nw_ref, link_ref)
         slink = find_support(refs)
         if slink
-          warn "Ignore: Duplicated support definition:#{slink.path} in #{@path}"
+          Netomox.logger.debug "Ignore: Duplicated support definition:#{slink.path} in #{@path}"
         else
           @supports.push(SupportLink.new(*refs))
         end
@@ -178,7 +176,7 @@ module Netomox
         return args if check_normalize_args(args, 2)
 
         raise DSLInvalidArgumentError, 'Support link args is not satisfied: ' \
-          "nw_ref:#{nw_ref}, link_ref:#{link_ref}"
+                                       "nw_ref:#{nw_ref}, link_ref:#{link_ref}"
       end
     end
   end

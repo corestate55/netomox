@@ -86,7 +86,7 @@ module Netomox
         refs = normalize_support_ref(nw_ref, node_ref)
         snode = find_support(refs)
         if snode
-          warn "Ignore: Duplicated support definition:#{snode.path} in #{@path}"
+          Netomox.logger.debug "Ignore: Duplicated support definition:#{snode.path} in #{@path}"
         else
           @supports.push(SupportNode.new(*refs))
         end
@@ -245,7 +245,7 @@ module Netomox
         return args if check_normalize_args(args, 2)
 
         raise DSLInvalidArgumentError, 'Support node args is not satisfied: ' \
-          "nw_ref:#{nw_ref}, node_ref:#{node_ref}"
+                                       "nw_ref:#{nw_ref}, node_ref:#{node_ref}"
       end
     end
     # rubocop:enable Metrics/ClassLength

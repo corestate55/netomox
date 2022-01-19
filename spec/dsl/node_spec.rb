@@ -113,14 +113,15 @@ RSpec.describe 'node dsl', :dsl, :node do
   end
 
   it 'ignore duplicated supporting-node' do
+    allow(Netomox.logger).to receive(:debug)
+    expect(Netomox.logger).to receive(:debug).with('Ignore: Duplicated support definition:nwY__nodeY in networks__test-L1__nodeX')
+
     node = Netomox::DSL::Node.new(@l1nw, 'nodeX')
-    result = capture do
-      node.register do
-        support %w[nwY nodeY]
-        support %w[nwY nodeY] # duplicated
-      end
+    node.register do
+      support %w[nwY nodeY]
+      support %w[nwY nodeY] # duplicated
     end
-    expect(result[:stderr].chomp!).to eq 'Ignore: Duplicated support definition:nwY__nodeY in networks__test-L1__nodeX'
+
     expect(node.supports.length).to eq 1
   end
 end

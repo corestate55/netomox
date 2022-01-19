@@ -25,14 +25,12 @@ module Netomox
       end
 
       def detect_state
-        if @diff_state.empty?
-          :changed # TODO: ok?
-        elsif @diff_state['forward'] == 'added'
+        if @diff_state['forward'] == 'added'
           :added
         elsif @diff_state['forward'] == 'deleted'
           :deleted
-        elsif [@diff_state['forward'],
-               @diff_state['backward']].include?('changed')
+        elsif [@diff_state['forward'], @diff_state['backward']].include?('changed') || @diff_state.empty?
+          # TODO: ok? if @diff_state.empty? is true case
           :changed
         else
           :kept

@@ -90,9 +90,7 @@ module Netomox
     # rubocop:enable Metrics/AbcSize
 
     def write_diff_file(json_str)
-      File.open(options[:output], 'w') do |file|
-        file.write(json_str)
-      end
+      File.write(options[:output], json_str)
     end
 
     def write_diff_stdout(json_str)

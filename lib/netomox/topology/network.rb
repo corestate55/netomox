@@ -52,7 +52,7 @@ module Netomox
       # @param [String] name Link name
       # @return [Link, nil] Found link (nil if not found)
       def find_link_by_name(name)
-        @links.find { |link| link.name == name}
+        @links.find { |link| link.name == name }
       end
 
       # @param [String] node_ref Source node_ref

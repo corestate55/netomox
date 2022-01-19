@@ -44,7 +44,7 @@ module Netomox
 
       def stringify_array_value(value)
         case value
-        when Array, Hash then
+        when Array, Hash
           dv = Viewer.new(data: value, indent: @indent_b, print_all: @print_all)
           # stringify array element recursively with deep indent
           dv.stringify
@@ -89,8 +89,8 @@ module Netomox
       def empty_value?(value)
         # avoid empty list(or hash)
         # and empty-key hash (that has only diff_state)
-        value.empty? || value.is_a?(Hash) \
-      && value.key?('_diff_state_') && value.keys.length == 1
+        value.empty? || (value.is_a?(Hash) \
+      && value.key?('_diff_state_') && value.keys.length == 1)
       end
 
       def allowed_empty?(key)
