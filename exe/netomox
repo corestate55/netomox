@@ -94,12 +94,7 @@ module Netomox
     end
 
     def write_diff_stdout(json_str)
-      opts = {
-        data: json_str,
-        print_all: options[:all],
-        color: options[:color]
-      }
-      diff_view = DiffView::Viewer.new(opts)
+      diff_view = DiffView::Viewer.new(data: json_str, print_all: options[:all], color: options[:color])
       puts diff_view
       return unless options[:verbose]
 
