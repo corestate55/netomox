@@ -60,7 +60,7 @@ RSpec.describe 'diff_state filling', :diff do
         supports = @d_nws.find_network('nw1').supports.map do |support|
           support.diff_state.detect
         end
-        expect(supports.all?(:added)).to eq true
+        expect(supports.all?(:added)).to be true
       end
     end
 
@@ -81,7 +81,7 @@ RSpec.describe 'diff_state filling', :diff do
         supports = node.supports.map do |support|
           support.diff_state.detect
         end
-        expect(supports.all?(:added)).to eq true
+        expect(supports.all?(:added)).to be true
       end
     end
 
@@ -114,7 +114,7 @@ RSpec.describe 'diff_state filling', :diff do
         supports = link.supports.map do |support|
           support.diff_state.detect
         end
-        expect(supports.all?(:added)).to eq true
+        expect(supports.all?(:added)).to be true
       end
     end
 
@@ -135,7 +135,7 @@ RSpec.describe 'diff_state filling', :diff do
         supports = tp.supports.map do |support|
           support.diff_state.detect
         end
-        expect(supports.all?(:added)).to eq true
+        expect(supports.all?(:added)).to be true
       end
     end
   end

@@ -30,10 +30,10 @@ RSpec.describe 'methods to generate link from/to node/tp', :dsl, :link do
     it 'generate bi-directional link from/to node' do
       link1_spec = %w[nodeX p0 nodeY p0]
       name = link1_spec.join(',')
-      expect(@nw.find_link(name)).not_to eq nil
+      expect(@nw.find_link(name)).not_to be_nil
       link2_spec = %w[nodeY p0 nodeX p0]
       name = link2_spec.join(',')
-      expect(@nw.find_link(name)).not_to eq nil
+      expect(@nw.find_link(name)).not_to be_nil
     end
 
     it 'generate bi-directional link from node to tp' do
@@ -42,10 +42,10 @@ RSpec.describe 'methods to generate link from/to node/tp', :dsl, :link do
       end
       link1_spec = %w[nodeX p1 nodeY tpB]
       name = link1_spec.join(',')
-      expect(@nw.find_link(name)).not_to eq nil
+      expect(@nw.find_link(name)).not_to be_nil
       link2_spec = %w[nodeY tpB nodeX p1]
       name = link2_spec.join(',')
-      expect(@nw.find_link(name)).not_to eq nil
+      expect(@nw.find_link(name)).not_to be_nil
     end
   end
 
@@ -58,10 +58,10 @@ RSpec.describe 'methods to generate link from/to node/tp', :dsl, :link do
       end
       link1_spec = %w[nodeX tpA nodeY p1]
       name = link1_spec.join(',')
-      expect(@nw.find_link(name)).not_to eq nil
+      expect(@nw.find_link(name)).not_to be_nil
       link2_spec = %w[nodeY p1 nodeX tpA]
       name = link2_spec.join(',')
-      expect(@nw.find_link(name)).not_to eq nil
+      expect(@nw.find_link(name)).not_to be_nil
     end
 
     it 'generate bi-directional link from tp to node' do
@@ -70,10 +70,10 @@ RSpec.describe 'methods to generate link from/to node/tp', :dsl, :link do
       end
       link1_spec = %w[nodeX tpA nodeY tpB]
       name = link1_spec.join(',')
-      expect(@nw.find_link(name)).not_to eq nil
+      expect(@nw.find_link(name)).not_to be_nil
       link2_spec = %w[nodeY tpB nodeX tpA]
       name = link2_spec.join(',')
-      expect(@nw.find_link(name)).not_to eq nil
+      expect(@nw.find_link(name)).not_to be_nil
     end
   end
 end

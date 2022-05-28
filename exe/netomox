@@ -37,7 +37,7 @@ module Netomox
 
     desc 'testfunc JSON', 'Test function'
     def testfunc(file)
-      networks = Topology::Networks.new(open_data(file))
+      networks = Topology::VerifiableNetworks.new(open_data(file))
       puts JSON.pretty_generate(networks.check_family_support_path)
     end
 

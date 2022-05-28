@@ -33,7 +33,7 @@ module Netomox
   # logger for netomox
   @logger = Logger.new($stderr)
   @logger.progname = 'netomox'
-  @logger.level = case ENV['NETOMOX_LOG_LEVEL']
+  @logger.level = case ENV.fetch('NETOMOX_LOG_LEVEL', nil)
                   when /fatal/i
                     Logger::FATAL
                   when /error/i

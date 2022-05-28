@@ -60,6 +60,7 @@ module Netomox
         str.gsub!(%r{</\w+>}, '')
         # clean over-wrapped hash key - hash/array bracket
         str.gsub!(/: [.\-+]?\s+/, ': ') # without tag
+        str
       end
 
       def convert_color_code(str)

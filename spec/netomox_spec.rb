@@ -2,6 +2,6 @@
 
 RSpec.describe Netomox do
   it 'has a version number' do
-    expect(Netomox::VERSION).not_to be nil
+    expect(Netomox::VERSION).not_to be_nil
   end
 end
