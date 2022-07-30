@@ -92,30 +92,21 @@ module Netomox
         end
       end
 
-      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize
 
       # Set attribute
       # @param [Hash] attr Attribute data
-      def attribute(attr = nil)
-        return @attribute if attr.nil?
-
-        @attribute = if @type.key?(NWTYPE_L2)
-                       L2NodeAttribute.new(**attr)
-                     elsif @type.key?(NWTYPE_L3)
-                       L3NodeAttribute.new(**attr)
-                     elsif @type.key?(NWTYPE_OPS)
-                       OpsNodeAttribute.new(**attr)
-                     elsif @type.key?(NWTYPE_MDDO_L1)
-                       MddoL1NodeAttribute.new(**attr)
-                     elsif @type.key?(NWTYPE_MDDO_L2)
-                       MddoL2NodeAttribute.new(**attr)
-                     elsif @type.key?(NWTYPE_MDDO_L3)
-                       MddoL3NodeAttribute.new(**attr)
-                     else
-                       {}
-                     end
+      def attribute(attr)
+        @attribute = {}
+        @type.key?(NWTYPE_L2) && (@attribute = L2NodeAttribute.new(**attr))
+        @type.key?(NWTYPE_L3) && (@attribute = L3NodeAttribute.new(**attr))
+        @type.key?(NWTYPE_OPS) && (@attribute = OpsNodeAttribute.new(**attr))
+        @type.key?(NWTYPE_MDDO_L1) && (@attribute = MddoL1NodeAttribute.new(**attr))
+        @type.key?(NWTYPE_MDDO_L2) && (@attribute = MddoL2NodeAttribute.new(**attr))
+        @type.key?(NWTYPE_MDDO_L3) && (@attribute = MddoL3NodeAttribute.new(**attr))
+        @type.key?(NWTYPE_MDDO_OSPF_AREA) && (@attribute = MddoOspfAreaNodeAttribute.new(**attr))
       end
-      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/AbcSize
 
       # Convert to RFC8345 topology data
       # @return [Hash]

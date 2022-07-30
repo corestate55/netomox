@@ -74,25 +74,21 @@ module Netomox
         end
       end
 
+      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize
+
       # Set attribute
       # @param [Hash] attr Attribute data
       def attribute(attr)
-        @attribute = if @type.key?(NWTYPE_L2)
-                       L2NWAttribute.new(**attr)
-                     elsif @type.key?(NWTYPE_L3)
-                       L3NWAttribute.new(**attr)
-                     elsif @type.key?(NWTYPE_OPS)
-                       OpsNWAttribute.new(**attr)
-                     elsif @type.key?(NWTYPE_MDDO_L1)
-                       MddoL1NWAttribute.new(**attr)
-                     elsif @type.key?(NWTYPE_MDDO_L2)
-                       MddoL2NWAttribute.new(**attr)
-                     elsif @type.key?(NWTYPE_MDDO_L3)
-                       MddoL3NWAttribute.new(**attr)
-                     else
-                       {}
-                     end
+        @attribute = {}
+        @type.key?(NWTYPE_L2) && (@attribute = L2NWAttribute.new(**attr))
+        @type.key?(NWTYPE_L3) && (@attribute = L3NWAttribute.new(**attr))
+        @type.key?(NWTYPE_OPS) && (@attribute = OpsNWAttribute.new(**attr))
+        @type.key?(NWTYPE_MDDO_L1) && (@attribute = MddoL1NWAttribute.new(**attr))
+        @type.key?(NWTYPE_MDDO_L2) && (@attribute = MddoL2NWAttribute.new(**attr))
+        @type.key?(NWTYPE_MDDO_L3) && (@attribute = MddoL3NWAttribute.new(**attr))
+        @type.key?(NWTYPE_MDDO_OSPF_AREA) && (@attribute = MddoOspfAreaNWAttribute.new(**attr))
       end
+      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/AbcSize
 
       # Add or get node
       # @param [String] name Node name

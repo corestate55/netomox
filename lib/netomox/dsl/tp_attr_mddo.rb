@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'netomox/const'
+require 'netomox/dsl/tp_attr_mddo_timer'
 
 module Netomox
   module DSL
@@ -118,6 +119,55 @@ module Netomox
       # @return [Boolean]
       def empty?
         @description.empty? && @ip_addrs.empty? && @flags.empty?
+      end
+    end
+
+    # attribute for mddo topology ospf-area term-point
+    class MddoOspfAreaTPAttribute
+      # @!attribute [rw] network_type
+      #   @return [String] TODO: Enum {p2p, broadcast, non_broadcast}
+      # @!attribute [rw] priority
+      #   @return [Integer]
+      # @!attribute [rw] metric
+      #   @return [Integer]
+      # @!attribute [rw] passive
+      #   @return [Boolean]
+      # @!attribute [rw] timer
+      #   @return [MddoOspfAreaTimer]
+      attr_accessor :network_type, :priority, :metric, :passive, :timer
+      # @!attribute [r] type
+      #   @return [String]
+      attr_reader :type
+
+      # @param [String] network_type
+      # @param [Integer] priority
+      # @param [Integer] metric
+      # @param [Boolean] passive
+      # @param [Hash] timer
+      def initialize(network_type: '', priority: 10, metric: 1, passive: false, timer: {})
+        @network_type = network_type # TODO: network type selection
+        @priority = priority
+        @metric = metric
+        @passive = passive
+        @timer = MddoOspfAreaTimer.new(**timer)
+        @type = "#{NS_MDDO}:ospf-area-termination-point-attributes"
+      end
+
+      # Convert to RFC8345 topology data
+      # @return [Hash]
+      def topo_data
+        {
+          'network-type' => @network_type,
+          'priority' => @priority,
+          'metric' => @metric,
+          'passive' => @passive,
+          'timer' => @timer.topo_data
+        }
+      end
+
+      # @return [Boolean]
+      def empty?
+        false
       end
     end
   end

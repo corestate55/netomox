@@ -28,5 +28,33 @@ module Netomox
         @type = "#{NS_MDDO}:l3-network-attributes"
       end
     end
+
+    # attribute for mddo-topology ospf-area network
+    class MddoOspfAreaNWAttribute < NetworkAttributeBase
+      # @!attribute identifier
+      #   @return [String] area-identifier, dotted-quad
+      attr_accessor :identifier
+
+      def initialize(name: '', identifier: '', flags: [])
+        super(name: name, flags: flags)
+        @identifier = identifier
+        @type = "#{NS_MDDO}:ospf-area-network-attributes"
+      end
+
+      # Convert to RFC8345 topology data
+      # @return [Hash]
+      def topo_data
+        {
+          'name' => @name,
+          'identifier' => @identifier,
+          'flag' => @flags
+        }
+      end
+
+      # @return [Boolean]
+      def empty?
+        @name.empty? && @identifier.empty? && @flags.empty?
+      end
+    end
   end
 end

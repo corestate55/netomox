@@ -29,6 +29,7 @@ module Netomox
   NWTYPE_MDDO_L1 = "#{NS_MDDO}:l1-network"
   NWTYPE_MDDO_L2 = "#{NS_MDDO}:l2-network"
   NWTYPE_MDDO_L3 = "#{NS_MDDO}:l3-network"
+  NWTYPE_MDDO_OSPF_AREA = "#{NS_MDDO}:ospf-area-network"
 
   # logger for netomox
   @logger = Logger.new($stderr)

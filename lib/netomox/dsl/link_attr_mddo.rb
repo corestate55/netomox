@@ -47,5 +47,13 @@ module Netomox
         @type = "#{NS_MDDO}:l3-link-attributes"
       end
     end
+
+    # attribute for mddo-topology ospf-area link
+    class MddoOspfAreaLinkAttribute < MddoLinkAttributeBase
+      def initialize(hash)
+        super(hash)
+        @type = "#{NS_MDDO}:ospf-area-link-attributes"
+      end
+    end
   end
 end
