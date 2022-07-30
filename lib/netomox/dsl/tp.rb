@@ -3,9 +3,9 @@
 require 'netomox/const'
 require 'netomox/dsl/error'
 require 'netomox/dsl/base'
-require 'netomox/dsl/tp_attr_rfc'
-require 'netomox/dsl/tp_attr_ops'
-require 'netomox/dsl/tp_attr_mddo'
+require 'netomox/dsl/tp_attr/rfc'
+require 'netomox/dsl/tp_attr/ops'
+require 'netomox/dsl/tp_attr/mddo'
 
 module Netomox
   module DSL

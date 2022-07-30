@@ -3,9 +3,9 @@
 require 'netomox/const'
 require 'netomox/dsl/error'
 require 'netomox/dsl/base'
-require 'netomox/dsl/network_attr_rfc'
-require 'netomox/dsl/network_attr_ops'
-require 'netomox/dsl/network_attr_mddo'
+require 'netomox/dsl/network_attr/rfc'
+require 'netomox/dsl/network_attr/ops'
+require 'netomox/dsl/network_attr/mddo'
 require 'netomox/dsl/node'
 require 'netomox/dsl/link'
 

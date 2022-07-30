@@ -3,9 +3,9 @@
 require 'netomox/const'
 require 'netomox/dsl/error'
 require 'netomox/dsl/base'
-require 'netomox/dsl/node_attr_rfc'
-require 'netomox/dsl/node_attr_ops'
-require 'netomox/dsl/node_attr_mddo'
+require 'netomox/dsl/node_attr/rfc'
+require 'netomox/dsl/node_attr/ops'
+require 'netomox/dsl/node_attr/mddo'
 require 'netomox/dsl/tp'
 
 module Netomox

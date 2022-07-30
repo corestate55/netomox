@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'netomox/const'
-require 'netomox/dsl/node_attr_rfc_prefix'
-require 'netomox/dsl/node_attr_mddo_static_route'
-require 'netomox/dsl/node_attr_mddo_redistribute'
+require 'netomox/dsl/node_attr/rfc_prefix'
+require 'netomox/dsl/node_attr/mddo_static_route'
+require 'netomox/dsl/node_attr/mddo_ospf_redistribute'
 
 module Netomox
   module DSL
@@ -132,7 +132,7 @@ module Netomox
       # @!attribute [rw] log_adjacency_change
       #   @return [Boolean]
       # @!attribute [rw] redistribute_list
-      #   @return [Array<MddoOspfAreaRedistribute>]
+      #   @return [Array<MddoOspfRedistribute>]
       attr_accessor :node_type, :router_id, :log_adjacency_change, :redistribute_list
       # @!attribute [r] type
       #   @return [String]
@@ -149,7 +149,7 @@ module Netomox
         @router_id_source = router_id.empty? ? :auto : :static
         @router_id = router_id # TODO: router id selection
         @log_adjacency_change = log_adjacency_change
-        @redistribute_list = redistribute.map { |r| MddoOspfAreaRedistribute.new(**r) }
+        @redistribute_list = redistribute.map { |r| MddoOspfRedistribute.new(**r) }
         @type = "#{NS_MDDO}:ospf-area-node-attributes"
       end
 

@@ -5,7 +5,7 @@ require 'netomox/const'
 module Netomox
   module DSL
     # Redistribute config for MDDO ospf-area node attribute
-    class MddoOspfAreaRedistribute
+    class MddoOspfRedistribute
       # @!attribute [rw] protocol
       #   @return [String] TODO: enum{static, connected}
       # @!attribute [rw] metric_type

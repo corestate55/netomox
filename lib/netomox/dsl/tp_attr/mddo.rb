@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'netomox/const'
-require 'netomox/dsl/tp_attr_mddo_timer'
+require 'netomox/dsl/tp_attr/mddo_ospf_timer'
 
 module Netomox
   module DSL
@@ -133,7 +133,7 @@ module Netomox
       # @!attribute [rw] passive
       #   @return [Boolean]
       # @!attribute [rw] timer
-      #   @return [MddoOspfAreaTimer]
+      #   @return [MddoOspfTimer]
       attr_accessor :network_type, :priority, :metric, :passive, :timer
       # @!attribute [r] type
       #   @return [String]
@@ -149,7 +149,7 @@ module Netomox
         @priority = priority
         @metric = metric
         @passive = passive
-        @timer = MddoOspfAreaTimer.new(**timer)
+        @timer = MddoOspfTimer.new(**timer)
         @type = "#{NS_MDDO}:ospf-area-termination-point-attributes"
       end
 

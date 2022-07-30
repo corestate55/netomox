@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'netomox/const'
-require 'netomox/dsl/node_attr_rfc_prefix'
+require 'netomox/dsl/node_attr/rfc_prefix'
 
 module Netomox
   module DSL

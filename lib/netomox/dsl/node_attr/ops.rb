@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'netomox/dsl/node_attr_ops'
-
 module Netomox
   module DSL
     # attribute for ops-topology node

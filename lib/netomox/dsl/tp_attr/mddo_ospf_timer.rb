@@ -5,7 +5,7 @@ require 'netomox/const'
 module Netomox
   module DSL
     # ospf timer for MDDO ospf-area term-point attribute
-    class MddoOspfAreaTimer
+    class MddoOspfTimer
       # @!attribute [rw] hello_interval
       #   @return [Integer]
       # @!attribute [rw] dead_interval

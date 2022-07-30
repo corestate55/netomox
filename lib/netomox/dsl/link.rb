@@ -2,9 +2,9 @@
 
 require 'netomox/const'
 require 'netomox/dsl/base'
-require 'netomox/dsl/link_attr_rfc'
-require 'netomox/dsl/link_attr_ops'
-require 'netomox/dsl/link_attr_mddo'
+require 'netomox/dsl/link_attr/rfc'
+require 'netomox/dsl/link_attr/ops'
+require 'netomox/dsl/link_attr/mddo'
 
 module Netomox
   module DSL
