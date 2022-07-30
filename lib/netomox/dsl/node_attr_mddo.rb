@@ -125,23 +125,27 @@ module Netomox
 
     # attribute for mddo-topology ospf-area node (ospf proc)
     class MddoOspfAreaNodeAttribute
+      # @!attribute [rw] node_type
+      #   @return [String]
       # @!attribute [rw] router_id
       #   @return [String] dotted-quote
       # @!attribute [rw] log_adjacency_change
       #   @return [Boolean]
       # @!attribute [rw] redistribute_list
       #   @return [Array<MddoOspfAreaRedistribute>]
-      attr_accessor :router_id, :log_adjacency_change, :redistribute_list
+      attr_accessor :node_type, :router_id, :log_adjacency_change, :redistribute_list
       # @!attribute [r] type
       #   @return [String]
       # @!attribute [r] router_id_source
       #   @return [Symbol] TODO: enum {:static, :auto}
       attr_reader :type, :router_id_source
 
+      # @param [String] node_type
       # @param [String] router_id
       # @param [Boolean] log_adjacency_change
       # @param [Array<Hash>] redistribute
-      def initialize(router_id: '', log_adjacency_change: false, redistribute: [])
+      def initialize(node_type: '', router_id: '', log_adjacency_change: false, redistribute: [])
+        @node_type = node_type
         @router_id_source = router_id.empty? ? :auto : :static
         @router_id = router_id # TODO: router id selection
         @log_adjacency_change = log_adjacency_change
@@ -153,6 +157,7 @@ module Netomox
       # @return [Hash]
       def topo_data
         {
+          'node-type' => @node_type,
           'router-id' => @router_id,
           'router-id-source' => @router_id_source.to_s,
           'log-adjacency-change' => @log_adjacency_change,
@@ -162,7 +167,7 @@ module Netomox
 
       # @return [Boolean]
       def empty?
-        @router_id.empty? # TODO
+        @node_type.empty? && @router_id.empty? && @redistribute_list.empty?
       end
     end
   end

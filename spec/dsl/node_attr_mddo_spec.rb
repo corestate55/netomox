@@ -104,6 +104,7 @@ RSpec.describe 'node dsl', :dsl, :node, :mddo do
 
   it 'generate node that has ospf-area attribute', :attr, :ospf_attr do
     node_attr = {
+      node_type: 'ospf_proc',
       router_id: '192.0.0.1',
       log_adjacency_change: true,
       redistribute: [
@@ -118,6 +119,7 @@ RSpec.describe 'node dsl', :dsl, :node, :mddo do
       'node-id' => 'nodeX',
       @tp_key => [],
       @ospf_attr_key => {
+        'node-type' => 'ospf_proc',
         'router-id' => '192.0.0.1',
         'router-id-source' => 'static',
         'log-adjacency-change' => true,
