@@ -2,6 +2,7 @@
 
 require 'netomox/const'
 require 'netomox/dsl/tp_attr/mddo_ospf_timer'
+require 'netomox/dsl/tp_attr/mddo_ospf_neighbor'
 
 module Netomox
   module DSL
@@ -139,19 +140,24 @@ module Netomox
       #   @return [String]
       attr_reader :type
 
+      # rubocop:disable Metrics/ParameterLists
+
       # @param [String] network_type
       # @param [Integer] priority
       # @param [Integer] metric
       # @param [Boolean] passive
       # @param [Hash] timer
-      def initialize(network_type: '', priority: 10, metric: 1, passive: false, timer: {})
+      # @param [Array<Hash>] neighbors
+      def initialize(network_type: '', priority: 10, metric: 1, passive: false, timer: {}, neighbors: [])
         @network_type = network_type # TODO: network type selection
         @priority = priority
         @metric = metric
         @passive = passive
         @timer = MddoOspfTimer.new(**timer)
+        @neighbors = neighbors.map { |n| MddoOspfNeighbor.new(**n) }
         @type = "#{NS_MDDO}:ospf-area-termination-point-attributes"
       end
+      # rubocop:enable Metrics/ParameterLists
 
       # Convert to RFC8345 topology data
       # @return [Hash]
@@ -161,7 +167,8 @@ module Netomox
           'priority' => @priority,
           'metric' => @metric,
           'passive' => @passive,
-          'timer' => @timer.topo_data
+          'timer' => @timer.topo_data,
+          'neighbor' => @neighbors.map(&:topo_data)
         }
       end
 

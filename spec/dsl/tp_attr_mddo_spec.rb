@@ -94,12 +94,14 @@ RSpec.describe 'termination point dsl', :dsl, :tp do
           'hello-interval' => 10,
           'dead-interval' => 40,
           'retransmission-interval' => 5
-        }
+        },
+        'neighbor' => []
       }
     }
     expect(tp.topo_data).to eq tp_data
   end
 
+  # rubocop:disable RSpec/ExampleLength
   it 'generate term-point that has ospf-area attribute', :attr, :ospf_attr do
     tp_attr = {
       network_type: 'p2p',
@@ -109,7 +111,8 @@ RSpec.describe 'termination point dsl', :dsl, :tp do
         hello_interval: 5,
         dead_interval: 20,
         retransmission_interval: 2
-      }
+      },
+      neighbors: [{ router_id: '10.0.0.1', ip_addr: '192.168.0.1' }]
     }
     tp = Netomox::DSL::TermPoint.new(@ospf_node, 'tpX') do
       attribute(tp_attr)
@@ -125,9 +128,16 @@ RSpec.describe 'termination point dsl', :dsl, :tp do
           'hello-interval' => 5,
           'dead-interval' => 20,
           'retransmission-interval' => 2
-        }
+        },
+        'neighbor' => [
+          {
+            'router-id' => '10.0.0.1',
+            'ip-address' => '192.168.0.1'
+          }
+        ]
       }
     }
     expect(tp.topo_data).to eq tp_data
   end
+  # rubocop:enable RSpec/ExampleLength
 end
