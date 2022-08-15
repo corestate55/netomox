@@ -2,7 +2,7 @@
 
 require 'netomox/topology/attr_base'
 require 'netomox/topology/diff_forward'
-require 'netomox/topology/node_attr_rfc_prefix'
+require 'netomox/topology/node_attr/rfc_prefix'
 
 module Netomox
   module Topology

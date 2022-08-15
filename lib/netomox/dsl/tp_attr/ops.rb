@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'netomox/dsl/base_attr_ops'
+require 'netomox/dsl/base_attr/ops'
 
 module Netomox
   module DSL

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'netomox/topology/attr_base'
-require 'netomox/topology/node_attr_base'
+require 'netomox/topology/node_attr/base'
 
 module Netomox
   module Topology

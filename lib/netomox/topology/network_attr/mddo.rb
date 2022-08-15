@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'netomox/topology/network_attr_base'
+require 'netomox/topology/network_attr/base'
 
 module Netomox
   module Topology

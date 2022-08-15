@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'netomox/const'
-require 'netomox/dsl/base_attr_rfc'
+require 'netomox/dsl/base_attr/rfc'
 
 module Netomox
   module DSL

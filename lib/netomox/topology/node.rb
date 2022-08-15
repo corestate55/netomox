@@ -3,8 +3,8 @@
 require 'netomox/const'
 require 'netomox/topology/tp'
 require 'netomox/topology/support_base'
-require 'netomox/topology/node_attr_rfc'
-require 'netomox/topology/node_attr_mddo'
+require 'netomox/topology/node_attr/rfc'
+require 'netomox/topology/node_attr/mddo'
 require 'netomox/topology/base'
 
 module Netomox

@@ -2,8 +2,8 @@
 
 require 'netomox/const'
 require 'netomox/topology/link_tpref'
-require 'netomox/topology/link_attr_rfc'
-require 'netomox/topology/link_attr_mddo'
+require 'netomox/topology/link_attr/rfc'
+require 'netomox/topology/link_attr/mddo'
 require 'netomox/topology/base'
 
 module Netomox

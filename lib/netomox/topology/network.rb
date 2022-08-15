@@ -4,8 +4,8 @@ require 'netomox/const'
 require 'netomox/topology/node'
 require 'netomox/topology/link'
 require 'netomox/topology/support_base'
-require 'netomox/topology/network_attr_rfc'
-require 'netomox/topology/network_attr_mddo'
+require 'netomox/topology/network_attr/rfc'
+require 'netomox/topology/network_attr/mddo'
 require 'netomox/topology/base'
 
 module Netomox
