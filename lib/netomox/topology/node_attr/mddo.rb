@@ -41,7 +41,7 @@ module Netomox
       #   @return [Array<String>]
       attr_accessor :name, :vlan_id, :flags
 
-      # Attribute definition of L1 node
+      # Attribute definition of L2 node
       ATTR_DEFS = [
         { int: :name, ext: 'name', default: '' },
         { int: :vlan_id, ext: 'vlan-id', default: 0 },
@@ -66,11 +66,8 @@ module Netomox
       #   @return [String]
       attr_accessor :node_type
 
-      # Attribute definition of L1 node
-      ATTR_DEFS = [
-        { int: :node_type, ext: 'node-type', default: '' },
-        { int: :prefixes, ext: 'prefix', default: [] }
-      ].freeze
+      # Attribute definition of L3 node
+      ATTR_DEFS = [{ int: :node_type, ext: 'node-type', default: '' }].freeze
 
       def initialize(data, type)
         super(ATTR_DEFS, data, type)

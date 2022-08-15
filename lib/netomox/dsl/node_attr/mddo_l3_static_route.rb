@@ -5,7 +5,7 @@ require 'netomox/const'
 module Netomox
   module DSL
     # Static routes for MDDO L3 node attribute
-    class MddoStaticRoute
+    class MddoL3StaticRoute
       # @!attribute [rw] prefix
       #   @return [String] IP address/prefix-length
       # @!attribute [rw] next_hop

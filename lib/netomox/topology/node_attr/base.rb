@@ -22,8 +22,8 @@ module Netomox
       # @param [Hash] data Attribute data (RFC8345)
       # @param [String] type Attribute type (keyword of data in RFC8345)
       def initialize(attr_table, data, type)
-        super(ATTR_DEFS + attr_table, data, type)
-        setup_prefixes(data)
+        super(ATTR_DEFS + attr_table, data, type) # merge ATTR_DEFS
+        @prefixes = convert_prefixes(data)
       end
 
       # @return [String]
@@ -52,12 +52,11 @@ module Netomox
         []
       end
 
-      def setup_prefixes(data)
-        @prefixes = if data.key?('prefix')
-                      data['prefix'].map { |p| L3Prefix.new(p, 'prefix') }
-                    else
-                      []
-                    end
+      # @param [Hash] data Attribute data (RFC8345)
+      # @return [Array<L3Prefix>] Converted attribute data
+      def convert_prefixes(data)
+        key = @attr_table.ext_of(:prefixes)
+        operative_array_key?(data, key) ? data[key].map { |p| L3Prefix.new(p, key) } : []
       end
     end
   end

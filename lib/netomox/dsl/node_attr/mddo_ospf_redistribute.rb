@@ -9,7 +9,7 @@ module Netomox
       # @!attribute [rw] protocol
       #   @return [String] TODO: enum{static, connected}
       # @!attribute [rw] metric_type
-      #   @return [Integer] TODO: enum{1, 2} (OE1, OE2)
+      #   @return [Integer] enum{1, 2} (OE1, OE2)
       attr_accessor :protocol, :metric_type
 
       # @param [String] protocol

@@ -2,35 +2,10 @@
 
 require 'netomox/topology/attr_base'
 require 'netomox/topology/diff_forward'
+require 'netomox/topology/tp_attr/rfc_vlan_id_name'
 
 module Netomox
   module Topology
-    # Port VLAN ID & Name, for L2 attribute
-    class L2VlanIdName < AttributeBase
-      # @!attribute [rw] id
-      #   @return [Integer]
-      # @!attribute [rw] name
-      #   @return [String]
-      attr_accessor :id, :name
-
-      # Attribute definition of Port VLAN ID & Name for L2 network
-      ATTR_DEFS = [
-        { int: :id, ext: 'vlan-id', default: 0 },
-        { int: :name, ext: 'vlan-name', default: '' }
-      ].freeze
-
-      # @param [Hash] data Attribute data (RFC8345)
-      # @param [String] type Attribute type (keyword of data in RFC8345)
-      def initialize(data, type)
-        super(ATTR_DEFS, data, type)
-      end
-
-      # @return [String]
-      def to_s
-        "VLAN: #{@id},#{@name}"
-      end
-    end
-
     # attribute for L2 termination point
     class L2TPAttribute < AttributeBase
       # @!attribute [rw] descr
@@ -45,7 +20,7 @@ module Netomox
       #   @return [Integer]
       # @!attribute [rw] vlan_id_names
       #   @return [Array<String>]
-      # @!attribute [rw] tp_state
+      # @!attribute4 [rw] tp_state
       #   @return [String]
       attr_accessor :descr, :max_frame_size, :mac_addr, :eth_encap,
                     :port_vlan_id, :vlan_id_names, :tp_state
@@ -68,7 +43,7 @@ module Netomox
       # @param [String] type Attribute type (keyword of data in RFC8345)
       def initialize(data, type)
         super(ATTR_DEFS, data, type)
-        @vlan_id_names = setup_vlan_id_names(data)
+        @vlan_id_names = convert_vlan_id_names(data)
       end
 
       # @return [String]
@@ -91,13 +66,11 @@ module Netomox
 
       private
 
-      def setup_vlan_id_names(data)
-        key = 'vlan-id-name' # alias
-        if data.key?(key) && !data[key].empty?
-          data[key].map { |p| L2VlanIdName.new(p, key) }
-        else
-          []
-        end
+      # @param [Hash] data Attribute data (RFC8345)
+      # @return [Array<L2VlanIdName>] Converted attribute data
+      def convert_vlan_id_names(data)
+        key = @attr_table.ext_of(:vlan_id_names)
+        operative_array_key?(data, key) ? data[key].map { |p| L2VlanIdName.new(p, key) } : []
       end
     end
 

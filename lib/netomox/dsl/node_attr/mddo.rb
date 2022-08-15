@@ -2,7 +2,7 @@
 
 require 'netomox/const'
 require 'netomox/dsl/node_attr/rfc_prefix'
-require 'netomox/dsl/node_attr/mddo_static_route'
+require 'netomox/dsl/node_attr/mddo_l3_static_route'
 require 'netomox/dsl/node_attr/mddo_ospf_redistribute'
 
 module Netomox
@@ -86,7 +86,7 @@ module Netomox
       # @!attribute [rw] prefixes
       #   @return [Array<L3Prefix>]
       # @!attribute [rw] static_routes
-      #   @return [Array<MddoStaticRoute>]
+      #   @return [Array<MddoL3StaticRoute>]
       # @!attribute [rw] flags
       #   @return [Array<String>]
       attr_accessor :node_type, :prefixes, :static_routes, :flags
@@ -101,7 +101,7 @@ module Netomox
       def initialize(node_type: '', prefixes: [], static_routes: [], flags: [])
         @node_type = node_type
         @prefixes = prefixes.map { |p| L3Prefix.new(**p) }
-        @static_routes = static_routes.map { |s| MddoStaticRoute.new(**s) }
+        @static_routes = static_routes.map { |s| MddoL3StaticRoute.new(**s) }
         @flags = flags
         @type = "#{NS_MDDO}:l3-node-attributes"
       end

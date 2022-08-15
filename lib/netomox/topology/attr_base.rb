@@ -87,6 +87,15 @@ module Netomox
         data
       end
 
+      protected
+
+      # @param [Hash] data Attribute data (RFC8345)
+      # @param [String] ext_key External-key of attribute-table record
+      # @return [Boolean] true if the key exists in the data and its value is an array.
+      def operative_array_key?(data, ext_key)
+        data.key?(ext_key) && !data[ext_key].nil? && data[ext_key].is_a?(Array)
+      end
+
       private
 
       def select_child_attr(attr)
