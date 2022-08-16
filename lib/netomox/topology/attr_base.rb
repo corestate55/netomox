@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'netomox/topology/attr_base'
 require 'netomox/topology/diff_state'
 require 'netomox/topology/attr_table'
 
@@ -91,9 +92,23 @@ module Netomox
 
       # @param [Hash] data Attribute data (RFC8345)
       # @param [String] ext_key External-key of attribute-table record
+      # @return [Boolean] true if the key exists in the data and not nil
+      def operative_key?(data, ext_key)
+        data.key?(ext_key) && !data[ext_key].nil?
+      end
+
+      # @param [Hash] data Attribute data (RFC8345)
+      # @param [String] ext_key External-key of attribute-table record
       # @return [Boolean] true if the key exists in the data and its value is an array.
       def operative_array_key?(data, ext_key)
-        data.key?(ext_key) && !data[ext_key].nil? && data[ext_key].is_a?(Array)
+        operative_key?(data, ext_key) && data[ext_key].is_a?(Array)
+      end
+
+      # @param [Hash] data Attribute data (RFC8345)
+      # @param [String] ext_key External-key of attribute-table record
+      # @return [Boolean] true if the key exists in the data and its value is an hash.
+      def operative_hash_key?(data, ext_key)
+        operative_key?(data, ext_key) && data[ext_key].is_a?(Hash)
       end
 
       private
@@ -127,16 +142,24 @@ module Netomox
           other.fill(forward: :added)
         elsif empty_deleted?(send(attr), other.send(attr))
           fill(forward: :deleted)
-        else
+        elsif send(attr).is_a?(Array)
           d_vid_names = diff_list(attr, other) # NOTICE: with Diffable mix-in
           other.send("#{attr}=", d_vid_names)
+        else
+          diff_hash(attr, other)
         end
         other
       end
 
+      # @param [Symbol] attr Attribute key
+      # @param [Hash] state_hash Hash of diff-state
+      # @return [void]
       def fill_of(attr, state_hash)
-        send(attr).each do |vid_name|
-          set_diff_state(vid_name, state_hash)
+        target_attr = send(attr)
+        if target_attr.is_a?(Array)
+          send(attr).each { |vid_name| set_diff_state(vid_name, state_hash) }
+        else
+          set_diff_state(target_attr, state_hash)
         end
       end
 
@@ -154,7 +177,7 @@ module Netomox
         # when other = AttributeBase (EMPTY Attribute)
         state = { forward: :deleted }
         fill(state)
-        @diff_state = DiffState.new(state)
+        @diff_state = DiffState.new(**state)
         self
       end
     end

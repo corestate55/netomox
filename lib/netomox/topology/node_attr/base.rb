@@ -46,12 +46,6 @@ module Netomox
 
       private
 
-      # @abstract
-      # to get ATTR_DEFS in child class
-      def attr_defs
-        []
-      end
-
       # @param [Hash] data Attribute data (RFC8345)
       # @return [Array<L3Prefix>] Converted attribute data
       def convert_prefixes(data)

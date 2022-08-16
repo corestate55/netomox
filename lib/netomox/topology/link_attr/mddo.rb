@@ -28,5 +28,7 @@ module Netomox
     class MddoL2LinkAttribute < MddoLinkAttributeBase; end
     # Attribute definition of MDDO L3 link
     class MddoL3LinkAttribute < MddoLinkAttributeBase; end
+    # Attribute definition of MDDO ospf-area link
+    class MddoOspfAreaLinkAttribute < MddoLinkAttributeBase; end
   end
 end

@@ -2,6 +2,8 @@
 
 require 'netomox/topology/attr_base'
 require 'netomox/topology/node_attr/base'
+require 'netomox/topology/node_attr/mddo_l3_static_route'
+require 'netomox/topology/node_attr/mddo_ospf_redistribute'
 
 module Netomox
   module Topology
@@ -60,17 +62,103 @@ module Netomox
       end
     end
 
-    # attribute for L3 2node
+    # attribute for L3 node
     class MddoL3NodeAttribute < L3NodeAttributeBase
       # @!attribute [rw] node_type
       #   @return [String]
-      attr_accessor :node_type
+      # @!attribute [rw] static_routes
+      #   @return []
+      attr_accessor :node_type, :static_routes
 
       # Attribute definition of L3 node
-      ATTR_DEFS = [{ int: :node_type, ext: 'node-type', default: '' }].freeze
+      ATTR_DEFS = [
+        { int: :node_type, ext: 'node-type', default: '' },
+        { int: :static_routes, ext: 'static-route', default: [] }
+      ].freeze
 
       def initialize(data, type)
         super(ATTR_DEFS, data, type)
+        @static_routes = convert_static_routes(data)
+      end
+
+      def diff(other)
+        super(other)
+        diff_of(:static_routes, other)
+      end
+
+      def fill(state_hash)
+        super(state_hash)
+        fill_of(:static_routes, state_hash)
+      end
+
+      private
+
+      # @param [Hash] data Attribute data (RFC8345)
+      # @return [Array<L3Prefix>] Converted attribute data
+      def convert_static_routes(data)
+        key = @attr_table.ext_of(:static_routes)
+        operative_array_key?(data, key) ? data[key].map { |s| MddoL3StaticRoute(s, key) } : []
+      end
+    end
+
+    # attribute for ospf-area node
+    class MddoOspfAreaNodeAttribute < AttributeBase
+      # @!attribute [rw] node_type
+      #   @return [String]
+      # @!attribute [rw] router_id
+      #   @return [String] dotted-quote
+      # @!attribute [rw] log_adjacency_change
+      #   @return [Boolean]
+      # @!attribute [rw] redistribute_list
+      #   @return [Array<MddoOspfRedistribute>]
+      # @!attribute [r] router_id_source
+      #   @return [Symbol] TODO: enum {:static, :auto}
+      attr_accessor :node_type, :router_id, :log_adjacency_change, :redistribute_list, :router_id_source
+
+      # Attribute definition of ospf-area node
+      ATTR_DEFS = [
+        { int: :node_type, ext: 'node-type', default: '' },
+        { int: :router_id, ext: 'router-id', default: '' },
+        { int: :log_adjacency_change, ext: 'log-adjacency-change', default: false },
+        { int: :redistribute_list, ext: 'redistribute', default: [] },
+        { int: :router_id_source, ext: 'router-id-source', default: 'dynamic' }
+      ].freeze
+
+      include Diffable
+      include SubAttributeOps
+
+      # @param [Hash] data Attribute data (RFC8345)
+      # @param [String] type Attribute type (keyword of data in RFC8345)
+      def initialize(data, type)
+        super(ATTR_DEFS, data, type)
+        @redistribute_list = convert_redistribute_list(data)
+      end
+
+      # @return [String]
+      def to_s
+        "attribute: #{@name}"
+      end
+
+      # @param [MddoOspfAreaNodeAttribute] other Target to compare
+      # @return [MddoOspfAreaNodeAttribute]
+      def diff(other)
+        diff_of(:redistribute_list, other)
+      end
+
+      # Fill diff state
+      # @param [Hash] state_hash
+      # @return [L3NodeAttributeBase]
+      def fill(state_hash)
+        fill_of(:redistribute_list, state_hash)
+      end
+
+      private
+
+      # @param [Hash] data Attribute data (RFC8345)
+      # @return [Array<L3Prefix>] Converted attribute data
+      def convert_redistribute_list(data)
+        key = @attr_table.ext_of(:redistribute_list)
+        operative_array_key?(data, key) ? data[key].map { |p| MddoOspfRedistribute.new(p, key) } : []
       end
     end
   end

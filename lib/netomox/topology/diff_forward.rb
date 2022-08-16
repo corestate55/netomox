@@ -24,6 +24,7 @@ module Netomox
         (result, d_attr) = compare_attribute(@attribute, other.attribute)
         arg = { forward: result, pair: @attribute }
         d_attr.diff_state = DiffState.new(**arg)
+
         # update diff_state in sub-class of attribute
         case result
         when :changed
@@ -98,6 +99,17 @@ module Netomox
           results.push(set_diff_state(rhs, forward: :added))
         end
         results
+      end
+
+      # @param [Symbol] attr Attribute of object to compare
+      # @param [TopoObjectBase, AttributeBase] other Target object to compare
+      # # @return [TopoObjectBase, AttributeBase] Objects of specified attribute (added DiffState)
+      def diff_hash(attr, other)
+        lhs = send(attr)
+        rhs = other.send(attr)
+        (result, d_attr) = compare_attribute(lhs, rhs)
+        d_attr.diff_state = DiffState.new(forward: result, pair: lhs)
+        d_attr
       end
 
       # Set diff state for list of objects

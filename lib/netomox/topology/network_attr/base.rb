@@ -18,10 +18,11 @@ module Netomox
         { int: :flags, ext: 'flag', default: [] }
       ].freeze
 
+      # @param [Array<Hash>] attr_table Attribute data
       # @param [Hash] data Attribute data (RFC8345)
       # @param [String] type Attribute type (keyword of data in RFC8345)
-      def initialize(data, type)
-        super(ATTR_DEFS, data, type)
+      def initialize(attr_table, data, type)
+        super(ATTR_DEFS + attr_table, data, type) # merge ATTR_DEFS
       end
 
       # @return [String]

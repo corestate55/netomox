@@ -2,6 +2,8 @@
 
 require 'netomox/topology/attr_base'
 require 'netomox/topology/diff_forward'
+require 'netomox/topology/tp_attr/mddo_ospf_timer'
+require 'netomox/topology/tp_attr/mddo_ospf_neighbor'
 
 module Netomox
   module Topology
@@ -87,6 +89,80 @@ module Netomox
       # @return [String]
       def to_s
         "attribute: #{@path}"
+      end
+    end
+
+    # attribute for ospf-area termination point
+    class MddoOspfAreaTPAttribute < AttributeBase
+      # @!attribute [rw] network_type
+      #   @return [String] TODO: Enum {p2p, broadcast, non_broadcast}
+      # @!attribute [rw] priority
+      #   @return [Integer]
+      # @!attribute [rw] metric
+      #   @return [Integer]
+      # @!attribute [rw] passive
+      #   @return [Boolean]
+      # @!attribute [rw] timer
+      #   @return [MddoOspfTimer]
+      # @!attribute [rw] neighbors
+      #   @return [Array<MddoOspfNeighbor>]
+      attr_accessor :network_type, :priority, :metric, :passive, :timer, :neighbors
+
+      # Attribute definition of L3 node
+      ATTR_DEFS = [
+        { int: :network_type, ext: 'network-type', default: '' },
+        { int: :priority, ext: 'priority', default: 10 },
+        { int: :metric, ext: 'metric', default: 1 },
+        { int: :passive, ext: 'passive', default: false },
+        { int: :timer, ext: 'timer', default: {} },
+        { int: :neighbors, ext: 'neighbor', default: [] }
+      ].freeze
+
+      include Diffable
+      include SubAttributeOps
+
+      # @param [Hash] data Attribute data (RFC8345)
+      # @param [String] type Attribute type (keyword of data in RFC8345)
+      def initialize(data, type)
+        super(ATTR_DEFS, data, type) # merge ATTR_DEFS
+        @timer = convert_timer(data)
+        @neighbors = convert_neighbors(data)
+      end
+
+      # @return [String]
+      def to_s
+        "attribute: #{@name}"
+      end
+
+      # @param [MddoOspfAreaTPAttribute] other Target to compare
+      # @return [MddoOspfAreaTPAttribute]
+      def diff(other)
+        diff_of(:timer, other)
+        diff_of(:neighbors, other)
+      end
+
+      # Fill diff state
+      # @param [Hash] state_hash
+      # @return [void]
+      def fill(state_hash)
+        fill_of(:timer, state_hash)
+        fill_of(:neighbors, state_hash)
+      end
+
+      private
+
+      # @param [Hash] data Attribute data (RFC8345)
+      # @return [MddoOspfTimer] Converted attribute data
+      def convert_timer(data)
+        key = @attr_table.ext_of(:timer)
+        MddoOspfTimer.new(operative_hash_key?(data, key) ? data[key] : {}, key)
+      end
+
+      # @param [Hash] data Attribute data (RFC8345)
+      # @return [Array<MddoOspfNeighbor>] Converted attribute data
+      def convert_neighbors(data)
+        key = @attr_table.ext_of(:neighbors)
+        operative_array_key?(data, key) ? data[key].map { |n| MddoOspfNeighbor.new(n, key) } : []
       end
     end
   end

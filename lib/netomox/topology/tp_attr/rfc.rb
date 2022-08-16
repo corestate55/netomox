@@ -81,9 +81,7 @@ module Netomox
       attr_accessor :ip_addrs
 
       # Attribute definition of L3 termination-point
-      ATTR_DEFS = [
-        { int: :ip_addrs, ext: 'ip-address', default: [] }
-      ].freeze
+      ATTR_DEFS = [{ int: :ip_addrs, ext: 'ip-address', default: [] }].freeze
 
       # @param [Hash] data Attribute data (RFC8345)
       # @param [String] type Attribute type (keyword of data in RFC8345)
