@@ -97,7 +97,7 @@ module Netomox
       # @return [Array<L3Prefix>] Converted attribute data
       def convert_static_routes(data)
         key = @attr_table.ext_of(:static_routes)
-        operative_array_key?(data, key) ? data[key].map { |s| MddoL3StaticRoute(s, key) } : []
+        operative_array_key?(data, key) ? data[key].map { |s| MddoL3StaticRoute.new(s, key) } : []
       end
     end
 

@@ -30,6 +30,10 @@ RSpec.describe 'check node attribute with RFC' do
             prefixes: [
               { prefix: '192.168.0.0/24', metric: 1, flags: 'test' },
               { prefix: '192.168.1.0/24', metric: 10, flags: %w[foo bar] }
+            ],
+            static_routes: [
+              { prefix: '172.16.1.0/24', next_hop: '10.0.0.1', metric: 1 },
+              { prefix: '172.16.2.0/24', next_hop: '10.0.1.0', description: 'test' },
             ]
           )
         end
@@ -38,7 +42,6 @@ RSpec.describe 'check node attribute with RFC' do
     topo_data = nws.topo_data
     @nws = Netomox::Topology::Networks.new(topo_data)
     @default_diff_state = { backward: nil, forward: :kept, pair: '' }
-    # TODO: static-route attribute test
   end
 
   it 'has MDDO layer1 node attribute' do
@@ -71,7 +74,16 @@ RSpec.describe 'check node attribute with RFC' do
         { '_diff_state_' => @default_diff_state, 'prefix' => '192.168.0.0/24', 'metric' => 1, 'flag' => 'test' },
         { '_diff_state_' => @default_diff_state, 'prefix' => '192.168.1.0/24', 'metric' => 10, 'flag' => %w[foo bar] }
       ],
-      'static-route' => []
+      'static-route' => [
+        {
+          '_diff_state_' => @default_diff_state, 'prefix' => '172.16.1.0/24', 'next-hop' => '10.0.0.1',
+          'metric' => 1, 'interface' => '', 'preference' => 1, 'description' => ''
+        },
+        {
+          '_diff_state_' => @default_diff_state, 'prefix' => '172.16.2.0/24', 'next-hop' => '10.0.1.0',
+          'metric' => 10, 'interface' => '', 'preference' => 1, 'description' => 'test'
+        }
+      ]
     }
     expect(attr&.to_data).to eq expected_attr
   end
