@@ -115,7 +115,11 @@ module Netomox
 
       def select_child_attr(attr)
         if attr.is_a?(Array) && attr.all? { |d| d.is_a?(AttributeBase) }
+          # for sub-attribute array
           attr.map(&:to_data)
+        elsif attr.is_a?(AttributeBase)
+          # for single sub-attribute
+          attr.to_data
         else
           attr
         end
