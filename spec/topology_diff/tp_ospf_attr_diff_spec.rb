@@ -122,24 +122,43 @@ RSpec.describe 'termination point diff with ospf attribute', :diff, :tp, :attr, 
       # so, it will be `added` and `deleted`, not `kept`
       expect(list).to eq %i[deleted added]
     end
-  end
 
-  it 'added a sub-attribute, neighbors' do
-    d_tp = @tp_ospf_attr1.diff(@tp_ospf_attr5)
-    expect(d_tp.diff_state.detect).to eq :changed
-    expect(d_tp.attribute.diff_state.detect).to eq :changed
-    expect(d_tp.attribute.timer.diff_state.detect).to eq :kept
-    list = d_tp.attribute.neighbors.map { |d| d.diff_state.detect }
-    expect(list).to eq %i[kept added]
-  end
+    it 'added a sub-attribute, neighbors' do
+      d_tp = @tp_ospf_attr1.diff(@tp_ospf_attr5)
+      expect(d_tp.diff_state.detect).to eq :changed
+      expect(d_tp.attribute.diff_state.detect).to eq :changed
+      expect(d_tp.attribute.timer.diff_state.detect).to eq :kept
+      list = d_tp.attribute.neighbors.map { |d| d.diff_state.detect }
+      expect(list).to eq %i[kept added]
+    end
 
-  it 'deleted a sub-attribute, neighbors' do
-    d_tp = @tp_ospf_attr5.diff(@tp_ospf_attr1)
-    expect(d_tp.diff_state.detect).to eq :changed
-    expect(d_tp.attribute.diff_state.detect).to eq :changed
-    expect(d_tp.attribute.timer.diff_state.detect).to eq :kept
-    list = d_tp.attribute.neighbors.map { |d| d.diff_state.detect }
-    expect(list).to eq %i[kept deleted]
+    it 'deleted a sub-attribute, neighbors' do
+      d_tp = @tp_ospf_attr5.diff(@tp_ospf_attr1)
+      expect(d_tp.diff_state.detect).to eq :changed
+      expect(d_tp.attribute.diff_state.detect).to eq :changed
+      expect(d_tp.attribute.timer.diff_state.detect).to eq :kept
+      list = d_tp.attribute.neighbors.map { |d| d.diff_state.detect }
+      expect(list).to eq %i[kept deleted]
+    end
+
+    it 'can convert to data, timer' do
+      d_tp = @tp_ospf_attr1.diff(@tp_ospf_attr3)
+      data = {
+        '_diff_state_' => { forward: :changed, backward: nil, pair: 'attribute' },
+        'network-type' => 'BROADCAST', 'priority' => 10, 'metric' => 1, 'passive' => false,
+        'timer' => {
+          '_diff_state_' => { forward: :changed, backward: nil, pair: '' },
+          'hello-interval' => 5, 'dead-interval' => 40, 'retransmission-interval' => 5
+        },
+        'neighbor' => [
+          {
+            '_diff_state_' => { forward: :kept, backward: nil, pair: 'attribute' },
+            'router-id' => '192.168.0.1', 'ip-address' => '172.16.0.1'
+          }
+        ]
+      }
+      expect(d_tp.attribute.to_data).to eq data
+    end
   end
   # rubocop:enable RSpec/MultipleExpectations
 end

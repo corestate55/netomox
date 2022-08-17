@@ -33,7 +33,7 @@ RSpec.describe 'check node attribute with RFC' do
             ],
             static_routes: [
               { prefix: '172.16.1.0/24', next_hop: '10.0.0.1', metric: 1 },
-              { prefix: '172.16.2.0/24', next_hop: '10.0.1.0', description: 'test' },
+              { prefix: '172.16.2.0/24', next_hop: '10.0.1.0', description: 'test' }
             ]
           )
         end

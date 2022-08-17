@@ -21,9 +21,9 @@ module Netomox
       def diff_attribute(other)
         # receiver of this method will be (a), other will be (b)
         # NOTICE: (a)(b) can use NULL attribute
-        (result, d_attr) = compare_attribute(@attribute, other.attribute)
+        result, d_attr = compare_attribute(@attribute, other.attribute)
         arg = { forward: result, pair: @attribute }
-        d_attr.diff_state = DiffState.new(**arg)
+        set_diff_state(d_attr, **arg)
 
         # update diff_state in sub-class of attribute
         case result
@@ -107,8 +107,8 @@ module Netomox
       def diff_hash(attr, other)
         lhs = send(attr)
         rhs = other.send(attr)
-        (result, d_attr) = compare_attribute(lhs, rhs)
-        d_attr.diff_state = DiffState.new(forward: result, pair: lhs)
+        result, d_attr = compare_attribute(lhs, rhs)
+        set_diff_state(d_attr, forward: result, pair: lhs)
         d_attr
       end
 
@@ -137,7 +137,7 @@ module Netomox
 
       # @param [AttributeBase] lhs
       # @param [AttributeBase] rhs
-      # @return [Array<Symbol, AttributeBase>]
+      # @return [Array<(Symbol, AttributeBase)>]
       def compare_attribute(lhs, rhs)
         # NOTICE: attribute (lhs and/or rhs) allowed be empty.
         if lhs == rhs
