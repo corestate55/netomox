@@ -134,10 +134,13 @@ module Netomox
       # @!attribute [rw] redistribute_list
       #   @return [Array<MddoOspfRedistribute>]
       attr_accessor :node_type, :router_id, :log_adjacency_change, :redistribute_list
+
+      # TODO: type: enum {:static, :auto}
+
       # @!attribute [r] type
       #   @return [String]
       # @!attribute [r] router_id_source
-      #   @return [Symbol] TODO: enum {:static, :auto}
+      #   @return [Symbol]
       attr_reader :type, :router_id_source
 
       # @param [String] node_type

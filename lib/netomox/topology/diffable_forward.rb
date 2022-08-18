@@ -8,7 +8,7 @@ module Netomox
     # NOTICE: who receive the method? (receiver?)
     # when (a) - (b) => (c)
     module Diffable
-      # Diff of supports
+      # Diff of supports (for TopoObjectBase)
       # @param [TopoObjectBase] other Target object to compare
       # @return [Array<SupportingRefBase>]
       def diff_supports(other)
@@ -16,6 +16,7 @@ module Netomox
         diff_list(:supports, other)
       end
 
+      # Diff of attribute (for TopoObjectBase)
       # @param [TopoObjectBase] other Target object to compare
       # @return [AttributeBase]
       def diff_attribute(other)
@@ -57,10 +58,14 @@ module Netomox
 
       private
 
+      # @param [AttributeBase] attr Attribute
+      # @return [Boolean] true if the attribute has #fill method
       def fillable_attribute?(attr)
         attr.is_a?(AttributeBase) && attr.fill?
       end
 
+      # @param [Array<Symbol>] attrs Attribute key of target object (:supports, :attribute, ...)
+      # @return [void]
       def fill_diff_state_of(attrs)
         attrs.each do |attr|
           case send(attr)
@@ -74,6 +79,8 @@ module Netomox
         end
       end
 
+      # @param [Array<TopoObjectBase, AttributeBase>] child_array Array of fillable object
+      # @return [void]
       def fill_array_diff_state(child_array)
         child_array.each do |child|
           set_diff_state(child, forward: @diff_state.forward)

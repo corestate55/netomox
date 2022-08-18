@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require 'netomox/topology/attr_base'
-require 'netomox/topology/diff_forward'
+require 'netomox/topology/diffable_forward'
+require 'netomox/topology/sub_attribute_ops'
 require 'netomox/topology/node_attr/rfc_prefix'
 
 module Netomox
@@ -39,7 +40,7 @@ module Netomox
 
       # Fill diff state
       # @param [Hash] state_hash
-      # @return [L3NodeAttributeBase]
+      # @return [void]
       def fill(state_hash)
         fill_of(:prefixes, state_hash)
       end

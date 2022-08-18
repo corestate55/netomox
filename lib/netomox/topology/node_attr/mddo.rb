@@ -81,11 +81,15 @@ module Netomox
         @static_routes = convert_static_routes(data)
       end
 
+      # @param [MddoL3NodeAttribute] other target to compare
+      # @return [MddoL3NodeAttribute]
       def diff(other)
         super(other)
         diff_of(:static_routes, other)
       end
 
+      # @param [Hash] state_hash
+      # @return [void]
       def fill(state_hash)
         super(state_hash)
         fill_of(:static_routes, state_hash)
@@ -103,16 +107,19 @@ module Netomox
 
     # attribute for ospf-area node
     class MddoOspfAreaNodeAttribute < AttributeBase
+      # NOTE: router_id: dotted-quote
+      # TODO: router_id_source: enum {:static, :auto}
+
       # @!attribute [rw] node_type
       #   @return [String]
       # @!attribute [rw] router_id
-      #   @return [String] dotted-quote
+      #   @return [String]
       # @!attribute [rw] log_adjacency_change
       #   @return [Boolean]
       # @!attribute [rw] redistribute_list
       #   @return [Array<MddoOspfRedistribute>]
       # @!attribute [r] router_id_source
-      #   @return [Symbol] TODO: enum {:static, :auto}
+      #   @return [Symbol]
       attr_accessor :node_type, :router_id, :log_adjacency_change, :redistribute_list, :router_id_source
 
       # Attribute definition of ospf-area node
@@ -147,7 +154,7 @@ module Netomox
 
       # Fill diff state
       # @param [Hash] state_hash
-      # @return [L3NodeAttributeBase]
+      # @return [void]
       def fill(state_hash)
         fill_of(:redistribute_list, state_hash)
       end

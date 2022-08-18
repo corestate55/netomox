@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require 'netomox/topology/attr_base'
-require 'netomox/topology/diff_forward'
+require 'netomox/topology/diffable_forward'
+require 'netomox/topology/sub_attribute_ops'
 require 'netomox/topology/tp_attr/rfc_vlan_id_name'
 
 module Netomox
@@ -20,7 +21,7 @@ module Netomox
       #   @return [Integer]
       # @!attribute [rw] vlan_id_names
       #   @return [Array<String>]
-      # @!attribute4 [rw] tp_state
+      # @!attribute [rw] tp_state
       #   @return [String]
       attr_accessor :descr, :max_frame_size, :mac_addr, :eth_encap,
                     :port_vlan_id, :vlan_id_names, :tp_state

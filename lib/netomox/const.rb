@@ -26,9 +26,13 @@ module Netomox
   # for ops project
   NWTYPE_OPS = "#{NS_OPS}:ops-network"
   # for MDDO project
+  # MDDO Layer1 network type
   NWTYPE_MDDO_L1 = "#{NS_MDDO}:l1-network"
+  # MDDO Layer2 network type
   NWTYPE_MDDO_L2 = "#{NS_MDDO}:l2-network"
+  # MDDO L3 network type
   NWTYPE_MDDO_L3 = "#{NS_MDDO}:l3-network"
+  # MDDO ospf-area network type
   NWTYPE_MDDO_OSPF_AREA = "#{NS_MDDO}:ospf-area-network"
 
   # logger for netomox

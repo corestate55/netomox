@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require 'netomox/topology/attr_base'
-require 'netomox/topology/diff_forward'
+require 'netomox/topology/diffable_forward'
+require 'netomox/topology/sub_attribute_ops'
 require 'netomox/topology/tp_attr/mddo_ospf_timer'
 require 'netomox/topology/tp_attr/mddo_ospf_neighbor'
 
@@ -94,8 +95,10 @@ module Netomox
 
     # attribute for ospf-area termination point
     class MddoOspfAreaTPAttribute < AttributeBase
+      # TODO: network_type: Enum {p2p, broadcast, non_broadcast}
+
       # @!attribute [rw] network_type
-      #   @return [String] TODO: Enum {p2p, broadcast, non_broadcast}
+      #   @return [String]
       # @!attribute [rw] priority
       #   @return [Integer]
       # @!attribute [rw] metric

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'netomox/topology/diff_forward'
-require 'netomox/topology/diff_backward'
+require 'netomox/topology/diffable_forward'
+require 'netomox/topology/diffable_backward'
 
 module Netomox
   module Topology

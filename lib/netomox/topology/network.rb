@@ -13,6 +13,7 @@ module Netomox
     # Network for topology data
     class Network < TopoObjectBase
       # @!attribute [rw] network_types
+      #   @return [Hash]
       # @!attribute [rw] nodes
       #   @return [Array<Node>]
       # @!attribute [rw] links
@@ -111,6 +112,7 @@ module Netomox
         d_network
       end
 
+      # @return [void]
       def fill_diff_state
         fill_diff_state_of(%i[nodes links supports attribute])
       end
@@ -130,10 +132,14 @@ module Netomox
 
       private
 
+      # @param [Hash] data A network data
+      # @return [hash] network-types of the data
       def setup_network_types(data)
         @network_types = data['network-types'] || {}
       end
 
+      # @param [Hash] data A node data
+      # @return [Node] Node instance
       def setup_nodes(data)
         @nodes = []
         return unless data.key?('node')
@@ -143,6 +149,8 @@ module Netomox
         end
       end
 
+      # @param [Hash] data A link data
+      # @return [Link] Link instance
       def setup_links(data)
         @links = []
         link_key = "#{NS_TOPO}:link"
@@ -153,10 +161,14 @@ module Netomox
         end
       end
 
+      # @param [Hash] data A node data
+      # @return [Node] Node instance
       def create_node(data)
         Node.new(data, @path)
       end
 
+      # @param [Hash] data A link data
+      # @return [Link] Link instance
       def create_link(data)
         Link.new(data, @path)
       end

@@ -63,6 +63,7 @@ module Netomox
         d_tp
       end
 
+      # @return [void]
       def fill_diff_state
         fill_diff_state_of(%i[supports attribute])
       end

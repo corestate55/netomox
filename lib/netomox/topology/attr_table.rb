@@ -13,17 +13,18 @@ module Netomox
         @int = int
         @ext = ext
         @default = default
-        setup_empty_check_method
+        @empty_check = select_empty_check_method
       end
 
       private
 
-      def setup_empty_check_method
-        @empty_check = case @default
-                       when [], '' then :empty?
-                       when 0 then :zero?
-                       else false # ignore empty check
-                       end
+      # @return [Symbol, FalseClass] empty check method (false to ignore empty-checking)
+      def select_empty_check_method
+        case @default
+        when [], '' then :empty?
+        when 0 then :zero?
+        else false # ignore empty check
+        end
       end
     end
 

@@ -52,6 +52,7 @@ module Netomox
         d_node
       end
 
+      # @return [void]
       def fill_diff_state
         fill_diff_state_of(%i[termination_points supports attribute])
       end
@@ -95,16 +96,20 @@ module Netomox
 
       private
 
+      # @param [Hash] data RFC8345 data (node element)
+      # @return [void]
       def setup_termination_points(data)
         @termination_points = []
         tp_key = "#{NS_TOPO}:termination-point"
-        return unless data.key?("#{NS_TOPO}:termination-point")
+        return unless data.key?(tp_key)
 
         @termination_points = data[tp_key].map do |tp|
           create_termination_point(tp)
         end
       end
 
+      # @param [Hash] data RFC8345 data (term-point element)
+      # @return [TermPoint] Term-point instance
       def create_termination_point(data)
         TermPoint.new(data, @path)
       end

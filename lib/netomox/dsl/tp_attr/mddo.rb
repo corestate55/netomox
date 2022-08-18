@@ -125,8 +125,10 @@ module Netomox
 
     # attribute for mddo topology ospf-area term-point
     class MddoOspfAreaTPAttribute
+      # TODO: network_type: Enum {p2p, broadcast, non_broadcast}
+
       # @!attribute [rw] network_type
-      #   @return [String] TODO: Enum {p2p, broadcast, non_broadcast}
+      #   @return [String]
       # @!attribute [rw] priority
       #   @return [Integer]
       # @!attribute [rw] metric

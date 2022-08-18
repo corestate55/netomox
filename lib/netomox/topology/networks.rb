@@ -8,7 +8,6 @@ require 'netomox/topology/link_tpref'
 
 module Netomox
   module Topology
-    # rubocop:disable Metrics/ClassLength
     # Networks for Topology data
     class Networks < TopoObjectBase
       # @!attribute [rw] networks
@@ -141,6 +140,7 @@ module Netomox
         d_networks
       end
 
+      # @return [void]
       def fill_diff_state
         fill_diff_state_of(%i[networks])
       end
@@ -158,6 +158,7 @@ module Netomox
 
       private
 
+      # @return [void]
       def setup_networks(data)
         @networks = []
         data['network'].each do |each|
@@ -165,19 +166,18 @@ module Netomox
         end
       end
 
+      # @return [Network] network instance
       def create_network(data)
         Network.new(data)
       end
 
-      def duplicated_element(list)
-        list.group_by { |i| i }.reject { |_k, v| v.one? }.keys
-      end
-
+      # @param [Network] network Network
+      # @param [TpRef] tp_ref Term-point reference
+      # @return [Integer, nil] Term-point reference count (count-up) (nil if the tp not found)
       def ref_count(network, tp_ref)
         tp = find_tp(network.name, tp_ref.node_ref, tp_ref.tp_ref)
         tp&.ref_count_up
       end
     end
-    # rubocop:enable Metrics/ClassLength
   end
 end

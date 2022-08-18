@@ -9,6 +9,7 @@ module Netomox
     # when (a) - (b) => (c)
     module Diffable
       # @param [Array<Symbol>] attrs Attributes
+      # @return [void]
       def diff_backward_check(attrs)
         # receiver of this method will be (c)
         bwd_states = []
@@ -20,6 +21,8 @@ module Netomox
 
       private
 
+      # @param [TopoObjectBase, AttributeBase] child_obj Sub-attribute object
+      # @return [:Symbol, Array<Symbol>, nil] Symbol(s) of the child_obj
       def pick_backward_state(child_obj)
         case child_obj
         when Array
@@ -31,6 +34,8 @@ module Netomox
         end
       end
 
+      # @param [Array<Symbol, nil>] diff_states Forward-states of child/children
+      # @return [Symbol] Backward-state
       def backward_state_from(diff_states)
         states = diff_states.flatten
         states.delete(nil) # del nil as empty list
@@ -41,6 +46,8 @@ module Netomox
         end
       end
 
+      # @param [TopoObjectBase] other Object to compare
+      # @return [DiffState] Diff state
       def select_diff_state(other)
         if eql?(other)
           @diff_state

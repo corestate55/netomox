@@ -2,10 +2,8 @@
 
 Netomox (**Ne**twork **To**pology **Mo**deling Toolbo**x**) is a tool to make/validate network topology data that based on RFC8345.
 
-***Development of netomox is going under [OOL-MDDO (Okinawa Open Lab, Model-Driven Network DevOps) project](https://www.okinawaopenlabs.org/mdnd) as [netomox-exp](https://github.com/ool-mddo/netomox-exp)!***
-
 See also:
-* [RFC 8345 \- A YANG Data Model for Network Topologies](https://datatracker.ietf.org/doc/rfc8345/)
+* [RFC 8345 - A YANG Data Model for Network Topologies](https://datatracker.ietf.org/doc/rfc8345/)
 * [Netomox Examples](https://github.com/corestate55/netomox-examples)
   * Repository of example topology data instance (defined by netomox DSL)
 * [Network topology visualizer](https://github.com/corestate55/netoviz)
