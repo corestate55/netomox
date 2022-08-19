@@ -107,19 +107,18 @@ module Netomox
 
     # attribute for ospf-area node
     class MddoOspfAreaNodeAttribute < AttributeBase
-      # NOTE: router_id: dotted-quote
-      # TODO: router_id_source: enum {:static, :auto}
-
       # @!attribute [rw] node_type
       #   @return [String]
       # @!attribute [rw] router_id
       #   @return [String]
+      #   @note dotted-quad string
       # @!attribute [rw] log_adjacency_change
       #   @return [Boolean]
       # @!attribute [rw] redistribute_list
       #   @return [Array<MddoOspfRedistribute>]
       # @!attribute [r] router_id_source
       #   @return [Symbol]
+      #   @todo enum (:static, :auto)
       attr_accessor :node_type, :router_id, :log_adjacency_change, :redistribute_list, :router_id_source
 
       # Attribute definition of ospf-area node

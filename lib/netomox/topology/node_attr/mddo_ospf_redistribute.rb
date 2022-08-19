@@ -6,13 +6,12 @@ module Netomox
   module Topology
     # Redistribute config for MDDO ospf-area node attribute
     class MddoOspfRedistribute < AttributeBase
-      # TODO: protocol: enum{static, connected}
-      #       metric_type: enum{1, 2} (OE1, OE2)
-
       # @!attribute [rw] protocol
       #   @return [String]
+      #   @todo enum (static, connected)
       # @!attribute [rw] metric_type
       #   @return [Integer]
+      #   @todo enum (1, 2) : (OE1, OE2)
       attr_accessor :protocol, :metric_type
 
       # Attribute definition of L3 prefix (for L3 node)

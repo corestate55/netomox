@@ -95,10 +95,9 @@ module Netomox
 
     # attribute for ospf-area termination point
     class MddoOspfAreaTPAttribute < AttributeBase
-      # TODO: network_type: Enum {p2p, broadcast, non_broadcast}
-
       # @!attribute [rw] network_type
       #   @return [String]
+      #   @todo enum %w(p2p, broadcast, non_broadcast)
       # @!attribute [rw] priority
       #   @return [Integer]
       # @!attribute [rw] metric

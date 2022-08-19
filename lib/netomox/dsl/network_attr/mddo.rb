@@ -32,9 +32,13 @@ module Netomox
     # attribute for mddo-topology ospf-area network
     class MddoOspfAreaNWAttribute < NetworkAttributeBase
       # @!attribute identifier
-      #   @return [String] area-identifier, dotted-quad
+      #   @return [String]
+      #   @note dotted-quad astring
       attr_accessor :identifier
 
+      # @param [String] name Network name
+      # @param [String] identifier OSPF area ID (dotted-quad)
+      # @param [Array<String>] flags
       def initialize(name: '', identifier: '', flags: [])
         super(name: name, flags: flags)
         @identifier = identifier

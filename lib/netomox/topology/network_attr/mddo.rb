@@ -28,7 +28,8 @@ module Netomox
     # attribute for ospf-area network
     class MddoOspfAreaNetworkAttribute < NetworkAttributeBase
       # @!attribute [rw] identifier
-      #   @return [String] NOTICE: dotted-quad stringa
+      #   @return [String]
+      #   @note dotted-quad string
       attr_accessor :identifier
 
       # Attribute definition of network

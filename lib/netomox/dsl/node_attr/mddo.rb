@@ -128,17 +128,16 @@ module Netomox
       # @!attribute [rw] node_type
       #   @return [String]
       # @!attribute [rw] router_id
-      #   @return [String] dotted-quote
+      #   @return [String]
+      #   @note dotted-quad string
       # @!attribute [rw] log_adjacency_change
       #   @return [Boolean]
       # @!attribute [rw] redistribute_list
       #   @return [Array<MddoOspfRedistribute>]
       attr_accessor :node_type, :router_id, :log_adjacency_change, :redistribute_list
-
-      # TODO: type: enum {:static, :auto}
-
       # @!attribute [r] type
       #   @return [String]
+      #   @todo enum (:static, :auto)
       # @!attribute [r] router_id_source
       #   @return [Symbol]
       attr_reader :type, :router_id_source
