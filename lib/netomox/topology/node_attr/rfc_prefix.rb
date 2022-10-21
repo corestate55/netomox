@@ -5,7 +5,7 @@ require 'netomox/topology/attr_base'
 module Netomox
   module Topology
     # L3 prefix for L3 attribute
-    class L3Prefix < AttributeBase
+    class L3Prefix < SubAttributeBase
       # @!attribute [rw] prefix
       #   @return [String]
       # @!attribute [rw] metric

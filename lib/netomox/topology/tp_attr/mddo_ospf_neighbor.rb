@@ -5,7 +5,7 @@ require 'netomox/topology/attr_base'
 module Netomox
   module Topology
     # ospf neighbor for MDDO ospf-area term-point attribute
-    class MddoOspfNeighbor < AttributeBase
+    class MddoOspfNeighbor < SubAttributeBase
       # @!attribute [rw] router_id
       #   @return [String]
       # @!attribute [rw] ip_addr
@@ -26,7 +26,7 @@ module Netomox
 
       # @return [String]
       def to_s
-        "Neighbor: router_id:#{router_id}, ip_addr:#{ip_addr}"
+        "ospf-neighbor: router_id:#{router_id}, ip_addr:#{ip_addr}"
       end
     end
   end

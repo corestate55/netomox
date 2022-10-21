@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'json'
+require 'jsonpath'
+require 'hashdiff'
 require 'termcolor'
 require 'netomox/diff_view/viewer_utils'
 
@@ -22,24 +24,121 @@ module Netomox
 
       private
 
+      def diff_data_type_table(diff_data_type)
+        case diff_data_type
+        when '+' then 'added'
+        when '-' then 'deleted'
+        when '~' then 'changed'
+        else 'kept'
+        end
+      end
+
+      # @param [Hash] found_data
+      # @param [Array<Array>] diff_data
+      # @return [void]
+      def copy_diff_state(found_data, diff_data)
+        if found_data.key?('_diff_state_')
+          found_data['_diff_state_']['diff_data'] = [] unless found_data['_diff_state_'].key?('diff_data')
+          found_data['_diff_state_']['diff_data'].push(*diff_data)
+        else
+          found_data['_diff_state_'] = {
+            'forward' => diff_data_type_table(diff_data[0][0]),
+            'backward' => nil,
+            'pair' => nil,
+            'diff_data' => diff_data
+          }
+        end
+      end
+
+      # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+      # @return [Array<Array>]
+      def detect_diff_data(dd_list)
+        return dd_list if dd_list.length == 1 && dd_list[0][0] != '-'
+
+        # Insert deleted data
+        if dd_list.length == 1 && dd_list[0][0] == '-'
+          dd = dd_list[0] # alias
+
+          # dd: [(+|-|~), jsonpath, diff-data]
+          matches = dd[1].match(/(?<path_key>.+)\[(?<index>\d+)\]/)
+
+          # NOTICE: Error when multiple hierarchy path (foo.bar.baz)
+          if matches # array path
+            key = matches[:path_key]
+            @data[key] = [] if !@data.key?(key) || @data[key].nil?
+            @data[key].insert(matches[:index].to_i, dd[2].dup) # duplicate to avoid circular reference
+            return dd[2].keys.map { |k| [dd[0], k, dd[2][k], ''] }
+          end
+
+          # hash path
+          key = dd[1]
+          @data[key] = dd[2] if !@data.key?(key) || @data[key].nil?
+          return [dd]
+        end
+
+        # Diff with object array returns + & - diff_data
+        # Hashdiff.diff({ data: [{ a:1, b:2 }]}, { data: [{ a:1, b:3 }]})
+        # => [["-", "data[0]", {:a=>1, :b=>2}], ["+", "data[0]", {:a=>1, :b=>3}]]
+        if dd_list.length == 2 && dd_list.map { |d| d[0] }.sort == %w[+ -]
+          dd_before = dd_list.find { |d| d[0] == '-' }[2]
+          dd_after = dd_list.find { |d| d[0] == '+' }[2]
+          # Hashdiff.diff => [[(+|-|=), key, data]]
+          return Hashdiff.diff(dd_before, dd_after)
+        end
+
+        msg = dd_list.empty? ? 'Not found diff-data' : 'Found multiple(>2) diff-data'
+        raise StandardError msg
+      end
+      # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+
+      # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+      def relocation_diff_data
+        updated_diff_data = []
+        # diff_data : [[ (+|-|~), jsonpath, changed-data,... ], ...]
+        diff_data = @diff_state['diff_data'] # alias
+        dd_keys = diff_data.map { |d| d[1] }.uniq
+        dd_keys.each do |dd_key|
+          dd_list = diff_data.find_all { |d| d[1] == dd_key }
+          dd_list = detect_diff_data(dd_list)
+
+          # dd_key is jsonpath: for example foo, foo.bar, baz[0], ...
+          dd_paths = dd_key.split('.')
+          next if dd_paths.empty? # when dd_key is empty or '.'
+
+          # jsonpath of diff_data always returns array has a object: [object]
+          dd_path0_data = JsonPath.new(dd_paths[0]).on(@data)[0]
+          unless dd_path0_data.is_a?(Hash)
+            updated_diff_data.push(*dd_list) # keep diff-data entry for self
+            next
+          end
+
+          # discard diff-data (move to jsonpath-specified object)
+          dd_list.each { |dd| dd[1] = dd_paths.slice(1..).join('.') if dd_paths.length > 1 }
+          copy_diff_state(dd_path0_data, dd_list)
+        end
+        @diff_state['diff_data'] = updated_diff_data
+      end
+      # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
+
       def stringify_data
         case @data
         when Array
           stringify_array
         when Hash
-          # @diff_state is used to decide text color, set at first
-          @diff_state = @data['_diff_state_'] if @data.key?('_diff_state_')
+          relocation_diff_data if exist_diff_data?
           stringify_hash
+        else
+          raise StandardError 'Data is literal (single value)?'
         end
       end
 
-      def stringify_single_value(value)
+      def stringify_single_value(value, state = nil)
         str = if value.nil? || value == ''
                 '""' # empty string (json)
               else
                 value
               end
-        coloring(str)
+        coloring(str, state)
       end
 
       def stringify_array_value(value)
@@ -136,14 +235,46 @@ module Netomox
         "#{dv.head_mark}#{@indent_b}#{dv.coloring(key)}: #{v_str}"
       end
 
+      def diff_data_includes_key?(key)
+        dd_keys = exist_diff_data? ? @diff_state['diff_data'].map { |dd| dd[1] } : []
+        dd_keys.include?(key)
+      end
+
+      def stringify_value_with_state(key, value, state, orig_value = nil)
+        v_str = stringify_single_value(value, state)
+        # append old value if :changed_strict
+        v_str += coloring(" ~#{orig_value}", state) if state == :changed_strict && !orig_value.nil?
+        "#{head_mark(state)}#{@indent_b}#{coloring(key, state)}: #{v_str}"
+      end
+
+      def stringify_value(key, value)
+        v_str = stringify_single_value(value)
+        "#{head_mark}#{@indent_b}#{coloring(key)}: #{v_str}"
+      end
+
+      def stringify_value_with_diff_data(key, value, diff_data)
+        # dd : Array [ (+|-|~), key, data...]
+        case diff_data[0]
+        when '+' then stringify_value_with_state(key, value, :added)
+        when '-' then stringify_value_with_state(key, value, :deleted)
+        when '~' then stringify_value_with_state(key, value, :changed_strict, diff_data[2])
+        else stringify_value(key, value)
+        end
+      end
+
       def stringify_hash_key_value(key, value)
         # stringify object recursively with deep indent
         case value
         when Array then stringify_hash_key_array(key, value)
         when Hash then stringify_hash_key_hash(key, value)
         else
-          v_str = stringify_single_value(value)
-          "#{head_mark}#{@indent_b}#{coloring(key)}: #{v_str}"
+          if diff_data_includes_key?(key)
+            # dd : Array [ (+|-|~), key, data...]
+            dd = @diff_state['diff_data'].find { |d| d[1] == key }
+            stringify_value_with_diff_data(key, value, dd)
+          else
+            stringify_value(key, value)
+          end
         end
       end
     end

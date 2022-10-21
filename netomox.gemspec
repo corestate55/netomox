@@ -33,6 +33,8 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
+  spec.add_runtime_dependency 'hashdiff', '~> 1.0.1'
+  spec.add_runtime_dependency 'jsonpath', '~> 1.1.2'
   spec.add_runtime_dependency 'neography', '~> 1.8.0'
   spec.add_runtime_dependency 'termcolor', '~> 1.2.2'
   spec.add_runtime_dependency 'thor', '~> 1.2.1'

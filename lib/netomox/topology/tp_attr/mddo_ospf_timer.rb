@@ -5,7 +5,7 @@ require 'netomox/topology/attr_base'
 module Netomox
   module Topology
     # ospf time for MDDO ospf-area term-point attribute
-    class MddoOspfTimer < AttributeBase
+    class MddoOspfTimer < SubAttributeBase
       # @!attribute [rw] hello_interval
       #   @return [Integer]
       # @!attribute [rw] dead_interval
@@ -31,7 +31,7 @@ module Netomox
 
       # @return [String]
       def to_s
-        "Ospf-Timer: hello:#{hello_interval}, dead:#{dead_interval}, retransmission:#{retransmission_interval}"
+        "ospf-timer: hello:#{hello_interval}, dead:#{dead_interval}, retransmission:#{retransmission_interval}"
       end
     end
   end

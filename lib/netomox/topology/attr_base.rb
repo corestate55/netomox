@@ -7,15 +7,13 @@ require 'netomox/topology/attr_table'
 module Netomox
   # RFC8345 Topology data parser
   module Topology
-    # Base class for attribute
-    class AttributeBase
-      # @!attribute [rw] diff_state
-      #   @return [DiffState]
+    # Base of sub-attribute class (doesn't have diff_state)
+    class SubAttributeBase
       # @!attribute [rw] path
       #   @return [String]
       # @!attribute [rw] type
       #   @return [String]
-      attr_accessor :diff_state, :path, :type
+      attr_accessor :path, :type
 
       # @param [Array<Hash>] attr_table Attribute data
       # @param [Hash] data Attribute data (RFC8345 external_key:value)
@@ -24,7 +22,6 @@ module Netomox
         @attr_table = AttributeTable.new(attr_table)
         @keys = @attr_table.int_keys
         @keys_with_empty_check = @attr_table.int_keys_with_empty_check
-        @diff_state = DiffState.new # empty state
         @path = 'attribute' # TODO: dummy for #to_data pair
         @type = type
         setup_members(data)
@@ -84,7 +81,6 @@ module Netomox
           ext_key = @attr_table.ext_of(k)
           data[ext_key] = attr
         end
-        data['_diff_state_'] = @diff_state.to_data unless @diff_state.empty?
         data
       end
 
@@ -117,14 +113,14 @@ module Netomox
       # @param [Array, AttributeBase, Hash] attr An attribute
       # @return [Array<Hash>, Hash] RFC8345 converted data
       def select_child_attr(attr)
-        if attr.is_a?(Array) && attr.all? { |d| d.is_a?(AttributeBase) }
+        if attr.is_a?(Array) && attr.all? { |d| d.is_a?(SubAttributeBase) }
           # for sub-attribute array
           attr.map(&:to_data)
-        elsif attr.is_a?(AttributeBase)
+        elsif attr.is_a?(SubAttributeBase)
           # for single sub-attribute
           attr.to_data
         else
-          # hash or array of literal or hash
+          # literal array or hash
           attr
         end
       end
@@ -141,6 +137,24 @@ module Netomox
           value = data[ext_key] || default
           send("#{int_key}=", value)
         end
+      end
+    end
+
+    # Base class for attribute (have diff_state)
+    class AttributeBase < SubAttributeBase
+      # @!attribute [rw] diff_state
+      #   @return [DiffState]
+      attr_accessor :diff_state
+
+      def initialize(attr_table, data, type)
+        super(attr_table, data, type)
+        @diff_state = DiffState.new # empty state
+      end
+
+      def to_data
+        data = super
+        data['_diff_state_'] = @diff_state.to_data
+        data
       end
     end
   end

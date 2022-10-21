@@ -2,7 +2,6 @@
 
 require 'netomox/topology/attr_base'
 require 'netomox/topology/diffable_forward'
-require 'netomox/topology/sub_attribute_ops'
 require 'netomox/topology/tp_attr/mddo_ospf_timer'
 require 'netomox/topology/tp_attr/mddo_ospf_neighbor'
 
@@ -121,7 +120,6 @@ module Netomox
       ].freeze
 
       include Diffable
-      include SubAttributeOps
 
       # @param [Hash] data Attribute data (RFC8345)
       # @param [String] type Attribute type (keyword of data in RFC8345)
@@ -134,21 +132,6 @@ module Netomox
       # @return [String]
       def to_s
         "attribute: #{@name}"
-      end
-
-      # @param [MddoOspfAreaTPAttribute] other Target to compare
-      # @return [MddoOspfAreaTPAttribute]
-      def diff(other)
-        diff_of(:timer, other)
-        diff_of(:neighbors, other)
-      end
-
-      # Fill diff state
-      # @param [Hash] state_hash
-      # @return [void]
-      def fill(state_hash)
-        fill_of(:timer, state_hash)
-        fill_of(:neighbors, state_hash)
       end
 
       private

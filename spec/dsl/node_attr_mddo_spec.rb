@@ -28,7 +28,7 @@ RSpec.describe 'node dsl', :dsl, :node, :mddo do
     @ospf_attr_key = "#{Netomox::NS_MDDO}:ospf-area-node-attributes"
   end
 
-  it 'generate node that has L21attribute', :attr, :l1attr do
+  it 'generate node that has L1 attribute', :attr, :l1attr do
     node_attr = { os_type: 'JUNOS', flags: %w[foo bar] }
     node = Netomox::DSL::Node.new(@l1nw, 'nodeX') do
       attribute(node_attr)

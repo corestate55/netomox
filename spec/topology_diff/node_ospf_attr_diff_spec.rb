@@ -64,8 +64,8 @@ RSpec.describe 'node diff with ospf-area attribute', :diff, :node, :attr, :ospf_
     d_node = @node_ospf_attr1.diff(@node_ospf_attr1.dup)
     expect(d_node.diff_state.detect).to eq :kept
     expect(d_node.attribute.diff_state.detect).to eq :kept
-    list = d_node.attribute.redistribute_list.map { |d| d.diff_state.detect }
-    expect(list).to eq %i[kept]
+    dd_expected = []
+    expect(d_node.attribute.diff_state.diff_data).to eq dd_expected
   end
 
   context 'diff with no-attribute node' do
@@ -73,16 +73,30 @@ RSpec.describe 'node diff with ospf-area attribute', :diff, :node, :attr, :ospf_
       d_node = @node_ospf_attr_empty.diff(@node_ospf_attr1)
       expect(d_node.diff_state.detect).to eq :changed
       expect(d_node.attribute.diff_state.detect).to eq :added
-      list = d_node.attribute.redistribute_list.map { |d| d.diff_state.detect }
-      expect(list).to eq %i[added]
+      dd_expected = [
+        ['+', '_diff_state_', { backward: nil, forward: :kept, pair: '' }],
+        ['+', 'log-adjacency-change', false],
+        ['+', 'node-type', 'ospf_proc'],
+        ['+', 'redistribute', [{ 'metric-type' => 2, 'protocol' => 'static' }]],
+        ['+', 'router-id', '192.168.0.1'],
+        ['+', 'router-id-source', 'static']
+      ]
+      expect(d_node.attribute.diff_state.diff_data).to eq dd_expected
     end
 
     it 'deleted whole ospf attribute' do
       d_node = @node_ospf_attr1.diff(@node_ospf_attr_empty)
       expect(d_node.diff_state.detect).to eq :changed
       expect(d_node.attribute.diff_state.detect).to eq :deleted
-      list = d_node.attribute.redistribute_list.map { |d| d.diff_state.detect }
-      expect(list).to eq %i[deleted]
+      dd_expected = [
+        ['-', '_diff_state_', { backward: nil, forward: :kept, pair: '' }],
+        ['-', 'log-adjacency-change', false],
+        ['-', 'node-type', 'ospf_proc'],
+        ['-', 'redistribute', [{ 'metric-type' => 2, 'protocol' => 'static' }]],
+        ['-', 'router-id', '192.168.0.1'],
+        ['-', 'router-id-source', 'static']
+      ]
+      expect(d_node.attribute.diff_state.diff_data).to eq dd_expected
     end
   end
 
@@ -91,35 +105,36 @@ RSpec.describe 'node diff with ospf-area attribute', :diff, :node, :attr, :ospf_
       d_node = @node_ospf_attr1.diff(@node_ospf_attr2)
       expect(d_node.diff_state.detect).to eq :changed
       expect(d_node.attribute.diff_state.detect).to eq :changed
-      list = d_node.attribute.redistribute_list.map { |d| d.diff_state.detect }
-      expect(list).to eq %i[kept]
+      dd_expected = [%w[~ router-id 192.168.0.1 192.168.0.2]]
+      expect(d_node.attribute.diff_state.diff_data).to eq dd_expected
     end
 
     it 'changed a sub-attribute' do
       d_node = @node_ospf_attr1.diff(@node_ospf_attr3)
       expect(d_node.diff_state.detect).to eq :changed
       expect(d_node.attribute.diff_state.detect).to eq :changed
-      list = d_node.attribute.redistribute_list.map { |d| d.diff_state.detect }
-      # NOTICE:
-      # redistribute attribute { protocol: static, metric_type:2 } != { protocol: static, metric_type: 1}
-      # so, it will be `added` and `deleted`, not `kept`
-      expect(list).to eq %i[deleted added]
+      dd_expected = [
+        ['-', 'redistribute[0]', { 'protocol' => 'static', 'metric-type' => 2 }],
+        ['+', 'redistribute[0]', { 'protocol' => 'static', 'metric-type' => 1 }]
+      ]
+      expect(d_node.attribute.diff_state.diff_data).to eq dd_expected
     end
 
     it 'added a sub-attribute' do
       d_node = @node_ospf_attr1.diff(@node_ospf_attr4)
       expect(d_node.diff_state.detect).to eq :changed
       expect(d_node.attribute.diff_state.detect).to eq :changed
-      list = d_node.attribute.redistribute_list.map { |d| d.diff_state.detect }
-      expect(list).to eq %i[kept added]
+      dd_expected = [
+        ['+', 'redistribute[1]', { 'protocol' => 'connected', 'metric-type' => 2 }],
+        ['~', 'router-id', '192.168.0.1', '192.168.0.2']
+      ]
+      expect(d_node.attribute.diff_state.diff_data).to eq dd_expected
     end
 
     it 'deleted a sub-attribute' do
       d_node = @node_ospf_attr4.diff(@node_ospf_attr1)
       expect(d_node.diff_state.detect).to eq :changed
       expect(d_node.attribute.diff_state.detect).to eq :changed
-      list = d_node.attribute.redistribute_list.map { |d| d.diff_state.detect }
-      expect(list).to eq %i[kept deleted]
     end
   end
 end

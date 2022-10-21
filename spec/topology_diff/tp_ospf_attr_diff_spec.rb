@@ -62,14 +62,12 @@ RSpec.describe 'termination point diff with ospf attribute', :diff, :tp, :attr, 
     @tp_ospf_attr5 = Netomox::Topology::TermPoint.new(tp_ospf_attr5_def.topo_data, '')
   end
 
-  # rubocop:disable RSpec/MultipleExpectations
   it 'kept ospf attribute' do
     d_tp = @tp_ospf_attr1.diff(@tp_ospf_attr1.dup)
     expect(d_tp.diff_state.detect).to eq :kept
     expect(d_tp.attribute.diff_state.detect).to eq :kept
-    expect(d_tp.attribute.timer.diff_state.detect).to eq :kept
-    list = d_tp.attribute.neighbors.map { |d| d.diff_state.detect }
-    expect(list).to eq %i[kept]
+    dd_expected = []
+    expect(d_tp.attribute.diff_state.diff_data).to eq dd_expected
   end
 
   context 'diff with no-attribute term-point' do
@@ -77,18 +75,32 @@ RSpec.describe 'termination point diff with ospf attribute', :diff, :tp, :attr, 
       d_tp = @tp_ospf_attr_empty.diff(@tp_ospf_attr1)
       expect(d_tp.diff_state.detect).to eq :changed
       expect(d_tp.attribute.diff_state.detect).to eq :added
-      expect(d_tp.attribute.timer.diff_state.detect).to eq :added
-      list = d_tp.attribute.neighbors.map { |d| d.diff_state.detect }
-      expect(list).to eq %i[added]
+      dd_expected = [
+        ['+', '_diff_state_', { forward: :kept, backward: nil, pair: '' }],
+        ['+', 'metric', 1],
+        ['+', 'neighbor', [{ 'router-id' => '192.168.0.1', 'ip-address' => '172.16.0.1' }]],
+        ['+', 'network-type', 'BROADCAST'],
+        ['+', 'passive', false],
+        ['+', 'priority', 10],
+        ['+', 'timer', { 'hello-interval' => 10, 'dead-interval' => 40, 'retransmission-interval' => 5 }]
+      ]
+      expect(d_tp.attribute.diff_state.diff_data).to eq dd_expected
     end
 
     it 'deleted whole ospf attribute' do
       d_tp = @tp_ospf_attr1.diff(@tp_ospf_attr_empty)
       expect(d_tp.diff_state.detect).to eq :changed
       expect(d_tp.attribute.diff_state.detect).to eq :deleted
-      expect(d_tp.attribute.timer.diff_state.detect).to eq :deleted
-      list = d_tp.attribute.neighbors.map { |d| d.diff_state.detect }
-      expect(list).to eq %i[deleted]
+      dd_expected = [
+        ['-', '_diff_state_', { forward: :kept, backward: nil, pair: '' }],
+        ['-', 'metric', 1],
+        ['-', 'neighbor', [{ 'router-id' => '192.168.0.1', 'ip-address' => '172.16.0.1' }]],
+        ['-', 'network-type', 'BROADCAST'],
+        ['-', 'passive', false],
+        ['-', 'priority', 10],
+        ['-', 'timer', { 'hello-interval' => 10, 'dead-interval' => 40, 'retransmission-interval' => 5 }]
+      ]
+      expect(d_tp.attribute.diff_state.diff_data).to eq dd_expected
     end
   end
 
@@ -97,68 +109,56 @@ RSpec.describe 'termination point diff with ospf attribute', :diff, :tp, :attr, 
       d_tp = @tp_ospf_attr1.diff(@tp_ospf_attr2)
       expect(d_tp.diff_state.detect).to eq :changed
       expect(d_tp.attribute.diff_state.detect).to eq :changed
-      expect(d_tp.attribute.timer.diff_state.detect).to eq :kept
-      list = d_tp.attribute.neighbors.map { |d| d.diff_state.detect }
-      expect(list).to eq %i[kept]
+      dd_expected = [%w[~ network-type BROADCAST P2P]]
+      expect(d_tp.attribute.diff_state.diff_data).to eq dd_expected
     end
 
     it 'changed a sub-module, timer' do
       d_tp = @tp_ospf_attr1.diff(@tp_ospf_attr3)
       expect(d_tp.diff_state.detect).to eq :changed
       expect(d_tp.attribute.diff_state.detect).to eq :changed
-      expect(d_tp.attribute.timer.diff_state.detect).to eq :changed
-      list = d_tp.attribute.neighbors.map { |d| d.diff_state.detect }
-      expect(list).to eq %i[kept]
+      dd_expected = [['~', 'timer.hello-interval', 10, 5]]
+      expect(d_tp.attribute.diff_state.diff_data).to eq dd_expected
     end
 
     it 'changed a sub-module, neighbors' do
       d_tp = @tp_ospf_attr1.diff(@tp_ospf_attr4)
       expect(d_tp.diff_state.detect).to eq :changed
       expect(d_tp.attribute.diff_state.detect).to eq :changed
-      expect(d_tp.attribute.timer.diff_state.detect).to eq :kept
-      list = d_tp.attribute.neighbors.map { |d| d.diff_state.detect }
-      # NOTICE:
-      # redistribute attribute attr_neighbor1 != attr_neighbor2
-      # so, it will be `added` and `deleted`, not `kept`
-      expect(list).to eq %i[deleted added]
+      dd_expected = [
+        ['-', 'neighbor[0]', { 'router-id' => '192.168.0.1', 'ip-address' => '172.16.0.1' }],
+        ['+', 'neighbor[0]', { 'router-id' => '192.168.0.2', 'ip-address' => '172.16.0.1' }]
+      ]
+      expect(d_tp.attribute.diff_state.diff_data).to eq dd_expected
     end
 
     it 'added a sub-attribute, neighbors' do
       d_tp = @tp_ospf_attr1.diff(@tp_ospf_attr5)
       expect(d_tp.diff_state.detect).to eq :changed
       expect(d_tp.attribute.diff_state.detect).to eq :changed
-      expect(d_tp.attribute.timer.diff_state.detect).to eq :kept
-      list = d_tp.attribute.neighbors.map { |d| d.diff_state.detect }
-      expect(list).to eq %i[kept added]
+      dd_expected = [['+', 'neighbor[1]', { 'router-id' => '192.168.0.2', 'ip-address' => '172.16.0.1' }]]
+      expect(d_tp.attribute.diff_state.diff_data).to eq dd_expected
     end
 
     it 'deleted a sub-attribute, neighbors' do
       d_tp = @tp_ospf_attr5.diff(@tp_ospf_attr1)
       expect(d_tp.diff_state.detect).to eq :changed
       expect(d_tp.attribute.diff_state.detect).to eq :changed
-      expect(d_tp.attribute.timer.diff_state.detect).to eq :kept
-      list = d_tp.attribute.neighbors.map { |d| d.diff_state.detect }
-      expect(list).to eq %i[kept deleted]
+      dd_expected = [['-', 'neighbor[1]', { 'router-id' => '192.168.0.2', 'ip-address' => '172.16.0.1' }]]
+      expect(d_tp.attribute.diff_state.diff_data).to eq dd_expected
     end
 
     it 'can convert to data, timer' do
       d_tp = @tp_ospf_attr1.diff(@tp_ospf_attr3)
       data = {
-        '_diff_state_' => { forward: :changed, backward: nil, pair: 'attribute' },
-        'network-type' => 'BROADCAST', 'priority' => 10, 'metric' => 1, 'passive' => false,
-        'timer' => {
-          '_diff_state_' => { forward: :changed, backward: nil, pair: '' },
-          'hello-interval' => 5, 'dead-interval' => 40, 'retransmission-interval' => 5
+        '_diff_state_' => {
+          forward: :changed, backward: nil, pair: 'attribute', diff_data: [['~', 'timer.hello-interval', 10, 5]]
         },
-        'neighbor' => [
-          {
-            '_diff_state_' => { forward: :kept, backward: nil, pair: 'attribute' },
-            'router-id' => '192.168.0.1', 'ip-address' => '172.16.0.1'
-          }
-        ]
+        'network-type' => 'BROADCAST', 'priority' => 10, 'metric' => 1, 'passive' => false,
+        'timer' => { 'hello-interval' => 5, 'dead-interval' => 40, 'retransmission-interval' => 5 },
+        'neighbor' => [{ 'router-id' => '192.168.0.1', 'ip-address' => '172.16.0.1' }]
       }
       expect(d_tp.attribute.to_data).to eq data
     end
   end
-  # rubocop:enable RSpec/MultipleExpectations
 end

@@ -5,7 +5,7 @@ require 'netomox/topology/attr_base'
 module Netomox
   module Topology
     # Port VLAN ID & Name, for L2 attribute
-    class L2VlanIdName < AttributeBase
+    class L2VlanIdName < SubAttributeBase
       # @!attribute [rw] id
       #   @return [Integer]
       # @!attribute [rw] name

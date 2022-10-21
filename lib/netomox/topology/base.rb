@@ -98,7 +98,8 @@ module Netomox
         @diff_state = DiffState.new(
           forward: data[ds_key]['forward']&.intern,
           backward: data[ds_key]['backward']&.intern,
-          pair: data[ds_key]['pair']
+          pair: data[ds_key]['pair'],
+          diff_data: data[ds_key]['diff_data'] || nil
         )
       end
 

@@ -5,7 +5,7 @@ require 'netomox/topology/attr_base'
 module Netomox
   module Topology
     # L3 prefix for L3 attribute
-    class MddoL3StaticRoute < AttributeBase
+    class MddoL3StaticRoute < SubAttributeBase
       # @!attribute [rw] prefix
       #   @return [String] IP address/prefix-length
       # @!attribute [rw] next_hop

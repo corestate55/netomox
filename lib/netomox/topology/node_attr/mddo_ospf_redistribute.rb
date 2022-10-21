@@ -5,7 +5,7 @@ require 'netomox/topology/attr_base'
 module Netomox
   module Topology
     # Redistribute config for MDDO ospf-area node attribute
-    class MddoOspfRedistribute < AttributeBase
+    class MddoOspfRedistribute < SubAttributeBase
       # @!attribute [rw] protocol
       #   @return [String]
       #   @todo enum (static, connected)

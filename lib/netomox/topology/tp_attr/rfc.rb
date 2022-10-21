@@ -2,7 +2,6 @@
 
 require 'netomox/topology/attr_base'
 require 'netomox/topology/diffable_forward'
-require 'netomox/topology/sub_attribute_ops'
 require 'netomox/topology/tp_attr/rfc_vlan_id_name'
 
 module Netomox
@@ -38,7 +37,6 @@ module Netomox
       ].freeze
 
       include Diffable
-      include SubAttributeOps
 
       # @param [Hash] data Attribute data (RFC8345)
       # @param [String] type Attribute type (keyword of data in RFC8345)
@@ -50,19 +48,6 @@ module Netomox
       # @return [String]
       def to_s
         "attribute: #{@descr}" # TODO
-      end
-
-      # @param [L2TPAttribute] other Target to compare
-      # @return [L2TPAttribute]
-      def diff(other)
-        diff_of(:vlan_id_names, other)
-      end
-
-      # Fill diff state
-      # @param [Hash] state_hash
-      # @return [L2TPAttribute]
-      def fill(state_hash)
-        fill_of(:vlan_id_names, state_hash)
       end
 
       private

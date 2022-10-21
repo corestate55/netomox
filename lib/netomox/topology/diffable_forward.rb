@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'netomox/topology/diff_state'
+require 'hashdiff'
 
 module Netomox
   module Topology
@@ -22,17 +23,9 @@ module Netomox
       def diff_attribute(other)
         # receiver of this method will be (a), other will be (b)
         # NOTICE: (a)(b) can use NULL attribute
-        result, d_attr = compare_attribute(@attribute, other.attribute)
-        arg = { forward: result, pair: @attribute }
+        result, d_attr, diff_data = compare_attribute(@attribute, other.attribute)
+        arg = { forward: result, pair: @attribute, diff_data: diff_data }
         set_diff_state(d_attr, **arg)
-
-        # update diff_state in sub-class of attribute
-        case result
-        when :changed
-          d_attr = @attribute.diff(other.attribute) if @attribute.diff?
-        when :added, :deleted
-          d_attr.fill(arg) if d_attr.fill?
-        end
         d_attr
       end
 
@@ -89,6 +82,8 @@ module Netomox
         end
       end
 
+      # rubocop:disable Metrics/AbcSize
+
       # @param [Symbol] attr Attribute of object to compare
       # @param [TopoObjectBase, AttributeBase] other Target object to compare
       # @return [Array<TopoObjectBase, AttributeBase>] Objects of specified attribute (added DiffState)
@@ -103,10 +98,12 @@ module Netomox
           next if send(attr).find { |l| rhs == l }
 
           # rhs only in other -> added
-          results.push(set_diff_state(rhs, forward: :added))
+          diff_data = rhs.is_a?(AttributeBase) ? Hashdiff.diff({}, rhs) : []
+          results.push(set_diff_state(rhs, forward: :added, diff_data: diff_data))
         end
         results
       end
+      # rubocop:enable Metrics/AbcSize
 
       # @param [Symbol] attr Attribute of object to compare
       # @param [TopoObjectBase, AttributeBase] other Target object to compare
@@ -114,8 +111,8 @@ module Netomox
       def diff_hash(attr, other)
         lhs = send(attr)
         rhs = other.send(attr)
-        result, d_attr = compare_attribute(lhs, rhs)
-        set_diff_state(d_attr, forward: result, pair: lhs)
+        result, d_attr, diff_data = compare_attribute(lhs, rhs)
+        set_diff_state(d_attr, forward: result, pair: lhs, diff_data: diff_data)
         d_attr
       end
 
@@ -124,12 +121,15 @@ module Netomox
       # @param [TopoObjectBase, AttributeBase] rhs right-hand-side object
       # @return [TopoObjectBase, AttributeBase]
       def select_diff_list(lhs, rhs)
+        diff_data = []
         if rhs
           # lhs found in rhs -> kept
-          set_diff_state(rhs, forward: :kept, pair: lhs)
+          diff_data = Hashdiff.diff(lhs.to_data, rhs.to_data) if lhs.is_a?(AttributeBase) && rhs.is_a?(AttributeBase)
+          set_diff_state(rhs, forward: :kept, pair: lhs, diff_data: diff_data)
         else
           # lhs only in self -> deleted
-          set_diff_state(lhs, forward: :deleted)
+          diff_data = Hashdiff.diff(lhs.to_data, {}) if lhs.is_a?(AttributeBase)
+          set_diff_state(lhs, forward: :deleted, diff_data: diff_data)
         end
       end
 
@@ -142,21 +142,25 @@ module Netomox
         rlhs
       end
 
+      # rubocop:disable Metrics/AbcSize
+
       # @param [AttributeBase] lhs
       # @param [AttributeBase] rhs
-      # @return [Array<(Symbol, AttributeBase)>]
+      # @return [Array<(Symbol, AttributeBase, Array)>] [result-key, object, hash-diff]
       def compare_attribute(lhs, rhs)
         # NOTICE: attribute (lhs and/or rhs) allowed be empty.
-        if lhs == rhs
-          [:kept, rhs]
-        elsif lhs.empty? && !rhs.empty?
-          [:added, rhs]
+        if lhs.empty? && !rhs.empty?
+          [:added, rhs, Hashdiff.diff({}, rhs.to_data)]
         elsif !lhs.empty? && rhs.empty?
-          [:deleted, lhs]
+          [:deleted, lhs, Hashdiff.diff(lhs.to_data, {})]
+        elsif Hashdiff.diff(lhs.to_data, rhs.to_data).empty?
+          # lhs & rhs are both empty or both exists
+          [:kept, rhs, []]
         else
-          [:changed, rhs]
+          [:changed, rhs, Hashdiff.diff(lhs.to_data, rhs.to_data)]
         end
       end
+      # rubocop:enable Metrics/AbcSize
     end
   end
 end

@@ -56,8 +56,8 @@ RSpec.describe 'termination point diff with L2 attribute', :diff, :tp, :attr, :l
     d_tp = @tp_l2attr.diff(@tp_l2attr.dup)
     expect(d_tp.diff_state.detect).to eq :kept
     expect(d_tp.attribute.diff_state.detect).to eq :kept
-    list = d_tp.attribute.vlan_id_names.map { |d| d.diff_state.detect }
-    expect(list.sort).to eq %i[kept kept]
+    dd_expected = []
+    expect(d_tp.attribute.diff_state.diff_data).to eq dd_expected
   end
 
   context 'diff with no-attribute tp' do
@@ -65,16 +65,40 @@ RSpec.describe 'termination point diff with L2 attribute', :diff, :tp, :attr, :l
       d_tp = @tp_l2attr0.diff(@tp_l2attr)
       expect(d_tp.diff_state.detect).to eq :changed
       expect(d_tp.attribute.diff_state.detect).to eq :added
-      list = d_tp.attribute.vlan_id_names.map { |d| d.diff_state.detect }
-      expect(list.sort).to eq %i[added added]
+      dd_expected = [
+        ['+', '_diff_state_', { forward: :kept, backward: nil, pair: '' }],
+        ['+', 'description', ''],
+        ['+', 'eth-encapsulation', ''],
+        ['+', 'mac-address', ''],
+        ['+', 'maximum-frame-size', 1500],
+        ['+', 'port-vlan-id', 10],
+        ['+', 'tp-state', 'in-use'],
+        ['+', 'vlan-id-name', [
+          { 'vlan-id' => 10, 'vlan-name' => 'Seg.A' },
+          { 'vlan-id' => 20, 'vlan-name' => 'Seg.B' }
+        ]]
+      ]
+      expect(d_tp.attribute.diff_state.diff_data).to eq dd_expected
     end
 
     it 'deleted whole L2 attribute' do
       d_tp = @tp_l2attr.diff(@tp_l2attr0)
       expect(d_tp.diff_state.detect).to eq :changed
       expect(d_tp.attribute.diff_state.detect).to eq :deleted
-      list = d_tp.attribute.vlan_id_names.map { |d| d.diff_state.detect }
-      expect(list.sort).to eq %i[deleted deleted]
+      dd_expected = [
+        ['-', '_diff_state_', { forward: :kept, backward: nil, pair: '' }],
+        ['-', 'description', ''],
+        ['-', 'eth-encapsulation', ''],
+        ['-', 'mac-address', ''],
+        ['-', 'maximum-frame-size', 1500],
+        ['-', 'port-vlan-id', 10],
+        ['-', 'tp-state', 'in-use'],
+        ['-', 'vlan-id-name', [
+          { 'vlan-id' => 10, 'vlan-name' => 'Seg.A' },
+          { 'vlan-id' => 20, 'vlan-name' => 'Seg.B' }
+        ]]
+      ]
+      expect(d_tp.attribute.diff_state.diff_data).to eq dd_expected
     end
   end
 
@@ -83,24 +107,27 @@ RSpec.describe 'termination point diff with L2 attribute', :diff, :tp, :attr, :l
       d_tp = @tp_l2attr.diff(@tp_l2attr_added)
       expect(d_tp.diff_state.detect).to eq :changed
       expect(d_tp.attribute.diff_state.detect).to eq :changed
-      list = d_tp.attribute.vlan_id_names.map { |d| d.diff_state.detect }
-      expect(list.sort).to eq %i[added kept kept]
+      dd_expected = [['+', 'vlan-id-name[1]', { 'vlan-id' => 11, 'vlan-name' => 'Seg.A' }]]
+      expect(d_tp.attribute.diff_state.diff_data).to eq dd_expected
     end
 
     it 'deleted vlan_id_names' do
       d_tp = @tp_l2attr.diff(@tp_l2attr_deleted)
       expect(d_tp.diff_state.detect).to eq :changed
       expect(d_tp.attribute.diff_state.detect).to eq :changed
-      list = d_tp.attribute.vlan_id_names.map { |d| d.diff_state.detect }
-      expect(list.sort).to eq %i[deleted kept]
+      dd_expected = [['-', 'vlan-id-name[1]', { 'vlan-id' => 20, 'vlan-name' => 'Seg.B' }]]
+      expect(d_tp.attribute.diff_state.diff_data).to eq dd_expected
     end
 
     it 'changed vlan_id_names' do
       d_tp = @tp_l2attr.diff(@tp_l2attr_changed)
       expect(d_tp.diff_state.detect).to eq :changed
       expect(d_tp.attribute.diff_state.detect).to eq :changed
-      list = d_tp.attribute.vlan_id_names.map { |d| d.diff_state.detect }
-      expect(list.sort).to eq %i[added deleted kept]
+      dd_expected = [
+        ['-', 'vlan-id-name[0]', { 'vlan-id' => 10, 'vlan-name' => 'Seg.A' }],
+        ['+', 'vlan-id-name[0]', { 'vlan-id' => 11, 'vlan-name' => 'Seg.A' }]
+      ]
+      expect(d_tp.attribute.diff_state.diff_data).to eq dd_expected
     end
   end
 end

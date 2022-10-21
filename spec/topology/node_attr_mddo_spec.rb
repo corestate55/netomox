@@ -71,16 +71,16 @@ RSpec.describe 'check node attribute with RFC' do
       '_diff_state_' => @default_diff_state,
       'node-type' => 'node',
       'prefix' => [
-        { '_diff_state_' => @default_diff_state, 'prefix' => '192.168.0.0/24', 'metric' => 1, 'flag' => 'test' },
-        { '_diff_state_' => @default_diff_state, 'prefix' => '192.168.1.0/24', 'metric' => 10, 'flag' => %w[foo bar] }
+        { 'prefix' => '192.168.0.0/24', 'metric' => 1, 'flag' => 'test' },
+        { 'prefix' => '192.168.1.0/24', 'metric' => 10, 'flag' => %w[foo bar] }
       ],
       'static-route' => [
         {
-          '_diff_state_' => @default_diff_state, 'prefix' => '172.16.1.0/24', 'next-hop' => '10.0.0.1',
+          'prefix' => '172.16.1.0/24', 'next-hop' => '10.0.0.1',
           'metric' => 1, 'interface' => '', 'preference' => 1, 'description' => ''
         },
         {
-          '_diff_state_' => @default_diff_state, 'prefix' => '172.16.2.0/24', 'next-hop' => '10.0.1.0',
+          'prefix' => '172.16.2.0/24', 'next-hop' => '10.0.1.0',
           'metric' => 10, 'interface' => '', 'preference' => 1, 'description' => 'test'
         }
       ]

@@ -81,20 +81,6 @@ module Netomox
         @static_routes = convert_static_routes(data)
       end
 
-      # @param [MddoL3NodeAttribute] other target to compare
-      # @return [MddoL3NodeAttribute]
-      def diff(other)
-        super(other)
-        diff_of(:static_routes, other)
-      end
-
-      # @param [Hash] state_hash
-      # @return [void]
-      def fill(state_hash)
-        super(state_hash)
-        fill_of(:static_routes, state_hash)
-      end
-
       private
 
       # @param [Hash] data Attribute data (RFC8345)
@@ -131,7 +117,6 @@ module Netomox
       ].freeze
 
       include Diffable
-      include SubAttributeOps
 
       # @param [Hash] data Attribute data (RFC8345)
       # @param [String] type Attribute type (keyword of data in RFC8345)
@@ -143,19 +128,6 @@ module Netomox
       # @return [String]
       def to_s
         "attribute: #{@name}"
-      end
-
-      # @param [MddoOspfAreaNodeAttribute] other Target to compare
-      # @return [MddoOspfAreaNodeAttribute]
-      def diff(other)
-        diff_of(:redistribute_list, other)
-      end
-
-      # Fill diff state
-      # @param [Hash] state_hash
-      # @return [void]
-      def fill(state_hash)
-        fill_of(:redistribute_list, state_hash)
       end
 
       private
