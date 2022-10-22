@@ -32,9 +32,13 @@ module Netomox
 
       # @return [Boolean]
       def empty?
-        mark = @type == '_empty_attr_'
-        mark || @keys_with_empty_check.inject(true) do |m, k|
-          m && send(k).send(@attr_table.check_of(k))
+        return true if @type == '_empty_attr_'
+        return false if @keys_with_empty_check.empty?
+
+        @keys_with_empty_check.all? do |k|
+          # send(k) -> attribute value
+          # @attr_table.check_of(k) -> method name to check empty/zero
+          send(k).send(@attr_table.check_of(k))
         end
       end
 

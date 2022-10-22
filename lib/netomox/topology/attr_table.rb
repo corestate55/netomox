@@ -21,8 +21,8 @@ module Netomox
       # @return [Symbol, FalseClass] empty check method (false to ignore empty-checking)
       def select_empty_check_method
         case @default
-        when [], '' then :empty?
-        when 0 then :zero?
+        when Array, Hash, String then :empty?
+        when Integer then :zero?
         else false # ignore empty check
         end
       end
@@ -36,8 +36,7 @@ module Netomox
         #   {
         #     int: :AttributeBase_member_name,
         #     ext: 'JSON-key-name',
-        #     default: default_value,
-        #     check: :empty_check_method_symbol (:empty? :zero? or false)
+        #     default: default_value
         #   },
         #   ....
         # ]
