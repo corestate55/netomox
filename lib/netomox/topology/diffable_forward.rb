@@ -98,7 +98,7 @@ module Netomox
           next if send(attr).find { |l| rhs == l }
 
           # rhs only in other -> added
-          diff_data = rhs.is_a?(AttributeBase) ? Hashdiff.diff({}, rhs) : []
+          diff_data = rhs.is_a?(AttributeBase) ? Hashdiff.diff({}, rhs.to_data) : []
           results.push(set_diff_state(rhs, forward: :added, diff_data: diff_data))
         end
         results
