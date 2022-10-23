@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'netomox/diff_view/const'
+require 'netomox/diff_view/viewer_diff_state'
+
 module Netomox
   module DiffView
     # Topology diff data viewer (Utility functions)
@@ -10,7 +13,8 @@ module Netomox
                 else data
                 end
         # @diff_state is used to decide text color, set at first
-        @diff_state = exist_diff_state? ? @data['_diff_state_'] : {}
+        @diff_state = nil
+        @diff_state = ViewerDiffState.new(@data[K_DS]) if @data.is_a?(Hash) && @data.key?(K_DS)
         @indent_a = indent
         @indent_b = "#{indent}  " # 2-space indent
         @print_all = print_all
@@ -23,44 +27,23 @@ module Netomox
         "#{c_begin}#{str}#{c_end}"
       end
 
-      def detect_state
-        if @diff_state['forward'] == 'added'
-          :added
-        elsif @diff_state['forward'] == 'deleted'
-          :deleted
-        elsif [@diff_state['forward'], @diff_state['backward']].include?('changed') || @diff_state.empty?
-          # TODO: ok? if @diff_state.empty? is true case
-          :changed
-        else
-          :kept
-        end
-      end
-
       def head_mark(state = nil)
-        d_state = state.nil? ? detect_state : state
+        d_state = state.nil? ? @diff_state&.detect_state : state
         mark = case d_state
-               when :added then '+'
-               when :deleted then '-'
-               when :changed then '.'
-               when :changed_strict then '~'
+               when :added then H_ADD
+               when :deleted then H_DEL
+               when :changed then H_CHG
+               when :changed_strict then H_CHG_S
                else ' '
                end
         coloring(mark, d_state)
       end
 
       def pass_kept?
-        !@print_all && detect_state == :kept
+        !@print_all && @diff_state&.detect_state == :kept
       end
 
       private
-
-      def exist_diff_state?
-        @data.is_a?(Hash) && @data.key?('_diff_state_') && !@data['_diff_state_'].empty?
-      end
-
-      def exist_diff_data?
-        exist_diff_state? && @diff_state.key?('diff_data') && !@diff_state['diff_data'].empty?
-      end
 
       def delete_color_code(str)
         # delete all color tags
@@ -109,7 +92,7 @@ module Netomox
       end
 
       def color_by_diff_state
-        color_table(detect_state)
+        color_table(@diff_state&.detect_state)
       end
 
       def color_tags(state = nil)
