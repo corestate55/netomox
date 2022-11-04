@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe 'networks diff (network list)', :diff, :networks, :network do
+RSpec.describe 'networks diff (network list)', :diff, :network, :networks do
   context 'when network literal attribute changed' do
     before do
       nws_nw0_def = Netomox::DSL::Networks.new

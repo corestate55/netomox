@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe 'termination point diff with L2 attribute', :diff, :tp, :attr, :l2attr do
+RSpec.describe 'termination point diff with L2 attribute', :attr, :diff, :l2attr, :tp do
   before do
     vlan_a = { id: 10, name: 'Seg.A' }
     vlan_b = { id: 20, name: 'Seg.B' }

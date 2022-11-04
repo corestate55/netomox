@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe 'termination point diff with ospf attribute', :diff, :tp, :attr, :ospf_attr do
+RSpec.describe 'termination point diff with ospf attribute', :attr, :diff, :ospf_attr, :tp do
   before do
     parent = lambda do |name|
       nws = Netomox::DSL::Networks.new do

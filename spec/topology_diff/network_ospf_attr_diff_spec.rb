@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe 'network diff with ospf-area attribute', :diff, :network, :attr, :ospf_attr do
+RSpec.describe 'network diff with ospf-area attribute', :attr, :diff, :network, :ospf_attr do
   before do
     parent = -> { Netomox::DSL::Networks.new }
     nw_ospf_attr_empty_def = Netomox::DSL::Network.new(parent.call, 'ospf') do

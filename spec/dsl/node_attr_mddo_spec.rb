@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe 'node dsl', :dsl, :node, :mddo do
+RSpec.describe 'node dsl', :dsl, :mddo, :node do
   before do
     nws = Netomox::DSL::Networks.new do
       network 'test-L1' do

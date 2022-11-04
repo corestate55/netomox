@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe 'node diff with L2 attribute', :diff, :node, :attr, :l2attr do
+RSpec.describe 'node diff with L2 attribute', :attr, :diff, :l2attr, :node do
   before do
     addrs = %w[192.168.0.1 192.168.1.1]
     addrs_added = %w[192.168.0.1 192.168.1.1 192.168.2.1]

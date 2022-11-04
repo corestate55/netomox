@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe 'node diff with ospf-area attribute', :diff, :node, :attr, :ospf_attr do
+RSpec.describe 'node diff with ospf-area attribute', :attr, :diff, :node, :ospf_attr do
   before do
     parent = lambda do |name|
       nws = Netomox::DSL::Networks.new

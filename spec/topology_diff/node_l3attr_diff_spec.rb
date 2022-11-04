@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe 'node diff with L3 attribute', :diff, :node, :attr, :l3attr do
+RSpec.describe 'node diff with L3 attribute', :attr, :diff, :l3attr, :node do
   before do
     seg_a_prefix = { prefix: '192.168.10.0/24', metric: 100 }
     seg_a2_prefix = { prefix: '192.168.10.0/24', metric: 50 }
