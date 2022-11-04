@@ -245,7 +245,7 @@ module Netomox
       # @param [String] array_str Stringified array
       # @return [Symbol] state
       def hash_key_array_color(array_str)
-        case @diff_state.forward
+        case @diff_state&.forward
         when :added, :deleted
           # if determined when forward check (filled)
           @diff_state.forward
