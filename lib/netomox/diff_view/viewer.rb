@@ -118,7 +118,7 @@ module Netomox
       end
 
       # @return [void]
-      def relocation_diff_data
+      def relocate_diff_data
         self_dd_list = []
         dd_paths = @diff_state.dd_paths.uniq
         dd_paths.each do |dd_path|
@@ -151,7 +151,7 @@ module Netomox
         when Array
           stringify_array
         when Hash
-          relocation_diff_data if @diff_state&.exist_diff_data?
+          relocate_diff_data if @diff_state&.exist_diff_data?
           stringify_hash
         else
           raise StandardError 'Data is literal (single value)?'
@@ -289,9 +289,12 @@ module Netomox
       # @param [Object] orig_value
       # @return [String]
       def stringify_value_with_state(key, value, state, orig_value = nil)
-        v_str = stringify_single_value(value, state)
-        # append old value if :changed_strict
-        v_str += coloring(" ~#{orig_value}", state) if state == :changed_strict && !orig_value.nil?
+        v_str = if state == :changed_strict && !orig_value.nil?
+                  # append old value if :changed_strict
+                  stringify_single_value(value, :added) + coloring(" ~#{orig_value}", :deleted)
+                else
+                  stringify_single_value(value, state)
+                end
         "#{head_mark(state)}#{@indent_b}#{coloring(key, state)}: #{v_str}"
       end
 
