@@ -129,12 +129,14 @@ module Netomox
       #   @return [String]
       # @!attribute [rw] router_id
       #   @return [String]
+      # @!attribute [rw] process_id
+      #   @return [String]
       #   @note dotted-quad string
       # @!attribute [rw] log_adjacency_change
       #   @return [Boolean]
       # @!attribute [rw] redistribute_list
       #   @return [Array<MddoOspfRedistribute>]
-      attr_accessor :node_type, :router_id, :log_adjacency_change, :redistribute_list
+      attr_accessor :node_type, :router_id, :process_id, :log_adjacency_change, :redistribute_list
       # @!attribute [r] type
       #   @return [String]
       #   @todo enum (:static, :auto)
@@ -146,10 +148,11 @@ module Netomox
       # @param [String] router_id
       # @param [Boolean] log_adjacency_change
       # @param [Array<Hash>] redistribute
-      def initialize(node_type: '', router_id: '', log_adjacency_change: false, redistribute: [])
+      def initialize(node_type: '', router_id: '', process_id: 'default', log_adjacency_change: false, redistribute: [])
         @node_type = node_type
         @router_id_source = router_id.empty? ? :auto : :static
         @router_id = router_id # TODO: router id selection
+        @process_id = process_id
         @log_adjacency_change = log_adjacency_change
         @redistribute_list = redistribute.map { |r| MddoOspfRedistribute.new(**r) }
         @type = "#{NS_MDDO}:ospf-area-node-attributes"
@@ -161,6 +164,7 @@ module Netomox
         {
           'node-type' => @node_type,
           'router-id' => @router_id,
+          'process-id' => @process_id,
           'router-id-source' => @router_id_source.to_s,
           'log-adjacency-change' => @log_adjacency_change,
           'redistribute' => @redistribute_list.map(&:topo_data)

@@ -106,6 +106,7 @@ RSpec.describe 'node dsl', :dsl, :mddo, :node do
     node_attr = {
       node_type: 'ospf_proc',
       router_id: '192.0.0.1',
+      process_id: '1',
       log_adjacency_change: true,
       redistribute: [
         { protocol: 'static', metric_type: 1 },
@@ -122,6 +123,7 @@ RSpec.describe 'node dsl', :dsl, :mddo, :node do
         'node-type' => 'ospf_proc',
         'router-id' => '192.0.0.1',
         'router-id-source' => 'static',
+        'process-id' => '1',
         'log-adjacency-change' => true,
         'redistribute' => [
           { 'protocol' => 'static', 'metric-type' => 1 },

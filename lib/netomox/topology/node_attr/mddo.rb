@@ -98,6 +98,8 @@ module Netomox
       # @!attribute [rw] router_id
       #   @return [String]
       #   @note dotted-quad string
+      # @!attribute [rw] process_id
+      #   @return [String]
       # @!attribute [rw] log_adjacency_change
       #   @return [Boolean]
       # @!attribute [rw] redistribute_list
@@ -105,12 +107,13 @@ module Netomox
       # @!attribute [r] router_id_source
       #   @return [Symbol]
       #   @todo enum (:static, :auto)
-      attr_accessor :node_type, :router_id, :log_adjacency_change, :redistribute_list, :router_id_source
+      attr_accessor :node_type, :router_id, :process_id, :log_adjacency_change, :redistribute_list, :router_id_source
 
       # Attribute definition of ospf-area node
       ATTR_DEFS = [
         { int: :node_type, ext: 'node-type', default: '' },
         { int: :router_id, ext: 'router-id', default: '' },
+        { int: :process_id, ext: 'process-id', default: 'default' },
         { int: :log_adjacency_change, ext: 'log-adjacency-change', default: false },
         { int: :redistribute_list, ext: 'redistribute', default: [] },
         { int: :router_id_source, ext: 'router-id-source', default: 'dynamic' }

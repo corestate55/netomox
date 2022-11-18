@@ -77,6 +77,7 @@ RSpec.describe 'node diff with ospf-area attribute', :attr, :diff, :node, :ospf_
         ['+', '_diff_state_', { backward: nil, forward: :kept, pair: '' }],
         ['+', 'log-adjacency-change', false],
         ['+', 'node-type', 'ospf_proc'],
+        ['+', 'process-id', 'default'],
         ['+', 'redistribute', [{ 'metric-type' => 2, 'protocol' => 'static' }]],
         ['+', 'router-id', '192.168.0.1'],
         ['+', 'router-id-source', 'static']
@@ -92,6 +93,7 @@ RSpec.describe 'node diff with ospf-area attribute', :attr, :diff, :node, :ospf_
         ['-', '_diff_state_', { backward: nil, forward: :kept, pair: '' }],
         ['-', 'log-adjacency-change', false],
         ['-', 'node-type', 'ospf_proc'],
+        ['-', 'process-id', 'default'],
         ['-', 'redistribute', [{ 'metric-type' => 2, 'protocol' => 'static' }]],
         ['-', 'router-id', '192.168.0.1'],
         ['-', 'router-id-source', 'static']
