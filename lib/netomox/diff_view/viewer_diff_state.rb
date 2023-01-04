@@ -48,6 +48,11 @@ module Netomox
       end
 
       # @return [void]
+      def rewrite_path_to_dot!
+        @path = '.'
+      end
+
+      # @return [void]
       def rewrite_path_to_child!
         list = path_elements
         # discard head element

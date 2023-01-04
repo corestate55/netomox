@@ -117,6 +117,8 @@ module Netomox
         JsonPath.new(jsonpath).on(@data)[0]
       end
 
+      # rubocop:disable Metrics/AbcSize
+
       # @return [void]
       def relocate_diff_data
         self_dd_list = []
@@ -140,10 +142,15 @@ module Netomox
           # relocate diff-data to child-attribute and discard it for self
           # (move the diff-data to jsonpath-specified object)
           dd_list.each(&:rewrite_path_to_child!)
+          # for Array<Hash> diff:
+          # e.g. prefix: [{x:foo,...}, {x:bar,...}], dd=['+', prefix[1], {x:bar,...}]
+          dd_list[0].rewrite_path_to_dot! if dd_path_elements[0] =~ /^\w+\[\d+\]$/ && child_data == dd_list[0].dd_after
+          # copy diff-data to child object
           copy_diff_state(child_data, dd_list)
         end
         @diff_state.diff_data = self_dd_list
       end
+      # rubocop:enable Metrics/AbcSize
 
       # @return [Array<String>]
       def stringify_data
