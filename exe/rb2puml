@@ -78,7 +78,7 @@ class RB2Puml
   attr_reader :kls_table
 
   def initialize(dir, simple)
-    @target_files = Dir.glob("#{dir}/*.rb")
+    @target_files = Dir.glob("#{dir}/**/*.rb")
     @simple = simple || false
     @kls_table = {}
     @modules = []

@@ -44,8 +44,12 @@ module Netomox
       end
 
       # Convert to data for RFC8345 format
+      # @param [Symbol] direction (:source or :destination)
       # @return [Hash]
       def to_data(direction)
+        # direction: 'destination' is different internal-key and external-key,
+        # convert internal-key (destination) to external-key (dest)
+        direction = 'dest' if direction == :destination
         {
           "#{direction}-node" => @node_ref,
           "#{direction}-tp" => @tp_ref,

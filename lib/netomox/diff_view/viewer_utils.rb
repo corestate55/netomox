@@ -1,17 +1,20 @@
 # frozen_string_literal: true
 
+require 'netomox/diff_view/const'
+require 'netomox/diff_view/viewer_diff_state'
+
 module Netomox
   module DiffView
     # Topology diff data viewer (Utility functions)
     class Viewer
-      attr_accessor :print_all
-
       def initialize(data:, indent: ' ', print_all: true, color: true)
         @data = case data
                 when String then JSON.parse(data)
                 else data
                 end
-        @diff_state = {}
+        # @diff_state is used to decide text color, set at first
+        @diff_state = nil
+        @diff_state = ViewerDiffState.new(@data[K_DS]) if @data.is_a?(Hash) && @data.key?(K_DS)
         @indent_a = indent
         @indent_b = "#{indent}  " # 2-space indent
         @print_all = print_all
@@ -24,32 +27,20 @@ module Netomox
         "#{c_begin}#{str}#{c_end}"
       end
 
-      def detect_state
-        if @diff_state['forward'] == 'added'
-          :added
-        elsif @diff_state['forward'] == 'deleted'
-          :deleted
-        elsif [@diff_state['forward'], @diff_state['backward']].include?('changed') || @diff_state.empty?
-          # TODO: ok? if @diff_state.empty? is true case
-          :changed
-        else
-          :kept
-        end
-      end
-
       def head_mark(state = nil)
-        d_state = state.nil? ? detect_state : state
+        d_state = state.nil? ? @diff_state&.detect_state : state
         mark = case d_state
-               when :added then '+'
-               when :deleted then '-'
-               when :changed then '.'
+               when :added then H_ADD
+               when :deleted then H_DEL
+               when :changed then H_CHG
+               when :changed_strict then H_CHG_S
                else ' '
                end
         coloring(mark, d_state)
       end
 
       def pass_kept?
-        !@print_all && detect_state == :kept
+        !@print_all && @diff_state&.detect_state == :kept
       end
 
       private
@@ -67,7 +58,7 @@ module Netomox
         # clean over-wrapped hash key - hash/array bracket
         str.gsub!(%r{: <\w+>[.\-+]</\w+>}, ': ')
         str.gsub!(/: (<\w+>)\s+/, ': \1') # with tag
-        str.gsub!(/:\s+/, ': ') # without tag
+        str.gsub!(/: [.\-+]?\s+/, ': ') # without tag
         # convert color tag to shell color code
         str.termcolor
       end
@@ -95,13 +86,13 @@ module Netomox
         case state
         when :added then :green
         when :deleted then :red
-        when :changed then :yellow
-        else '' # no color
+        when :changed_strict then :yellow
+        else '' # no color (including when :changed)
         end
       end
 
       def color_by_diff_state
-        color_table(detect_state)
+        color_table(@diff_state&.detect_state)
       end
 
       def color_tags(state = nil)

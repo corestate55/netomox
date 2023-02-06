@@ -4,15 +4,16 @@ module Netomox
   module Topology
     # Diff state container
     class DiffState
-      attr_accessor :forward, :backward, :pair
+      attr_accessor :forward, :backward, :pair, :diff_data
 
       # @param [Symbol] forward Diff state in forward-check
       # @param [Symbol] backward Diff state in backward-check
       # @param [TopoObjectBase] pair Counter-part object to compare
-      def initialize(forward: :kept, backward: nil, pair: nil)
+      def initialize(forward: :kept, backward: nil, pair: nil, diff_data: nil)
         @forward = forward
         @backward = backward
         @pair = pair
+        @diff_data = diff_data
       end
 
       # @return [Symbol] Diff state (:added, :deleted, :kept, :changed)
@@ -37,11 +38,18 @@ module Netomox
       # Convert to data for RFC8345 format
       # @return [Hash]
       def to_data
-        {
+        data = {
           forward: @forward,
           backward: @backward,
           pair: @pair.nil? || @pair.empty? ? '' : @pair.path # TODO
         }
+        # diff_data is optional
+        data[:diff_data] = @diff_data unless @diff_data.nil? || @diff_data.empty?
+        data
+      end
+
+      def kept?
+        detect == :kept
       end
 
       # @return [Boolean]

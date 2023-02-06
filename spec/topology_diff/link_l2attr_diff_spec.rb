@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe 'link diff with L2 attribute', :diff, :link, :attr, :l2attr do
+RSpec.describe 'link diff with L2 attribute', :attr, :diff, :l2attr, :link do
   before do
     link_attr = { name: 'linkX', flags: [], rate: 1000, delay: 10, srlg: '' }
     link_attr_changed = { name: 'linkX', flags: [], rate: 1000, delay: 20, srlg: '' }

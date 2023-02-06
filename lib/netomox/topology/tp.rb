@@ -2,8 +2,8 @@
 
 require 'netomox/const'
 require 'netomox/topology/support_base'
-require 'netomox/topology/tp_attr_rfc'
-require 'netomox/topology/tp_attr_mddo'
+require 'netomox/topology/tp_attr/rfc'
+require 'netomox/topology/tp_attr/mddo'
 require 'netomox/topology/base'
 
 module Netomox
@@ -18,7 +18,8 @@ module Netomox
         { key: "#{NS_L3NW}:l3-termination-point-attributes", klass: L3TPAttribute },
         { key: "#{NS_MDDO}:l1-termination-point-attributes", klass: MddoL1TPAttribute },
         { key: "#{NS_MDDO}:l2-termination-point-attributes", klass: MddoL2TPAttribute },
-        { key: "#{NS_MDDO}:l3-termination-point-attributes", klass: MddoL3TPAttribute }
+        { key: "#{NS_MDDO}:l3-termination-point-attributes", klass: MddoL3TPAttribute },
+        { key: "#{NS_MDDO}:ospf-area-termination-point-attributes", klass: MddoOspfAreaTPAttribute }
       ].freeze
 
       # @param [Hash] data RFC8345 data (term-point element)
@@ -62,6 +63,7 @@ module Netomox
         d_tp
       end
 
+      # @return [void]
       def fill_diff_state
         fill_diff_state_of(%i[supports attribute])
       end

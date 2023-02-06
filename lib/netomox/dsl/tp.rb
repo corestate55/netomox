@@ -3,9 +3,9 @@
 require 'netomox/const'
 require 'netomox/dsl/error'
 require 'netomox/dsl/base'
-require 'netomox/dsl/tp_attr_rfc'
-require 'netomox/dsl/tp_attr_ops'
-require 'netomox/dsl/tp_attr_mddo'
+require 'netomox/dsl/tp_attr/rfc'
+require 'netomox/dsl/tp_attr/ops'
+require 'netomox/dsl/tp_attr/mddo'
 
 module Netomox
   module DSL
@@ -70,25 +70,21 @@ module Netomox
         end
       end
 
+      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize
+
       # Set attribute
       # @param [Hash] attr Attribute data
       def attribute(attr)
-        @attribute = if @type.key?(NWTYPE_L2)
-                       L2TPAttribute.new(**attr)
-                     elsif @type.key?(NWTYPE_L3)
-                       L3TPAttribute.new(**attr)
-                     elsif @type.key?(NWTYPE_OPS)
-                       OpsTPAttribute.new(**attr)
-                     elsif @type.key?(NWTYPE_MDDO_L1)
-                       MddoL1TPAttribute.new(**attr)
-                     elsif @type.key?(NWTYPE_MDDO_L2)
-                       MddoL2TPAttribute.new(**attr)
-                     elsif @type.key?(NWTYPE_MDDO_L3)
-                       MddoL3TPAttribute.new(**attr)
-                     else
-                       {}
-                     end
+        @attribute = {}
+        @type.key?(NWTYPE_L2) && (@attribute = L2TPAttribute.new(**attr))
+        @type.key?(NWTYPE_L3) && (@attribute = L3TPAttribute.new(**attr))
+        @type.key?(NWTYPE_OPS) && (@attribute = OpsTPAttribute.new(**attr))
+        @type.key?(NWTYPE_MDDO_L1) && (@attribute = MddoL1TPAttribute.new(**attr))
+        @type.key?(NWTYPE_MDDO_L2) && (@attribute = MddoL2TPAttribute.new(**attr))
+        @type.key?(NWTYPE_MDDO_L3) && (@attribute = MddoL3TPAttribute.new(**attr))
+        @type.key?(NWTYPE_MDDO_OSPF_AREA) && (@attribute = MddoOspfAreaTPAttribute.new(**attr))
       end
+      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/AbcSize
 
       # Convert to RFC8345 topology data
       # @return [Hash]

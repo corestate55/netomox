@@ -4,8 +4,8 @@ require 'netomox/const'
 require 'netomox/topology/node'
 require 'netomox/topology/link'
 require 'netomox/topology/support_base'
-require 'netomox/topology/network_attr_rfc'
-require 'netomox/topology/network_attr_mddo'
+require 'netomox/topology/network_attr/rfc'
+require 'netomox/topology/network_attr/mddo'
 require 'netomox/topology/base'
 
 module Netomox
@@ -13,6 +13,7 @@ module Netomox
     # Network for topology data
     class Network < TopoObjectBase
       # @!attribute [rw] network_types
+      #   @return [Hash]
       # @!attribute [rw] nodes
       #   @return [Array<Node>]
       # @!attribute [rw] links
@@ -25,7 +26,8 @@ module Netomox
         { key: "#{NS_L3NW}:l3-topology-attributes", klass: L3NetworkAttribute },
         { key: "#{NS_MDDO}:l1-network-attributes", klass: MddoL1NetworkAttribute },
         { key: "#{NS_MDDO}:l2-network-attributes", klass: MddoL2NetworkAttribute },
-        { key: "#{NS_MDDO}:l3-network-attributes", klass: MddoL3NetworkAttribute }
+        { key: "#{NS_MDDO}:l3-network-attributes", klass: MddoL3NetworkAttribute },
+        { key: "#{NS_MDDO}:ospf-area-network-attributes", klass: MddoOspfAreaNetworkAttribute }
       ].freeze
 
       # @param [Hash] data RFC8345 data (network element)
@@ -110,6 +112,7 @@ module Netomox
         d_network
       end
 
+      # @return [void]
       def fill_diff_state
         fill_diff_state_of(%i[nodes links supports attribute])
       end
@@ -129,10 +132,14 @@ module Netomox
 
       private
 
+      # @param [Hash] data A network data
+      # @return [hash] network-types of the data
       def setup_network_types(data)
         @network_types = data['network-types'] || {}
       end
 
+      # @param [Hash] data A node data
+      # @return [Node] Node instance
       def setup_nodes(data)
         @nodes = []
         return unless data.key?('node')
@@ -142,6 +149,8 @@ module Netomox
         end
       end
 
+      # @param [Hash] data A link data
+      # @return [Link] Link instance
       def setup_links(data)
         @links = []
         link_key = "#{NS_TOPO}:link"
@@ -152,10 +161,14 @@ module Netomox
         end
       end
 
+      # @param [Hash] data A node data
+      # @return [Node] Node instance
       def create_node(data)
         Node.new(data, @path)
       end
 
+      # @param [Hash] data A link data
+      # @return [Link] Link instance
       def create_link(data)
         Link.new(data, @path)
       end

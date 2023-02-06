@@ -10,6 +10,10 @@ module Netomox
   class CLI < Thor
     class_option :verbose, type: :boolean, default: false, aliases: :v
 
+    def self.exit_on_failure?
+      true
+    end
+
     desc 'check JSON', 'Check topology data consistency'
     def check(file)
       run_check(file)

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-RSpec.describe 'node diff with L3 attribute', :diff, :node, :attr, :l3attr do
+RSpec.describe 'node diff with L3 attribute', :attr, :diff, :l3attr, :node do
   before do
-    seg_a_prefix = { prefix: '192.168,10.0/24', metric: 100 }
-    seg_a2_prefix = { prefix: '192.168,10.0/24', metric: 50 }
+    seg_a_prefix = { prefix: '192.168.10.0/24', metric: 100 }
+    seg_a2_prefix = { prefix: '192.168.10.0/24', metric: 50 }
     seg_b_prefix = { prefix: '192.168.20.0/24', metric: 100 }
     seg_c_prefix = { prefix: '192.168.30.0/24', metric: 100 }
 
@@ -43,8 +43,8 @@ RSpec.describe 'node diff with L3 attribute', :diff, :node, :attr, :l3attr do
     d_node = @node_l3attr.diff(@node_l3attr.dup)
     expect(d_node.diff_state.detect).to eq :kept
     expect(d_node.attribute.diff_state.detect).to eq :kept
-    list = d_node.attribute.prefixes.map { |d| d.diff_state.detect }
-    expect(list.sort).to eq %i[kept kept]
+    dd_expected = []
+    expect(d_node.attribute.diff_state.diff_data).to eq dd_expected
   end
 
   context 'diff with no-attribute node' do
@@ -52,16 +52,34 @@ RSpec.describe 'node diff with L3 attribute', :diff, :node, :attr, :l3attr do
       d_node = @node_l3attr0.diff(@node_l3attr)
       expect(d_node.diff_state.detect).to eq :changed
       expect(d_node.attribute.diff_state.detect).to eq :added
-      list = d_node.attribute.prefixes.map { |d| d.diff_state.detect }
-      expect(list.sort).to eq %i[added added]
+      dd_expected = [
+        ['+', '_diff_state_', { backward: nil, forward: :kept, pair: '' }],
+        ['+', 'flag', []],
+        ['+', 'name', ''],
+        ['+', 'prefix', [
+          { 'flag' => [], 'metric' => 100, 'prefix' => '192.168.10.0/24' },
+          { 'flag' => [], 'metric' => 100, 'prefix' => '192.168.20.0/24' }
+        ]],
+        ['+', 'router-id', ['']]
+      ]
+      expect(d_node.attribute.diff_state.diff_data).to eq dd_expected
     end
 
     it 'deleted whole L3 attribute' do
       d_node = @node_l3attr.diff(@node_l3attr0)
       expect(d_node.diff_state.detect).to eq :changed
       expect(d_node.attribute.diff_state.detect).to eq :deleted
-      list = d_node.attribute.prefixes.map { |d| d.diff_state.detect }
-      expect(list.sort).to eq %i[deleted deleted]
+      dd_expected = [
+        ['-', '_diff_state_', { backward: nil, forward: :kept, pair: '' }],
+        ['-', 'flag', []],
+        ['-', 'name', ''],
+        ['-', 'prefix', [
+          { 'flag' => [], 'metric' => 100, 'prefix' => '192.168.10.0/24' },
+          { 'flag' => [], 'metric' => 100, 'prefix' => '192.168.20.0/24' }
+        ]],
+        ['-', 'router-id', ['']]
+      ]
+      expect(d_node.attribute.diff_state.diff_data).to eq dd_expected
     end
   end
 
@@ -70,24 +88,31 @@ RSpec.describe 'node diff with L3 attribute', :diff, :node, :attr, :l3attr do
       d_node = @node_l3attr.diff(@node_l3attr_added)
       expect(d_node.diff_state.detect).to eq :changed
       expect(d_node.attribute.diff_state.detect).to eq :changed
-      list = d_node.attribute.prefixes.map { |d| d.diff_state.detect }
-      expect(list.sort).to eq %i[added kept kept]
+      dd_expected = [
+        ['+', 'prefix[2]', { 'flag' => [], 'metric' => 100, 'prefix' => '192.168.30.0/24' }]
+      ]
+      expect(d_node.attribute.diff_state.diff_data).to eq dd_expected
     end
 
     it 'deleted prefixes' do
       d_node = @node_l3attr.diff(@node_l3attr_deleted)
       expect(d_node.diff_state.detect).to eq :changed
       expect(d_node.attribute.diff_state.detect).to eq :changed
-      list = d_node.attribute.prefixes.map { |d| d.diff_state.detect }
-      expect(list.sort).to eq %i[deleted kept]
+      dd_expected = [
+        ['-', 'prefix[0]', { 'flag' => [], 'metric' => 100, 'prefix' => '192.168.10.0/24' }]
+      ]
+      expect(d_node.attribute.diff_state.diff_data).to eq dd_expected
     end
 
     it 'changed prefixes' do
       d_node = @node_l3attr.diff(@node_l3attr_changed)
       expect(d_node.diff_state.detect).to eq :changed
       expect(d_node.attribute.diff_state.detect).to eq :changed
-      list = d_node.attribute.prefixes.map { |d| d.diff_state.detect }
-      expect(list.sort).to eq %i[added deleted kept]
+      dd_expected = [
+        ['-', 'prefix[0]', { 'flag' => [], 'metric' => 100, 'prefix' => '192.168.10.0/24' }],
+        ['+', 'prefix[0]', { 'flag' => [], 'metric' => 50, 'prefix' => '192.168.10.0/24' }]
+      ]
+      expect(d_node.attribute.diff_state.diff_data).to eq dd_expected
     end
   end
 end

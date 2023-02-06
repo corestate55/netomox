@@ -2,6 +2,7 @@
 
 require 'netomox/topology/networks'
 require 'netomox/topology/error'
+require 'netomox/topology/verification_utility'
 
 module Netomox
   module Topology
@@ -9,6 +10,7 @@ module Netomox
     # Networks for Topology data verification
     class VerifiableNetworks < Networks
       # Search networks that support non-existent network
+      # @return [Hash] Check result
       def check_exist_supporting_network
         check('supporting network existence') do |messages|
           @networks.each do |nw|
@@ -28,6 +30,7 @@ module Netomox
       end
 
       # Search nodes that support non-existent node
+      # @return [Hash] Check result
       def check_exist_supporting_node
         check('supporting node existence') do |messages|
           all_nodes do |node, _nw|
@@ -46,6 +49,7 @@ module Netomox
       end
 
       # Search term-points that support non-existent term-point
+      # @return [Hash] Check result
       def check_exist_supporting_tp
         check('supporting terminal-points existence') do |messages|
           all_termination_points do |tp, _node, _nw|
@@ -64,6 +68,7 @@ module Netomox
       end
 
       # search links that support non-existent link
+      # @return [Hash] Check result
       def check_exist_supporting_link
         check('supporting link existence') do |messages|
           all_links do |link, _nw|
@@ -82,6 +87,7 @@ module Netomox
       end
 
       # search links that has non-existent endpoint (term-point)
+      # @return [Hash] Check result
       def check_exist_link_tp
         check('link source/target tp ref check') do |messages|
           all_links do |link, _nw|
@@ -94,6 +100,7 @@ module Netomox
       end
 
       # search uni-directional links
+      # @return [Hash] Check result
       def check_exist_reverse_link
         check('reverse (bi-directional) link existence') do |messages|
           all_links do |link, nw|
@@ -106,6 +113,7 @@ module Netomox
       end
 
       # search objects that has same id (id duplication check)
+      # @return [Hash] Check result
       def check_id_uniqueness
         check('object id uniqueness') do |messages|
           list = [
@@ -114,12 +122,12 @@ module Netomox
             check_link_id_uniqueness,
             check_tp_id_uniqueness
           ]
-          messages.push(list)
-          messages.flatten!
+          messages.push(*list.flatten!)
         end
       end
 
       # search term-points that has irregular reference count
+      # @return [Hash] Check result
       def check_tp_ref_count
         update_tp_ref_count
         check('link reference count of terminal-point') do |messages|
@@ -134,8 +142,9 @@ module Netomox
       end
 
       # rubocop:disable Metrics/AbcSize
-      #
+
       # search corresponding link in supported layer of term-points of a link
+      # @return [Hash] Check result
       def check_facing_link
         check('facing link in supported layer') do |messages|
           all_termination_points do |tp, node, nw|
@@ -153,8 +162,7 @@ module Netomox
               found_links = find_links_between(ss_tp, destination_tp.supports)
               next unless found_links.empty?
 
-              msg = "facing link not found source:#{ss_tp}" \
-                    " (supported #{tp.path}--#{destination_tp.path})"
+              msg = "facing link not found source:#{ss_tp} (supported #{tp.path}--#{destination_tp.path})"
               messages.push(message(:warn, tp.path, msg))
             end
           end
@@ -165,9 +173,10 @@ module Netomox
       # rubocop:disable Metrics/AbcSize
       # rubocop:disable Metrics/CyclomaticComplexity
       # rubocop:disable Metrics/PerceivedComplexity
-      #
+
       # check node-tp support path consistency
       # @todo network-node support path consistency
+      # @return [Hash] Check result
       def check_family_support_path
         check('family support path consistency') do |messages|
           all_termination_points do |tp, node, _nw|
@@ -199,43 +208,59 @@ module Netomox
       # rubocop:enable Metrics/CyclomaticComplexity
       # rubocop:enable Metrics/PerceivedComplexity
 
-      private
+      protected
 
+      # @param [String] desc Description of the check
+      # @yield [messages]
+      # @yieldparam [Array<CheckMessage>] messages Check results (messages)
+      # @return [Hash] Description and messages
       def check(desc)
-        result = {
-          checkup: desc,
-          messages: []
-        }
-        yield result[:messages]
-        result
+        result = CheckResult.new(desc)
+        yield result.messages
+        result.to_data
       end
 
+      # Message-store only checking for uniqueness check
+      # @yield [messages]
+      # @yieldparam [Array<CheckMessage>] messages Check results (messages)
+      # @return [Array<CheckMessages>] Check results (messages)
       def check_uniqueness
         messages = []
         yield messages
         messages
       end
 
+      # @param [Symbol] severity Message severity
+      # @param [String] path Target object path
+      # @param [String] message Message
+      # @return [CheckMessage] A check result (message)
       def message(severity, path, message)
-        {
-          severity: severity,
-          path: path,
-          message: message
-        }
+        CheckMessage.new(severity, path, message)
       end
 
+      private
+
+      # @param [Array<CheckMessage>] messages
+      # @param [String] target_str Link endpoint string ('source' or 'destination')
+      # @param [Array<String>] target_refs Refs [network, node, term-point]
+      # @param [Link] link Target link that connected with the target_refs term-point
+      # @return [void]
       def check_tp_ref(messages, target_str, target_refs, link)
         return if find_tp(*target_refs)
 
-        msg = "link #{target_str} path:#{target_refs.join('__')}" \
-              " is not found in link:#{link.path}"
+        msg = "link #{target_str} path:#{target_refs.join('__')} is not found in link:#{link.path}"
         messages.push(message(:error, link.path, msg))
       end
 
+      # @param [SupportingTerminationPoint] ss_tp Source supporting term-point
+      # @param [SupportingTerminationPoint] ds_tp Destination supporting term-point
+      # @return [String] Link name (rule-based) of a link connect between these source/destination term-point
       def link_name_between(ss_tp, ds_tp)
         "#{ss_tp.ref_link_tp_name},#{ds_tp.ref_link_tp_name}"
       end
 
+      # @param [Link] link Target link
+      # @return [TermPoint, nil] Destination term-point of the link
       def destination_tp_from_link(link)
         destination_ref = link.destination
         find_tp(destination_ref.network_ref,
@@ -243,6 +268,9 @@ module Netomox
                 destination_ref.tp_ref)
       end
 
+      # @param [SupportingTerminationPoint] ss_tp Source supporting term-point
+      # @param [Array<SupportingTerminationPoint>] dest_supports Destination supporting term-points
+      # @return [Array<Link>] Found links
       def find_links_between(ss_tp, dest_supports)
         found_links = []
         dest_supports.each do |ds_tp|
@@ -254,6 +282,8 @@ module Netomox
         found_links
       end
 
+      # Count-up reference count of link endpoints
+      # @return [void]
       def update_tp_ref_count
         all_links do |link, nw|
           ref_count(nw, link.source)
@@ -261,6 +291,13 @@ module Netomox
         end
       end
 
+      # @return [Array] list Elements
+      # @return [Array] duplicated elements in the list
+      def duplicated_element(list)
+        list.group_by { |i| i }.reject { |_k, v| v.one? }.keys
+      end
+
+      # @return [Array<CheckMessages>] Check results (messages)
       def check_network_id_uniqueness
         check_uniqueness do |messages|
           network_ids = @networks.map(&:name)
@@ -272,6 +309,7 @@ module Netomox
         end
       end
 
+      # @return [Array<CheckMessages>] Check results (messages)
       def check_node_id_uniqueness
         check_uniqueness do |messages|
           @networks.each do |nw|
@@ -284,6 +322,7 @@ module Netomox
         end
       end
 
+      # @return [Array<CheckMessages>] Check results (messages)
       def check_link_id_uniqueness
         check_uniqueness do |messages|
           @networks.each do |nw|
@@ -296,6 +335,7 @@ module Netomox
         end
       end
 
+      # @return [Array<CheckMessages>] Check results (messages)
       def check_tp_id_uniqueness
         check_uniqueness do |messages|
           all_nodes do |node, _nw|

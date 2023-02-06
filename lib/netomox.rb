@@ -7,6 +7,7 @@ require 'netomox/dsl/dsl'
 require 'netomox/graphdb/networks_ops'
 require 'netomox/topology/networks'
 require 'netomox/topology/verifiable_networks'
+require 'netomox/pseudo_dsl/p_networks'
 
 # Network Topology Modeling Toolbox
 module Netomox
