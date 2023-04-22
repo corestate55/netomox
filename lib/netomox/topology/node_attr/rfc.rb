@@ -47,16 +47,13 @@ module Netomox
     class L3NodeAttribute < L3NodeAttributeBase
       # @!attribute [rw] name
       #   @return [String]
-      # @!attribute [rw] flags
-      #   @return [Array<String>]
       # @!attribute [rw] router_id
       #   @return [String]
-      attr_accessor :name, :flags, :router_id
+      attr_accessor :name, :router_id
 
       # Attribute definition of L3 node
       ATTR_DEFS = [
         { int: :name, ext: 'name', default: '' },
-        { int: :flags, ext: 'flag', default: [] },
         { int: :router_id, ext: 'router-id', default: '' }
       ].freeze
 

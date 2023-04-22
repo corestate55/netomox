@@ -83,7 +83,8 @@ RSpec.describe 'check node attribute with RFC' do
           'prefix' => '172.16.2.0/24', 'next-hop' => '10.0.1.0',
           'metric' => 10, 'interface' => '', 'preference' => 1, 'description' => 'test'
         }
-      ]
+      ],
+      'flag' => []
     }
     expect(attr&.to_data).to eq expected_attr
   end
