@@ -10,10 +10,15 @@ module Netomox
     class L3NodeAttributeBase < AttributeBase
       # @!attribute [rw] prefixes
       #   @return [Array<L3Prefix>]
-      attr_accessor :prefixes
+      # @!attribute [rw] flags
+      #   @return [Array<String>]
+      attr_accessor :prefixes, :flags
 
       # Attribute definition of L3 node
-      ATTR_DEFS = [{ int: :prefixes, ext: 'prefix', default: [] }].freeze
+      ATTR_DEFS = [
+        { int: :prefixes, ext: 'prefix', default: [] },
+        { int: :flags, ext: 'flag', default: [] }
+      ].freeze
 
       include Diffable
 
