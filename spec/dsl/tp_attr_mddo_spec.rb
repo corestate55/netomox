@@ -95,7 +95,8 @@ RSpec.describe 'termination point dsl', :dsl, :tp do
           'dead-interval' => 40,
           'retransmission-interval' => 5
         },
-        'neighbor' => []
+        'neighbor' => [],
+        'area' => -1
       }
     }
     expect(tp.topo_data).to eq tp_data
@@ -112,7 +113,8 @@ RSpec.describe 'termination point dsl', :dsl, :tp do
         dead_interval: 20,
         retransmission_interval: 2
       },
-      neighbors: [{ router_id: '10.0.0.1', ip_addr: '192.168.0.1' }]
+      neighbors: [{ router_id: '10.0.0.1', ip_addr: '192.168.0.1' }],
+      area: 1
     }
     tp = Netomox::DSL::TermPoint.new(@ospf_node, 'tpX') do
       attribute(tp_attr)
@@ -134,7 +136,8 @@ RSpec.describe 'termination point dsl', :dsl, :tp do
             'router-id' => '10.0.0.1',
             'ip-address' => '192.168.0.1'
           }
-        ]
+        ],
+        'area' => 1
       }
     }
     expect(tp.topo_data).to eq tp_data

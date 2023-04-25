@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe 'check node attribute with RFC' do
+RSpec.describe 'check node attribute with Mddo-model' do
   before do
     nws = Netomox::DSL::Networks.new do
       network 'nw1' do
@@ -35,6 +35,18 @@ RSpec.describe 'check node attribute with RFC' do
               { prefix: '172.16.1.0/24', next_hop: '10.0.0.1', metric: 1 },
               { prefix: '172.16.2.0/24', next_hop: '10.0.1.0', description: 'test' }
             ]
+          )
+        end
+      end
+      network 'nw_ospf' do
+        type Netomox::NWTYPE_MDDO_OSPF_AREA
+        node('node1') do
+          attribute(
+            node_type: 'node',
+            router_id: '10.0.0.1',
+            process_id: 1,
+            log_adjacency_change: false,
+            redistribute: [{ protocol: 'static', metric_type: 2 }]
           )
         end
       end
@@ -85,6 +97,20 @@ RSpec.describe 'check node attribute with RFC' do
         }
       ],
       'flag' => []
+    }
+    expect(attr&.to_data).to eq expected_attr
+  end
+
+  it 'has MDDO ospf node attribute' do
+    attr = @nws.find_network('nw_ospf')&.find_node_by_name('node1')&.attribute
+    expected_attr = {
+      '_diff_state_' => @default_diff_state,
+      'node-type' => 'node',
+      'router-id' => '10.0.0.1',
+      'router-id-source' => 'static',
+      'process-id' => 1,
+      'log-adjacency-change' => false,
+      'redistribute' => [{ 'protocol' => 'static', 'metric-type' => 2 }]
     }
     expect(attr&.to_data).to eq expected_attr
   end
