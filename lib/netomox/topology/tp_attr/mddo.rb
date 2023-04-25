@@ -107,7 +107,9 @@ module Netomox
       #   @return [MddoOspfTimer]
       # @!attribute [rw] neighbors
       #   @return [Array<MddoOspfNeighbor>]
-      attr_accessor :network_type, :priority, :metric, :passive, :timer, :neighbors
+      # @!attribute [rw] area
+      #   @return [Integer]
+      attr_accessor :network_type, :priority, :metric, :passive, :timer, :neighbors, :area
 
       # Attribute definition of L3 node
       ATTR_DEFS = [
@@ -116,7 +118,8 @@ module Netomox
         { int: :metric, ext: 'metric', default: 1 },
         { int: :passive, ext: 'passive', default: false },
         { int: :timer, ext: 'timer', default: {} },
-        { int: :neighbors, ext: 'neighbor', default: [] }
+        { int: :neighbors, ext: 'neighbor', default: [] },
+        { int: :area, ext: 'area', default: -1 }
       ].freeze
 
       include Diffable

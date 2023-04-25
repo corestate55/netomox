@@ -129,9 +129,10 @@ module Netomox
       #   @return [String]
       # @!attribute [rw] router_id
       #   @return [String]
-      # @!attribute [rw] process_id
-      #   @return [String]
       #   @note dotted-quad string
+      # @!attribute [rw] process_id
+      #   @return [String, Integer]
+      #   @note 'default' string or ID integer
       # @!attribute [rw] log_adjacency_change
       #   @return [Boolean]
       # @!attribute [rw] redistribute_list
@@ -146,6 +147,7 @@ module Netomox
 
       # @param [String] node_type
       # @param [String] router_id
+      # @param [Integer] process_id
       # @param [Boolean] log_adjacency_change
       # @param [Array<Hash>] redistribute
       def initialize(node_type: '', router_id: '', process_id: 'default', log_adjacency_change: false, redistribute: [])
