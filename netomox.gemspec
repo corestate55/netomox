@@ -14,13 +14,13 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Network Topology Modeling Toolbox'
   spec.description   = 'Tools for build/validate RFC8345-based network topology data.'
-  spec.homepage      = 'https://github.com/corestate55/netomox'
+  spec.homepage      = 'https://github.com/ool-mddo/netomox'
   spec.license       = 'MIT'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
+    spec.metadata['allowed_push_host'] = 'https://rubygems.pkg.github.com/ool-mddo'
   else
     raise 'RubyGems 2.0 or newer is required to protect against ' \
           'public gem pushes.'
@@ -42,9 +42,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'byebug', '~> 11.1.1'
   spec.add_development_dependency 'rake', '~> 13.0.1'
   spec.add_development_dependency 'rspec', '~> 3.11'
-  spec.add_development_dependency 'rubocop', '>= 1.37'
-  spec.add_development_dependency 'rubocop-rake', '>= 0.6.0'
-  spec.add_development_dependency 'rubocop-rspec', '>= 2.13'
+  spec.add_development_dependency 'rubocop', '~> 1.37'
+  spec.add_development_dependency 'rubocop-rake', '~> 0.6'
+  spec.add_development_dependency 'rubocop-rspec', '~> 2.13'
   spec.add_development_dependency 'simplecov', '~> 0.21.0'
   spec.add_development_dependency 'yard', '~> 0.9.20'
   spec.metadata['rubygems_mfa_required'] = 'true'
