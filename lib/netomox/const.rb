@@ -19,21 +19,21 @@ module Netomox
   NS_MDDO = 'mddo-topology'
 
   # Layer2 network type (draft-ietf-i2rs-l2-network-topology)
-  NWTYPE_L2 = "#{NS_L2NW}:l2-network"
+  NWTYPE_L2 = "#{NS_L2NW}:l2-network".freeze
   # Layer3 network type (RFC83446)
-  NWTYPE_L3 = "#{NS_L3NW}:l3-unicast-topology"
+  NWTYPE_L3 = "#{NS_L3NW}:l3-unicast-topology".freeze
   # Experimental network type
   # for ops project
-  NWTYPE_OPS = "#{NS_OPS}:ops-network"
+  NWTYPE_OPS = "#{NS_OPS}:ops-network".freeze
   # for MDDO project
   # MDDO Layer1 network type
-  NWTYPE_MDDO_L1 = "#{NS_MDDO}:l1-network"
+  NWTYPE_MDDO_L1 = "#{NS_MDDO}:l1-network".freeze
   # MDDO Layer2 network type
-  NWTYPE_MDDO_L2 = "#{NS_MDDO}:l2-network"
+  NWTYPE_MDDO_L2 = "#{NS_MDDO}:l2-network".freeze
   # MDDO L3 network type
-  NWTYPE_MDDO_L3 = "#{NS_MDDO}:l3-network"
+  NWTYPE_MDDO_L3 = "#{NS_MDDO}:l3-network".freeze
   # MDDO ospf-area network type
-  NWTYPE_MDDO_OSPF_AREA = "#{NS_MDDO}:ospf-area-network"
+  NWTYPE_MDDO_OSPF_AREA = "#{NS_MDDO}:ospf-area-network".freeze
 
   # logger for netomox
   @logger = Logger.new($stderr)

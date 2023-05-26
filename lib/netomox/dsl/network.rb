@@ -44,14 +44,14 @@ module Netomox
       # @param [Networks] parent Parent object (Networks)
       # @param [String] name Network name
       # @param [Proc] block Code block to eval this instance
-      def initialize(parent, name, &block)
+      def initialize(parent, name, &)
         super(parent, name)
         @type = {}
         @nodes = []
         @links = []
         @supports = [] # supporting network
         @attribute = {} # for augments
-        register(&block) if block_given?
+        register(&) if block_given?
       end
 
       # @param [Hash] type Network type object
@@ -94,12 +94,12 @@ module Netomox
       # @param [String] name Node name
       # @param [Proc] block Code block to eval the node
       # @return [Node]
-      def node(name, &block)
+      def node(name, &)
         node = find_node(name)
         if node
-          node.register(&block) if block_given?
+          node.register(&) if block_given?
         else
-          node = Node.new(self, name, &block)
+          node = Node.new(self, name, &)
           @nodes.push(node)
         end
         node
@@ -112,13 +112,13 @@ module Netomox
       # @param [String] dst_tp Destination term-point name
       # @param [Proc] block Code block to eval the link
       # @return [Link]
-      def link(src_node, src_tp = nil, dst_node = nil, dst_tp = nil, &block)
+      def link(src_node, src_tp = nil, dst_node = nil, dst_tp = nil, &)
         args = normalize_link_args(src_node, src_tp, dst_node, dst_tp)
         link = find_link(args.join(','))
         if link
-          link.register(&block) if block_given?
+          link.register(&) if block_given?
         else
-          link = Link.new(self, args[0], args[1], args[2], args[3], &block)
+          link = Link.new(self, args[0], args[1], args[2], args[3], &)
           @links.push(link)
         end
         link
@@ -131,10 +131,10 @@ module Netomox
       # @param [String] dst_tp Destination term-point name
       # @param [Proc] block Code block to eval the link
       # @todo: supporting-link implementation
-      def bdlink(src_node, src_tp = nil, dst_node = nil, dst_tp = nil, &block)
+      def bdlink(src_node, src_tp = nil, dst_node = nil, dst_tp = nil, &)
         args = normalize_link_args(src_node, src_tp, dst_node, dst_tp)
-        link(args[0], args[1], args[2], args[3], &block)
-        link(args[2], args[3], args[0], args[1], &block)
+        link(args[0], args[1], args[2], args[3], &)
+        link(args[2], args[3], args[0], args[1], &)
       end
 
       # Convert to RFC8345 topology data
@@ -159,8 +159,8 @@ module Netomox
       # @return [Array<Link>]
       def links_between(src_node_name:, dst_node_name:, src_tp_name: nil, dst_tp_name: nil)
         conds = normalize_find_link_args(
-          src_node_name: src_node_name, src_tp_name: src_tp_name,
-          dst_node_name: dst_node_name, dst_tp_name: dst_tp_name
+          src_node_name:, src_tp_name:,
+          dst_node_name:, dst_tp_name:
         )
         found_links = find_links_with_condition(conds)
         conds = normalize_find_link_args(

@@ -39,14 +39,5 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'rexml', '~> 3.2' # termcolor dependency (not resolved?)
   spec.add_runtime_dependency 'termcolor', '~> 1.2.2'
   spec.add_runtime_dependency 'thor', '~> 1.2.1'
-  spec.add_development_dependency 'bundler', '~> 2.0'
-  spec.add_development_dependency 'byebug', '~> 11.1.1'
-  spec.add_development_dependency 'rake', '~> 13.0.1'
-  spec.add_development_dependency 'rspec', '~> 3.11'
-  spec.add_development_dependency 'rubocop', '~> 1.37'
-  spec.add_development_dependency 'rubocop-rake', '~> 0.6'
-  spec.add_development_dependency 'rubocop-rspec', '~> 2.13'
-  spec.add_development_dependency 'simplecov', '~> 0.21.0'
-  spec.add_development_dependency 'yard', '~> 0.9.20'
   spec.metadata['rubygems_mfa_required'] = 'true'
 end

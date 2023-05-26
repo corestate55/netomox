@@ -95,14 +95,14 @@ module Netomox
       # @param [String] dst_node Destination node name
       # @param [String] dst_tp Destination term-point name
       # @param [Proc] block Code block to eval this instance
-      def initialize(parent, src_node, src_tp, dst_node, dst_tp, &block)
+      def initialize(parent, src_node, src_tp, dst_node, dst_tp, &)
         super(parent, [src_node, src_tp, dst_node, dst_tp].join(','))
         @source = SrcTPRef.new(src_node, src_tp)
         @destination = DstTPRef.new(dst_node, dst_tp)
         @type = @parent.type
         @supports = [] # supporting link
         @attribute = {} # for augments
-        register(&block) if block_given?
+        register(&) if block_given?
       end
 
       # Add supporting link

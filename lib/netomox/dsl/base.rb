@@ -22,8 +22,8 @@ module Netomox
       end
 
       # @param [Proc] block Code Block to eval in this instance
-      def register(&block)
-        instance_eval(&block)
+      def register(&)
+        instance_eval(&)
       end
 
       protected

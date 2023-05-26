@@ -48,12 +48,12 @@ module Netomox
       # @param [Node] parent Parent object (Node)
       # @param [String] name Term-point name
       # @param [Proc] block Conde block to eval in this instance
-      def initialize(parent, name, &block)
+      def initialize(parent, name, &)
         super(parent, name)
         @supports = [] # supporting termination point
         @type = @parent.type
         @attribute = {} # for augments
-        register(&block) if block_given?
+        register(&) if block_given?
       end
 
       # Add supporting term-point

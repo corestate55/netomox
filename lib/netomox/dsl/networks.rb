@@ -12,22 +12,22 @@ module Netomox
       attr_accessor :networks
 
       # @param [Proc] block Code block to eval this instance
-      def initialize(&block)
+      def initialize(&)
         super(nil, 'networks')
         @networks = []
-        register(&block) if block_given?
+        register(&) if block_given?
       end
 
       # Add or access network by name
       # @param [String] name Network name
       # @param [Proc] block Code block to eval the network
       # @return [Network]
-      def network(name, &block)
+      def network(name, &)
         nw = find_network(name)
         if nw
-          nw.register(&block) if block_given?
+          nw.register(&) if block_given?
         else
-          nw = Network.new(self, name, &block)
+          nw = Network.new(self, name, &)
           @networks.push(nw)
         end
         nw
