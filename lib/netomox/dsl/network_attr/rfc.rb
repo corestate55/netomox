@@ -10,7 +10,7 @@ module Netomox
       # @param [String] name
       # @param [Array<String>] flags
       def initialize(name: '', flags: [])
-        super(name: name, flags: flags)
+        super(name:, flags:)
         @type = "#{NS_L3NW}:l3-topology-attributes"
       end
     end
@@ -20,7 +20,7 @@ module Netomox
       # @param [String] name
       # @param [Array<String>] flags
       def initialize(name: '', flags: [])
-        super(name: name, flags: flags)
+        super(name:, flags:)
         @type = "#{NS_L2NW}:l2-network-attributes"
       end
     end

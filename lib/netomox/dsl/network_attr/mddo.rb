@@ -40,7 +40,7 @@ module Netomox
       # @param [String] identifier OSPF area ID (dotted-quad)
       # @param [Array<String>] flags
       def initialize(name: '', identifier: '', flags: [])
-        super(name: name, flags: flags)
+        super(name:, flags:)
         @identifier = identifier
         @type = "#{NS_MDDO}:ospf-area-network-attributes"
       end

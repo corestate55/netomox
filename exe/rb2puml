@@ -114,11 +114,11 @@ class RB2Puml
     @method_mode = :pub_methods
   end
 
-  def all_lines(&block)
+  def all_lines(&)
     @target_files.each do |file_name|
       init_states(file_name)
       File.open(file_name, 'r') do |file|
-        file.each_line(&block)
+        file.each_line(&)
       end
     end
   end

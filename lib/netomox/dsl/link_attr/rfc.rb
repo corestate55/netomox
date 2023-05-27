@@ -93,7 +93,7 @@ module Netomox
 
       # @return [Boolean]
       def empty?
-        @name.empty? && @flags.empty? && \
+        @name.empty? && @flags.empty? &&
           @rate.nil? && @delay.nil? && @srlg.empty?
       end
     end

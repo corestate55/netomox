@@ -52,7 +52,7 @@ module Netomox
       # @param [Network] parent Parent object (Network)
       # @param [String] name Node name
       # @param [Proc] block Code block to eval this instance
-      def initialize(parent, name, &block)
+      def initialize(parent, name, &)
         super(parent, name)
         @term_points = []
         @type = @parent.type
@@ -60,19 +60,19 @@ module Netomox
         @attribute = {} # for augments
         @tp_prefix = 'p'
         @tp_number = 0
-        register(&block) if block_given?
+        register(&) if block_given?
       end
 
       # Add or access term-point by name
       # @param [String] name Term-point name
       # @param [Proc] block Code block to eval the term-point
       # @return [TermPoint]
-      def term_point(name, &block)
+      def term_point(name, &)
         tp = find_term_point(name)
         if tp
-          tp.register(&block) if block_given?
+          tp.register(&) if block_given?
         else
-          tp = TermPoint.new(self, name, &block)
+          tp = TermPoint.new(self, name, &)
           @term_points.push(tp)
         end
         tp

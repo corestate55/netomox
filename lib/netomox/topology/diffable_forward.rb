@@ -24,7 +24,7 @@ module Netomox
         # receiver of this method will be (a), other will be (b)
         # NOTICE: (a)(b) can use NULL attribute
         result, d_attr, diff_data = compare_attribute(@attribute, other.attribute)
-        arg = { forward: result, pair: @attribute, diff_data: diff_data }
+        arg = { forward: result, pair: @attribute, diff_data: }
         set_diff_state(d_attr, **arg)
         d_attr
       end
@@ -99,7 +99,7 @@ module Netomox
 
           # rhs only in other -> added
           diff_data = rhs.is_a?(AttributeBase) ? Hashdiff.diff({}, rhs.to_data) : []
-          results.push(set_diff_state(rhs, forward: :added, diff_data: diff_data))
+          results.push(set_diff_state(rhs, forward: :added, diff_data:))
         end
         results
       end
@@ -112,7 +112,7 @@ module Netomox
         lhs = send(attr)
         rhs = other.send(attr)
         result, d_attr, diff_data = compare_attribute(lhs, rhs)
-        set_diff_state(d_attr, forward: result, pair: lhs, diff_data: diff_data)
+        set_diff_state(d_attr, forward: result, pair: lhs, diff_data:)
         d_attr
       end
 
@@ -125,11 +125,11 @@ module Netomox
         if rhs
           # lhs found in rhs -> kept
           diff_data = Hashdiff.diff(lhs.to_data, rhs.to_data) if lhs.is_a?(AttributeBase) && rhs.is_a?(AttributeBase)
-          set_diff_state(rhs, forward: :kept, pair: lhs, diff_data: diff_data)
+          set_diff_state(rhs, forward: :kept, pair: lhs, diff_data:)
         else
           # lhs only in self -> deleted
           diff_data = Hashdiff.diff(lhs.to_data, {}) if lhs.is_a?(AttributeBase)
-          set_diff_state(lhs, forward: :deleted, diff_data: diff_data)
+          set_diff_state(lhs, forward: :deleted, diff_data:)
         end
       end
 
