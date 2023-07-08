@@ -8,6 +8,8 @@ require 'netomox/topology/link_tpref'
 
 module Netomox
   module Topology
+    # rubocop:disable Metrics/ClassLength
+
     # Networks for Topology data
     class Networks < TopoObjectBase
       # @!attribute [rw] networks
@@ -29,6 +31,14 @@ module Netomox
       # @return [Network, nil] Found network (nil if not found)
       def find_network(network_ref)
         @networks.find { |nw| nw.name == network_ref }
+      end
+
+      # @param [String] network_type Network type (see const.rb)
+      # @return [Array<Network>] Matched networks(layers)
+      def find_all_networks_by_type(network_type)
+        @networks.find_all do |network|
+          network.network_types.keys.include?(network_type)
+        end
       end
 
       # @param [String] network_ref Network name
@@ -179,5 +189,6 @@ module Netomox
         tp&.ref_count_up
       end
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end
