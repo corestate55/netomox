@@ -12,28 +12,28 @@ RSpec.describe 'node diff with ospf-area attribute', :attr, :diff, :node, :ospf_
     attr1 = {
       node_type: 'ospf_proc',
       router_id: '192.168.0.1',
-      redistribute: [
+      redistribute_list: [
         { protocol: 'static', metric_type: 2 }
       ]
     }
     attr2 = {
       node_type: 'ospf_proc',
       router_id: '192.168.0.2', # change
-      redistribute: [
+      redistribute_list: [
         { protocol: 'static', metric_type: 2 }
       ]
     }
     attr3 = {
       node_type: 'ospf_proc',
       router_id: '192.168.0.1',
-      redistribute: [
+      redistribute_list: [
         { protocol: 'static', metric_type: 1 } # change internal
       ]
     }
     attr4 = {
       node_type: 'ospf_proc',
       router_id: '192.168.0.2', # change
-      redistribute: [
+      redistribute_list: [
         { protocol: 'static', metric_type: 2 },
         { protocol: 'connected', metric_type: 2 } # added internal
       ]

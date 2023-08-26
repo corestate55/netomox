@@ -43,7 +43,8 @@ module Netomox
 
       # @param [Networks] parent Parent object (Networks)
       # @param [String] name Network name
-      # @param [Proc] block Code block to eval this instance
+      # @yield Code block to eval this instance
+      # @yieldreturn [void]
       def initialize(parent, name, &)
         super(parent, name)
         @type = {}
@@ -74,7 +75,7 @@ module Netomox
         end
       end
 
-      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize
+      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
 
       # Set attribute
       # @param [Hash] attr Attribute data
@@ -87,12 +88,15 @@ module Netomox
         @type.key?(NWTYPE_MDDO_L2) && (@attribute = MddoL2NWAttribute.new(**attr))
         @type.key?(NWTYPE_MDDO_L3) && (@attribute = MddoL3NWAttribute.new(**attr))
         @type.key?(NWTYPE_MDDO_OSPF_AREA) && (@attribute = MddoOspfAreaNWAttribute.new(**attr))
+        @type.key?(NWTYPE_MDDO_BGP_PROC) && (@attribute = MddoBgpProcNWAttribute.new(**attr))
+        @type.key?(NWTYPE_MDDO_BGP_AS) && (@attribute = MddoBgpAsNWAttribute.new(**attr))
       end
-      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/AbcSize
+      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
 
       # Add or get node
       # @param [String] name Node name
-      # @param [Proc] block Code block to eval the node
+      # @yield Code block to eval the node
+      # @yieldreturn [void]
       # @return [Node]
       def node(name, &)
         node = find_node(name)
@@ -110,7 +114,8 @@ module Netomox
       # @param [String] src_tp Source term-point name
       # @param [String] dst_node Destination node name
       # @param [String] dst_tp Destination term-point name
-      # @param [Proc] block Code block to eval the link
+      # @yield Code block to eval the link
+      # @yieldreturn [void]
       # @return [Link]
       def link(src_node, src_tp = nil, dst_node = nil, dst_tp = nil, &)
         args = normalize_link_args(src_node, src_tp, dst_node, dst_tp)
@@ -129,7 +134,8 @@ module Netomox
       # @param [String] src_tp Source term-point name
       # @param [String] dst_node Destination node name
       # @param [String] dst_tp Destination term-point name
-      # @param [Proc] block Code block to eval the link
+      # @yield Code block to eval the link
+      # @yieldreturn [void]
       # @todo: supporting-link implementation
       def bdlink(src_node, src_tp = nil, dst_node = nil, dst_tp = nil, &)
         args = normalize_link_args(src_node, src_tp, dst_node, dst_tp)

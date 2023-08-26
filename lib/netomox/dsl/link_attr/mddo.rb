@@ -55,5 +55,21 @@ module Netomox
         @type = "#{NS_MDDO}:ospf-area-link-attributes"
       end
     end
+
+    # attribute for mddo-topology bgp-proc link
+    class MddoBgpProcLinkAttribute < MddoLinkAttributeBase
+      def initialize(hash)
+        super(hash)
+        @type = "#{NS_MDDO}:bgp-proc-link-attributes"
+      end
+    end
+
+    # attribute for mddo-topology bgp-as link
+    class MddoBgpAsLinkAttribute < MddoLinkAttributeBase
+      def initialize(hash)
+        super(hash)
+        @type = "#{NS_MDDO}:bgp-as-link-attributes"
+      end
+    end
   end
 end

@@ -3,6 +3,7 @@
 require 'netomox/const'
 require 'netomox/dsl/tp_attr/mddo_ospf_timer'
 require 'netomox/dsl/tp_attr/mddo_ospf_neighbor'
+require 'netomox/dsl/tp_attr/mddo_bgp_timer'
 
 module Netomox
   module DSL
@@ -182,6 +183,101 @@ module Netomox
       # @return [Boolean]
       def empty?
         false
+      end
+    end
+
+    # attribute for mddo-topology bgp-proc term-point
+    class MddoBgpProcTPAttribute
+      # @!attribute [rw] local_as
+      #   @return [Integer]
+      # @!attribute [rw] local_ip
+      #   @return [String]
+      # @!attribute [rw] remote_as
+      #   @return [Integer]
+      # @!attribute [rw] remote_ip
+      #   @return [String]
+      # @!attribute [rw] confederation
+      #   @return [Integer] ASN
+      # @!attribute [rw] route_reflector_client
+      #   @return [Boolean]
+      # @!attribute [rw] cluster_id
+      #   @return [String] IP
+      # @!attribute [rw] peer_group
+      #   @return [String]
+      # @!attribute [rw] import_policies
+      #   @return [Array<String>]
+      # @!attribute [rw] export_policies
+      #   @return [Array<String>]
+      # @!attribute [rw] timer
+      #   @return [MddoBgpTimer]
+      attr_accessor :local_as, :local_ip, :remote_as, :remote_ip, :confederation, :route_reflector_client, :cluster_id,
+                    :peer_group, :import_policies, :export_policies, :timer
+      # @!attribute [r] type
+      #   @return [String]
+      attr_reader :type
+
+      # rubocop:disable Metrics/ParameterLists
+
+      # @param [Integer] local_as Local ASN
+      # @param [String] local_ip Local IP address
+      # @param [Integer] remote_as Remote ASN
+      # @param [String] remote_ip Remote IP address
+      # @param [Integer] confederation
+      # @param [Boolean] route_reflector_client
+      # @param [String] cluster_id
+      # @param [String] peer_group
+      # @param [Array<String>] import_policies
+      # @param [Array<String>] export_policies
+      # @timer [MddoBgpTimer] timer
+      def initialize(local_as: -1, local_ip: '', remote_as: -1, remote_ip: '', confederation: -1,
+                     route_reflector_client: false, cluster_id: '', peer_group: '', import_policies: [],
+                     export_policies: [], timer: {})
+        @local_as = local_as
+        @local_ip = local_ip
+        @remote_as = remote_as
+        @remote_ip = remote_ip
+        @confederation = confederation
+        @route_reflector_client = route_reflector_client
+        @cluster_id = cluster_id
+        @peer_group = peer_group
+        @import_policies = import_policies
+        @export_policies = export_policies
+        @timer = MddoBgpTimer.new(**timer)
+        @type = "#{NS_MDDO}:bgp-proc-termination-point-attributes"
+      end
+      # rubocop:enable Metrics/ParameterLists
+
+      # Convert to RFC8345 topology data
+      # @return [Hash]
+      def topo_data
+        {
+          'local-as' => @local_as,
+          'local-ip' => @local_ip,
+          'remote-as' => @remote_as,
+          'remote-ip' => @remote_ip,
+          'confederation' => @confederation,
+          'route-reflector-client' => @route_reflector_client,
+          'cluster-id' => @cluster_id,
+          'peer-group' => @peer_group,
+          'import-policy' => @import_policies,
+          'export-policy' => @export_policies,
+          'timer' => @timer.topo_data
+        }
+      end
+
+      # @return [Boolean]
+      def empty?
+        @local_as.negative?
+      end
+    end
+
+    # attribute for mddo-topology bgp-as term-point
+    class MddoBgpAsTPAttribute < MddoL1TPAttribute
+      # @param [String] description Interface description
+      # @param [Array<String>] flags Flags
+      def initialize(description: '', flags: [])
+        super(description:, flags:)
+        @type = "#{NS_MDDO}:bgp-as-termination-point-attributes"
       end
     end
   end

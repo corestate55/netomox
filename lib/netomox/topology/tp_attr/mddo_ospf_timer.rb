@@ -4,7 +4,7 @@ require 'netomox/topology/attr_base'
 
 module Netomox
   module Topology
-    # ospf time for MDDO ospf-area term-point attribute
+    # ospf timer for MDDO ospf-area term-point attribute
     class MddoOspfTimer < SubAttributeBase
       # @!attribute [rw] hello_interval
       #   @return [Integer]

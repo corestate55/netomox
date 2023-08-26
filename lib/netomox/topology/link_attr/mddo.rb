@@ -24,11 +24,20 @@ module Netomox
 
     # Attribute definition of MDDO L1 link
     class MddoL1LinkAttribute < MddoLinkAttributeBase; end
+
     # Attribute definition of MDDO L2 link
     class MddoL2LinkAttribute < MddoLinkAttributeBase; end
+
     # Attribute definition of MDDO L3 link
     class MddoL3LinkAttribute < MddoLinkAttributeBase; end
+
     # Attribute definition of MDDO ospf-area link
     class MddoOspfAreaLinkAttribute < MddoLinkAttributeBase; end
+
+    # attribute definition of MDDO bgp-proc link
+    class MddoBgpProcLinkAttribute < MddoLinkAttributeBase; end
+
+    # attribute definition of MDDO bgp-as link
+    class MddoBgpAsLinkAttribute < MddoLinkAttributeBase; end
   end
 end

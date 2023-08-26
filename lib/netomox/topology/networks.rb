@@ -37,7 +37,7 @@ module Netomox
       # @return [Array<Network>] Matched networks(layers)
       def find_all_networks_by_type(network_type)
         @networks.find_all do |network|
-          network.network_types.keys.include?(network_type)
+          network.network_type?(network_type)
         end
       end
 
@@ -69,6 +69,30 @@ module Netomox
         end
 
         node.termination_points.find { |tp| tp.name == tp_ref }
+      end
+
+      # @param [SupportingRefBase] support Support object
+      # @return [Network, Node, TermPoint, Link, nil] Object the referred support object (nil if not found)
+      # @return [StandardError]
+      def find_object_by_support(support)
+        case support
+        when SupportingNetwork
+          find_network(support.network_ref)
+        when SupportingNode
+          find_node(support.network_ref, support.node_ref)
+        when SupportingTerminationPoint
+          find_tp(support.network_ref, support.node_ref, support.tp_ref)
+        when SupportingLink
+          find_link(support.network_ref, support.link_ref)
+        else
+          raise StandardError, 'Unknown support'
+        end
+      end
+
+      # @param [TpRef] edge Link edge
+      # @return [TermPoint, nil] Found term-point
+      def find_tp_by_edge(edge)
+        find_tp(edge.network_ref, edge.node_ref, edge.tp_ref)
       end
 
       # @param [String] network_ref Network name

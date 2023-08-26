@@ -11,7 +11,8 @@ module Netomox
       #   @return [Array<Network>]
       attr_accessor :networks
 
-      # @param [Proc] block Code block to eval this instance
+      # @yield Code block to eval this instance
+      # @yieldreturn [void]
       def initialize(&)
         super(nil, 'networks')
         @networks = []
@@ -20,7 +21,8 @@ module Netomox
 
       # Add or access network by name
       # @param [String] name Network name
-      # @param [Proc] block Code block to eval the network
+      # @yield Code block to eval the network
+      # @yieldreturn [void]
       # @return [Network]
       def network(name, &)
         nw = find_network(name)

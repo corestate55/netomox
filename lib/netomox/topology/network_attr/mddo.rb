@@ -46,5 +46,29 @@ module Netomox
         "attribute: area:#{@identifier}, #{@name}, #{@flags}"
       end
     end
+
+    # attribute for bgp-proc network
+    class MddoBgpProcNetworkAttribute < NetworkAttributeBase
+      def initialize(data, type)
+        super([], data, type) # same as Parent
+      end
+
+      # @return [String]
+      def to_s
+        "attribute: #{@name}, #{@flags}"
+      end
+    end
+
+    # attribute for bgp-as network
+    class MddoBgpAsNetworkAttribute < NetworkAttributeBase
+      def initialize(data, type)
+        super([], data, type) # same as Parent
+      end
+
+      # @return [String]
+      def to_s
+        "attribute: #{@name}, #{@flags}"
+      end
+    end
   end
 end

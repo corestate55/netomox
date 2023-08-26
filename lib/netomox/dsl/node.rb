@@ -51,7 +51,8 @@ module Netomox
 
       # @param [Network] parent Parent object (Network)
       # @param [String] name Node name
-      # @param [Proc] block Code block to eval this instance
+      # @yield Code block to eval this instance
+      # @yieldreturn [void]
       def initialize(parent, name, &)
         super(parent, name)
         @term_points = []
@@ -65,7 +66,8 @@ module Netomox
 
       # Add or access term-point by name
       # @param [String] name Term-point name
-      # @param [Proc] block Code block to eval the term-point
+      # @yield Code block to eval the term-point
+      # @yieldreturn [void]
       # @return [TermPoint]
       def term_point(name, &)
         tp = find_term_point(name)
@@ -92,7 +94,7 @@ module Netomox
         end
       end
 
-      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize
+      # rubocop:disable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
 
       # Set attribute
       # @param [Hash] attr Attribute data
@@ -105,8 +107,10 @@ module Netomox
         @type.key?(NWTYPE_MDDO_L2) && (@attribute = MddoL2NodeAttribute.new(**attr))
         @type.key?(NWTYPE_MDDO_L3) && (@attribute = MddoL3NodeAttribute.new(**attr))
         @type.key?(NWTYPE_MDDO_OSPF_AREA) && (@attribute = MddoOspfAreaNodeAttribute.new(**attr))
+        @type.key?(NWTYPE_MDDO_BGP_PROC) && (@attribute = MddoBgpProcNodeAttribute.new(**attr))
+        @type.key?(NWTYPE_MDDO_BGP_AS) && (@attribute = MddoBgpAsNodeAttribute.new(**attr))
       end
-      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/AbcSize
+      # rubocop:enable Metrics/CyclomaticComplexity, Metrics/AbcSize, Metrics/PerceivedComplexity
 
       # Convert to RFC8345 topology data
       # @return [Hash]

@@ -13,7 +13,7 @@ module Netomox
       attr_accessor :parent, :name, :path
 
       # @param [DSLObjectBase] parent Parent object
-      # param [String] name Object name
+      # @param [String] name Object name
       def initialize(parent, name)
         @parent = parent
         @name = name
@@ -21,7 +21,9 @@ module Netomox
         @path = [@parent.path, @name].join('__') unless @parent.nil?
       end
 
-      # @param [Proc] block Code Block to eval in this instance
+      # @yield Code Block to eval in this instance
+      # @yieldreturn [void]
+      # @return [void]
       def register(&)
         instance_eval(&)
       end

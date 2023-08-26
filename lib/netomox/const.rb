@@ -34,6 +34,10 @@ module Netomox
   NWTYPE_MDDO_L3 = "#{NS_MDDO}:l3-network".freeze
   # MDDO ospf-area network type
   NWTYPE_MDDO_OSPF_AREA = "#{NS_MDDO}:ospf-area-network".freeze
+  # MDDO bgp-proc network type
+  NWTYPE_MDDO_BGP_PROC = "#{NS_MDDO}:bgp-proc-network".freeze
+  # MDDO bgp-as network type
+  NWTYPE_MDDO_BGP_AS = "#{NS_MDDO}:bgp-as-network".freeze
 
   # logger for netomox
   @logger = Logger.new($stderr)

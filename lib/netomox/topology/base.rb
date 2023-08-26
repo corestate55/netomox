@@ -7,7 +7,7 @@ module Netomox
   module Topology
     # Topology Object Base
     class TopoObjectBase
-      attr_reader :name, :path
+      attr_reader :name, :path, :parent_path
       attr_accessor :diff_state, :attribute, :supports
 
       include Diffable
@@ -19,6 +19,17 @@ module Netomox
         @parent_path = parent_path
         @path = parent_path.empty? ? @name : make_path
         @diff_state = DiffState.new # empty state
+      end
+
+      # @return [Array<String>] List of path element
+      def path_list
+        @path.split('__')
+      end
+
+      # @return [String,nil] Parent object name
+      #   (nil then parent path = ''(empty string))
+      def parent_name
+        @parent_path.split('__').last
       end
 
       # @param [TopoObjectBase] other Target topology object

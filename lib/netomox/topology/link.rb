@@ -23,7 +23,9 @@ module Netomox
         { key: "#{NS_MDDO}:l1-link-attributes", klass: MddoL1LinkAttribute },
         { key: "#{NS_MDDO}:l2-link-attributes", klass: MddoL2LinkAttribute },
         { key: "#{NS_MDDO}:l3-link-attributes", klass: MddoL3LinkAttribute },
-        { key: "#{NS_MDDO}:ospf-area-link-attributes", klass: MddoOspfAreaLinkAttribute }
+        { key: "#{NS_MDDO}:ospf-area-link-attributes", klass: MddoOspfAreaLinkAttribute },
+        { key: "#{NS_MDDO}:bgp-proc-link-attributes", klass: MddoBgpProcLinkAttribute },
+        { key: "#{NS_MDDO}:bgp-as-link-attributes", klass: MddoBgpAsLinkAttribute }
       ].freeze
 
       # @param [Hash] data RFC8345 data (link element)

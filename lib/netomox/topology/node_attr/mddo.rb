@@ -130,7 +130,7 @@ module Netomox
 
       # @return [String]
       def to_s
-        "attribute: #{@name}"
+        "attribute: #{@router_id}"
       end
 
       private
@@ -140,6 +140,73 @@ module Netomox
       def convert_redistribute_list(data)
         key = @attr_table.ext_of(:redistribute_list)
         operative_array_key?(data, key) ? data[key].map { |p| MddoOspfRedistribute.new(p, key) } : []
+      end
+    end
+
+    # attribute for bgp-proc node
+    class MddoBgpProcNodeAttribute < AttributeBase
+      # @!attribute [rw] router_id
+      #   @return [String]
+      # @!attribute [rw] confederation_id
+      #   @return [Integer] ASN
+      # @!attribute [rw] confederation_members
+      #   @return [Array<Integer>] List of ASN
+      # @!attribute [rw] route_reflector
+      #   @return [Boolean]
+      # @!attribute [rw] peer_groups
+      #   @return [Array] # TODO: attr implementation
+      # @!attribute [rw] policies
+      #   @return [Array] # TODO: attr implementation
+      # @!attribute [rw] redistribute_list
+      #   @return [Array] # TODO: attr implementation
+      attr_accessor :router_id, :confederation_id, :confederation_members, :route_reflector, :peer_groups, :policies,
+                    :redistribute_list
+
+      # Attribute definition of bgp-proc node
+      ATTR_DEFS = [
+        { int: :router_id, ext: 'router-id', default: '' },
+        { int: :confederation_id, ext: 'confederation-id', default: -1 },
+        { int: :confederation_members, ext: 'confederation-member', default: [] },
+        { int: :route_reflector, ext: 'route-reflector', default: false },
+        { int: :peer_groups, ext: 'peer-group', default: [] },
+        { int: :policies, ext: 'policy', default: [] },
+        { int: :redistribute_list, ext: 'redistribute', default: [] }
+      ].freeze
+
+      include Diffable
+
+      # @param [Hash] data Attribute data (RFC8345)
+      # @param [String] type Attribute type (keyword of data in RFC8345)
+      def initialize(data, type)
+        super(ATTR_DEFS, data, type)
+      end
+
+      # @return [String]
+      def to_s
+        "attribute: #{@router_id}"
+      end
+    end
+
+    # attribute for bgp-as node
+    class MddoBgpAsNodeAttribute < AttributeBase
+      # @!attribute [rw] as_number
+      #   @return [Integer] AS number
+      attr_accessor :as_number
+
+      # Attribute definition of bgp-as node
+      ATTR_DEFS = [{ int: :as_number, ext: 'as-number', default: -1 }].freeze
+
+      include Diffable
+
+      # @param [Hash] data Attribute data (RFC8345)
+      # @param [String] type Attribute type (keyword of data in RFC8345)
+      def initialize(data, type)
+        super(ATTR_DEFS, data, type)
+      end
+
+      # @return [String]
+      def to_s
+        "attribute: #{@as_number}"
       end
     end
   end

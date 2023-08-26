@@ -59,6 +59,31 @@ RSpec.describe 'check term-point attribute with Mddo-model' do
           end
         end
       end
+      network 'nw_bgp_proc' do
+        type Netomox::NWTYPE_MDDO_BGP_PROC
+        node('node1') do
+          term_point('eth1') do
+            attribute(
+              local_as: 65_531,
+              local_ip: '10.0.0.21',
+              remote_as: 65_531,
+              remote_ip: '10.0.0.22',
+              confederation: 65_530
+            )
+          end
+        end
+      end
+      network 'nw_bgp_as' do
+        type Netomox::NWTYPE_MDDO_BGP_AS
+        node('node1') do
+          term_point('eth1') do
+            attribute(
+              description: 'descr of bgp-as node eth1',
+              flags: %w[bgp-as term-point]
+            )
+          end
+        end
+      end
     end
     topo_data = nws.topo_data
     @nws = Netomox::Topology::Networks.new(topo_data)
@@ -115,6 +140,41 @@ RSpec.describe 'check term-point attribute with Mddo-model' do
         { 'router-id' => '10.0.0.1', 'ip-address' => '192.168.0.1' }
       ],
       'area' => 1
+    }
+    expect(attr&.to_data).to eq expected_attr
+  end
+
+  it 'has MDDO BGP-PROC term-point attribute' do
+    attr = @nws.find_network('nw_bgp_proc')&.find_node_by_name('node1')&.find_tp_by_name('eth1')&.attribute
+    expected_attr = {
+      '_diff_state_' => @default_diff_state,
+      'local-as' => 65_531,
+      'local-ip' => '10.0.0.21',
+      'remote-as' => 65_531,
+      'remote-ip' => '10.0.0.22',
+      'confederation' => 65_530,
+      'route-reflector-client' => false,
+      'cluster-id' => '',
+      'peer-group' => '',
+      'import-policy' => [],
+      'export-policy' => [],
+      'timer' => {
+        'connect-retry' => 30,
+        'hold-time' => 90,
+        'keepalive-interval' => 30,
+        'minimum-advertisement-interval' => 30,
+        'restart-time' => -1
+      }
+    }
+    expect(attr&.to_data).to eq expected_attr
+  end
+
+  it 'has MDDO BGP-AS term-point attribute' do
+    attr = @nws.find_network('nw_bgp_as')&.find_node_by_name('node1')&.find_tp_by_name('eth1')&.attribute
+    expected_attr = {
+      '_diff_state_' => @default_diff_state,
+      'description' => 'descr of bgp-as node eth1',
+      'flag' => %w[bgp-as term-point]
     }
     expect(attr&.to_data).to eq expected_attr
   end

@@ -19,7 +19,9 @@ module Netomox
         { key: "#{NS_MDDO}:l1-termination-point-attributes", klass: MddoL1TPAttribute },
         { key: "#{NS_MDDO}:l2-termination-point-attributes", klass: MddoL2TPAttribute },
         { key: "#{NS_MDDO}:l3-termination-point-attributes", klass: MddoL3TPAttribute },
-        { key: "#{NS_MDDO}:ospf-area-termination-point-attributes", klass: MddoOspfAreaTPAttribute }
+        { key: "#{NS_MDDO}:ospf-area-termination-point-attributes", klass: MddoOspfAreaTPAttribute },
+        { key: "#{NS_MDDO}:bgp-proc-termination-point-attributes", klass: MddoBgpProcTPAttribute },
+        { key: "#{NS_MDDO}:bgp-as-termination-point-attributes", klass: MddoBgpAsTPAttribute }
       ].freeze
 
       # @param [Hash] data RFC8345 data (term-point element)

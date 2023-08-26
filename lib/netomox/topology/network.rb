@@ -7,9 +7,12 @@ require 'netomox/topology/support_base'
 require 'netomox/topology/network_attr/rfc'
 require 'netomox/topology/network_attr/mddo'
 require 'netomox/topology/base'
+require 'netomox/topology/error'
 
 module Netomox
   module Topology
+    # rubocop:disable Metrics/ClassLength
+
     # Network for topology data
     class Network < TopoObjectBase
       # @!attribute [rw] network_types
@@ -27,7 +30,9 @@ module Netomox
         { key: "#{NS_MDDO}:l1-network-attributes", klass: MddoL1NetworkAttribute },
         { key: "#{NS_MDDO}:l2-network-attributes", klass: MddoL2NetworkAttribute },
         { key: "#{NS_MDDO}:l3-network-attributes", klass: MddoL3NetworkAttribute },
-        { key: "#{NS_MDDO}:ospf-area-network-attributes", klass: MddoOspfAreaNetworkAttribute }
+        { key: "#{NS_MDDO}:ospf-area-network-attributes", klass: MddoOspfAreaNetworkAttribute },
+        { key: "#{NS_MDDO}:bgp-proc-network-attributes", klass: MddoBgpProcNetworkAttribute },
+        { key: "#{NS_MDDO}:bgp-as-network-attributes", klass: MddoBgpAsNetworkAttribute }
       ].freeze
 
       # @param [Hash] data RFC8345 data (network element)
@@ -79,6 +84,39 @@ module Netomox
       # @return [Node, nil] Found node (nil if not found)
       def find_node_by_name(node_ref)
         @nodes.find { |node| node.name == node_ref }
+      end
+
+      # @param [TpRef] edge Link edge
+      # @return [Array(Node, TermPoint)]
+      # @raise [TopologyElementNotFoundError] if node or term-point is not found
+      def find_node_tp_by_edge(edge)
+        node = find_node_by_name(edge.node_ref)
+        raise TopologyElementNotFoundError, "cannot find node:#{edge.node_ref}" if node.nil?
+
+        term_point = node.find_tp_by_name(edge.tp_ref)
+        raise TopologyElementNotFoundError, "cannot find tp:#{edge.node_ref}[#{edge.tp_ref}]" if term_point.nil?
+
+        [node, term_point]
+      end
+
+      # For link verification (term-point link-count check)
+      # @param [TpRef] edge Link edge
+      # @return [Array<Link>] Found links
+      def find_all_links_by_source_edge(edge)
+        @links.find_all { |link| link.source == edge }
+      end
+
+      # @return [String] primary network type
+      def primary_network_type
+        # NOTE: Usage of network_types is ambiguous
+        @network_types.keys[0]
+      end
+
+      # @param [String] network_type Network type string
+      # @return [Boolean]
+      def network_type?(network_type)
+        # NOTE: Usage of network_types is ambiguous
+        @network_types.keys.include?(network_type)
       end
 
       # @param [Network] other Target network
@@ -173,5 +211,6 @@ module Netomox
         Link.new(data, @path)
       end
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end
