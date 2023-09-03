@@ -68,6 +68,7 @@ RSpec.describe 'check term-point attribute with Mddo-model' do
               local_ip: '10.0.0.21',
               remote_as: 65_531,
               remote_ip: '10.0.0.22',
+              description: 'test-descr',
               confederation: 65_530
             )
           end
@@ -152,6 +153,7 @@ RSpec.describe 'check term-point attribute with Mddo-model' do
       'local-ip' => '10.0.0.21',
       'remote-as' => 65_531,
       'remote-ip' => '10.0.0.22',
+      'description' => 'test-descr',
       'confederation' => 65_530,
       'route-reflector-client' => false,
       'cluster-id' => '',

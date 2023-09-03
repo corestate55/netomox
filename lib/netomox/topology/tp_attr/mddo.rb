@@ -165,6 +165,8 @@ module Netomox
       #   @return [Integer]
       # @!attribute [rw] remote_ip
       #   @return [String]
+      # @!attribute [rw] description
+      #   @return [String]
       # @!attribute [rw] confederation
       #   @return [Integer] ASN
       # @!attribute [rw] route_reflector_client
@@ -178,9 +180,9 @@ module Netomox
       # @!attribute [rw] export_policies
       #   @return [Array<String>]
       # @!attribute [rw] timer
-      #   @return [] # TODO
-      attr_accessor :local_as, :local_ip, :remote_as, :remote_ip, :confederation, :route_reflector_client, :cluster_id,
-                    :peer_group, :import_policies, :export_policies, :timer
+      #   @return [MddoBgpTimer]
+      attr_accessor :local_as, :local_ip, :remote_as, :remote_ip, :description, :confederation, :route_reflector_client,
+                    :cluster_id, :peer_group, :import_policies, :export_policies, :timer
 
       # Attribute definition of bgp node
       ATTR_DEFS = [
@@ -188,6 +190,7 @@ module Netomox
         { int: :local_ip, ext: 'local-ip', default: '' },
         { int: :remote_as, ext: 'remote-as', default: -1 },
         { int: :remote_ip, ext: 'remote-ip', default: '' },
+        { int: :description, ext: 'description', default: '' },
         { int: :confederation, ext: 'confederation', default: -1 },
         { int: :route_reflector_client, ext: 'route-reflector-client', default: false },
         { int: :cluster_id, ext: 'cluster-id', default: '' },

@@ -196,6 +196,8 @@ module Netomox
       #   @return [Integer]
       # @!attribute [rw] remote_ip
       #   @return [String]
+      # @!attribute [rw] description
+      #   @return [String]
       # @!attribute [rw] confederation
       #   @return [Integer] ASN
       # @!attribute [rw] route_reflector_client
@@ -210,8 +212,8 @@ module Netomox
       #   @return [Array<String>]
       # @!attribute [rw] timer
       #   @return [MddoBgpTimer]
-      attr_accessor :local_as, :local_ip, :remote_as, :remote_ip, :confederation, :route_reflector_client, :cluster_id,
-                    :peer_group, :import_policies, :export_policies, :timer
+      attr_accessor :local_as, :local_ip, :remote_as, :remote_ip, :description, :confederation, :route_reflector_client,
+                    :cluster_id, :peer_group, :import_policies, :export_policies, :timer
       # @!attribute [r] type
       #   @return [String]
       attr_reader :type
@@ -222,6 +224,7 @@ module Netomox
       # @param [String] local_ip Local IP address
       # @param [Integer] remote_as Remote ASN
       # @param [String] remote_ip Remote IP address
+      # @param [String] description
       # @param [Integer] confederation
       # @param [Boolean] route_reflector_client
       # @param [String] cluster_id
@@ -229,13 +232,14 @@ module Netomox
       # @param [Array<String>] import_policies
       # @param [Array<String>] export_policies
       # @timer [MddoBgpTimer] timer
-      def initialize(local_as: -1, local_ip: '', remote_as: -1, remote_ip: '', confederation: -1,
+      def initialize(local_as: -1, local_ip: '', remote_as: -1, remote_ip: '', description: '', confederation: -1,
                      route_reflector_client: false, cluster_id: '', peer_group: '', import_policies: [],
                      export_policies: [], timer: {})
         @local_as = local_as
         @local_ip = local_ip
         @remote_as = remote_as
         @remote_ip = remote_ip
+        @description = description
         @confederation = confederation
         @route_reflector_client = route_reflector_client
         @cluster_id = cluster_id
@@ -255,6 +259,7 @@ module Netomox
           'local-ip' => @local_ip,
           'remote-as' => @remote_as,
           'remote-ip' => @remote_ip,
+          'description' => @description,
           'confederation' => @confederation,
           'route-reflector-client' => @route_reflector_client,
           'cluster-id' => @cluster_id,
